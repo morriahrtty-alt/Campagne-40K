@@ -1,0 +1,2637 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archivum Tacticus — Wrath &amp; Glory</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --bg-deep: #0f0d0a;
+  --bg-panel: #1b1611;
+  --bg-panel-raised: #241d16;
+  --bone: #ddd0ad;
+  --bone-dim: #9c8f72;
+  --blood: #7f1d1d;
+  --blood-bright: #a83232;
+  --brass: #b6893f;
+  --brass-dim: #6f5527;
+  --border: #3a2f22;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'EB Garamond', serif;
+  --font-mono: 'Share Tech Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at top, #211a13 0%, var(--bg-deep) 55%),
+    var(--bg-deep);
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+::selection { background: var(--blood); color: var(--bone); }
+
+a { color: var(--brass); }
+
+/* ---------- Header ---------- */
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+  padding: 1.4rem 1.5rem 1rem;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(180deg, rgba(0,0,0,0.25), transparent);
+}
+
+.site-header .aquila {
+  font-size: 1.4rem;
+  color: var(--brass);
+  letter-spacing: 0.5rem;
+}
+
+.site-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  font-size: 1.7rem;
+  margin: 0.3rem 0 0.15rem;
+  color: var(--bone);
+  text-shadow: 0 0 18px rgba(166,124,61,0.25);
+}
+
+.site-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--brass-dim);
+  text-transform: uppercase;
+}
+
+/* ---------- Nav ---------- */
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--bone-dim);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 1.1rem;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.15s ease;
+}
+
+.tab-btn:hover { color: var(--bone); border-color: var(--brass-dim); }
+
+.tab-btn.active {
+  color: var(--bg-deep);
+  background: var(--brass);
+  border-color: var(--brass);
+}
+
+/* ---------- Layout ---------- */
+
+main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+.view { display: none; }
+.view.active { display: block; }
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+
+h2.section-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  color: var(--brass);
+  margin: 0 0 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--border);
+  color: var(--bone);
+  padding: 0.55rem 1rem;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn:hover { border-color: var(--brass-dim); }
+
+.btn-primary {
+  background: var(--blood);
+  border-color: var(--blood-bright);
+  color: var(--bone);
+}
+.btn-primary:hover { background: var(--blood-bright); }
+
+.btn-danger {
+  border-color: var(--blood);
+  color: var(--blood-bright);
+  background: transparent;
+}
+.btn-danger:hover { background: var(--blood); color: var(--bone); }
+
+.btn-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+
+/* ---------- Character list ---------- */
+
+.char-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+}
+
+.char-card {
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brass-dim);
+  border-radius: 3px;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.char-card:hover { border-left-color: var(--brass); }
+
+.char-card .cname {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--bone);
+}
+.char-card .cmeta {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--bone-dim);
+  margin-top: 0.25rem;
+  letter-spacing: 0.03em;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--bone-dim);
+  font-style: italic;
+  padding: 2rem 1rem;
+}
+
+/* ---------- Forms ---------- */
+
+label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brass-dim);
+  margin-bottom: 0.25rem;
+}
+
+input[type="text"], input[type="number"], select, textarea {
+  width: 100%;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 3px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--brass);
+}
+
+.field { margin-bottom: 0.9rem; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+
+/* ---------- Attribute / Skill grids ---------- */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+.stat-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.45rem 0.6rem;
+}
+
+.stat-box .stat-name {
+  font-size: 0.85rem;
+  color: var(--bone-dim);
+}
+.stat-box .stat-name small { display:block; font-family: var(--font-mono); font-size: 0.65rem; color: var(--brass-dim); }
+
+.stat-box input[type="number"] {
+  width: 3.4rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  color: var(--bone);
+  padding: 0.3rem;
+}
+
+.xp-summary {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--brass);
+  text-align: right;
+  margin-top: 0.6rem;
+}
+
+/* ---------- Codex ---------- */
+
+.subtabs { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.subtab-btn {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--bone-dim);
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.subtab-btn.active { color: var(--bg-deep); background: var(--brass-dim); border-color: var(--brass-dim); }
+
+.codex-entry {
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 0;
+}
+.codex-entry:last-child { border-bottom: none; }
+.codex-entry .entry-name {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--bone);
+}
+.codex-entry .entry-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--brass);
+  margin-left: 0.5rem;
+}
+.codex-entry .entry-desc {
+  font-size: 0.92rem;
+  color: var(--bone-dim);
+  margin-top: 0.2rem;
+}
+
+table.codex-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+table.codex-table th, table.codex-table td {
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.5rem;
+  text-align: center;
+}
+table.codex-table th { color: var(--brass); background: var(--bg-panel-raised); }
+
+.list-tag-input { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--bg-panel-raised);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.3rem 0.6rem;
+  margin: 0.2rem 0.3rem 0.2rem 0;
+  font-size: 0.85rem;
+}
+.tag-chip button {
+  background: none; border: none; color: var(--blood-bright); cursor: pointer; font-weight: bold;
+}
+
+.note {
+  font-size: 0.82rem;
+  color: var(--bone-dim);
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .field-row { grid-template-columns: 1fr; }
+}
+
+/* ============ Ajouts : portrait, stats dérivées, tableaux fiche ============ */
+
+.char-card { display: flex; align-items: center; gap: 0.8rem; }
+.char-thumb { width: 48px; height: 48px; border-radius: 3px; object-fit: cover; border: 1px solid var(--border); flex-shrink: 0; }
+.char-thumb-empty { display: flex; align-items: center; justify-content: center; color: var(--brass-dim); font-size: 1.2rem; background: var(--bg-deep); }
+.char-card-info { flex: 1; }
+
+.portrait-row { display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; }
+.portrait-preview { width: 90px; height: 90px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg-deep); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+.portrait-preview img { width: 100%; height: 100%; object-fit: cover; }
+.portrait-preview span { font-size: 1.8rem; color: var(--brass-dim); }
+.portrait-controls { flex: 1; min-width: 200px; }
+.portrait-controls input[type="file"] { font-size: 0.8rem; color: var(--bone-dim); margin-bottom: 0.4rem; }
+
+.field-row-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem; margin-bottom: 0.9rem; }
+@media (max-width: 600px) { .field-row-4 { grid-template-columns: 1fr 1fr; } }
+
+.stat-box { flex-wrap: wrap; }
+.stat-total { font-family: var(--font-mono); font-size: 0.68rem; color: var(--brass); width: 100%; text-align: right; margin-top: 0.2rem; }
+
+.derived-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+@media (max-width: 600px) { .derived-grid { grid-template-columns: repeat(2, 1fr); } }
+.derived-box { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 3px; padding: 0.5rem 0.6rem; text-align: center; }
+.derived-box span { display: block; font-family: var(--font-mono); font-size: 0.65rem; color: var(--brass-dim); text-transform: uppercase; }
+.derived-box strong { display: block; font-size: 1.3rem; color: var(--bone); font-family: var(--font-mono); }
+.derived-box small { display: block; font-size: 0.62rem; color: var(--bone-dim); }
+
+.talent-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.6rem; border-bottom: 1px solid var(--border); padding: 0.6rem 0; }
+.talent-row:last-child { border-bottom: none; }
+
+.sheet-equip-table input[type="text"] { background: transparent; border: 1px solid var(--border); color: var(--bone); font-size: 0.8rem; padding: 0.2rem 0.3rem; }
+.sheet-equip-table td { vertical-align: top; }
+
+.field-inline { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; }
+.field-inline label { margin: 0; min-width: 1.4rem; }
+.field-inline input { flex: 1; }
+.graves-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+@media (max-width: 600px) { .graves-list { grid-template-columns: 1fr; } }
+
+.codex-subhead { font-family: var(--font-mono); font-size: 0.75rem; color: var(--brass); margin: 1rem 0 0.5rem; }
+.table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+
+/* ============ Fiche imprimable (écran) ============ */
+
+.print-sheet { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem; }
+.print-sheet h1 { font-family: var(--font-display); color: var(--bone); margin: 0 0 0.3rem; }
+.print-sheet h2 { font-family: var(--font-display); font-size: 1rem; color: var(--brass); border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin: 1.4rem 0 0.6rem; }
+.print-sheet h3 { font-family: var(--font-display); font-size: 0.85rem; color: var(--bone); margin: 0 0 0.3rem; }
+.pt-header { display: flex; gap: 1.2rem; align-items: flex-start; }
+.pt-portrait { width: 110px; height: 110px; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; flex-shrink: 0; background: var(--bg-deep); }
+.pt-portrait img { width: 100%; height: 100%; object-fit: cover; }
+.pt-identity div { font-size: 0.9rem; color: var(--bone-dim); margin-bottom: 0.15rem; }
+.pt-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.pt-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+@media (max-width: 700px) { .pt-grid-2, .pt-grid-3 { grid-template-columns: 1fr; } }
+.pt-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.pt-table th, .pt-table td { border: 1px solid var(--border); padding: 0.3rem 0.5rem; text-align: left; }
+.pt-table th { background: var(--bg-panel-raised); color: var(--brass); }
+.pt-derived td:nth-child(1), .pt-derived td:nth-child(3) { color: var(--bone-dim); }
+.pt-talent { border-bottom: 1px solid var(--border); padding: 0.4rem 0; font-size: 0.88rem; }
+.pt-grave { font-size: 0.85rem; padding: 0.15rem 0; color: var(--bone-dim); }
+.pt-equip-line { margin: 0.8rem 0; font-size: 0.9rem; }
+
+/* ============ Impression ============ */
+
+@media print {
+  body { background: #fff !important; color: #111 !important; }
+  .no-print, .site-header, .tabs { display: none !important; }
+  main { max-width: 100%; padding: 0; }
+  .view { display: none !important; }
+  #view-print.view { display: block !important; }
+  .print-sheet { background: #fff; border: none; color: #111; padding: 0; }
+  .print-sheet h2 { color: #333; border-color: #999; }
+  .pt-table th { background: #eee; color: #111; }
+  .pt-table th, .pt-table td { border-color: #999; }
+  a { color: inherit; text-decoration: none; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="site-header no-print">
+  <div class="aquila">✠</div>
+  <h1 class="site-title">ARCHIVUM TACTICUS</h1>
+  <div class="site-subtitle">Gestionnaire de personnages — Wrath &amp; Glory</div>
+</header>
+
+<nav class="tabs no-print">
+  <button class="tab-btn active" data-view="list">Personnages</button>
+  <button class="tab-btn" data-view="sheet">Fiche</button>
+  <button class="tab-btn" data-view="codex">Codex</button>
+</nav>
+
+<main>
+
+  <section id="view-list" class="view active">
+    <div class="panel">
+      <h2 class="section-title">Vos Personnages</h2>
+      <div id="char-list" class="char-grid"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="new-char-btn">+ Nouveau Personnage</button>
+    </div>
+  </section>
+
+  <section id="view-sheet" class="view">
+    <div id="sheet-content"></div>
+  </section>
+
+  <section id="view-codex" class="view">
+    <div class="panel">
+      <h2 class="section-title">Codex</h2>
+      <div class="subtabs">
+        <button class="subtab-btn active" data-codex="attributs">Attributs</button>
+        <button class="subtab-btn" data-codex="competences">Compétences</button>
+        <button class="subtab-btn" data-codex="especes">Espèces</button>
+        <button class="subtab-btn" data-codex="archetypes">Archétypes</button>
+        <button class="subtab-btn" data-codex="dons">Dons</button>
+        <button class="subtab-btn" data-codex="armurerie">Armurerie</button>
+        <button class="subtab-btn" data-codex="psychique">Pouvoirs Psychiques</button>
+        <button class="subtab-btn" data-codex="factions">Factions</button>
+        <button class="subtab-btn" data-codex="mutations">Mutations</button>
+      </div>
+      <input type="text" id="codex-search" placeholder="Rechercher dans le Codex...">
+    </div>
+    <div class="panel">
+      <div id="codex-content"></div>
+    </div>
+  </section>
+
+  <section id="view-print" class="view">
+    <div class="btn-row no-print">
+      <button class="btn" id="print-back">&larr; Retour à la fiche</button>
+      <button class="btn btn-primary" id="print-now">Imprimer / Exporter en PDF</button>
+    </div>
+    <div id="print-content"></div>
+  </section>
+
+</main>
+
+<script>
+
+// ==== js/data/core.js ====
+// ============================================================
+// WRATH & GLORY — DONNÉES DE BASE (Attributs, Compétences, Espèces)
+// Terminologie alignée sur la fiche de personnage officielle FR.
+// Contenu reformulé à partir du manuel de règles, à usage personnel.
+// ============================================================
+
+const ATTRIBUTES = [
+  { key: "F",   name: "Force",         full: "Strength",   desc: "La puissance physique brute : la force de frappe au corps à corps et la capacité à porter des charges ou de l'équipement lourd." },
+  { key: "E",   name: "Endurance",     full: "Toughness",  desc: "La résistance du corps aux blessures, aux poisons et aux maladies, ainsi que la capacité à encaisser les dégâts." },
+  { key: "A",   name: "Agilité",       full: "Agility",    desc: "La coordination et la dextérité fine : précision au tir, pilotage, contrôle des mouvements." },
+  { key: "I",   name: "Initiative",    full: "Initiative", desc: "La vivacité des réflexes et la capacité à réagir vite, en particulier au corps à corps ou sous pression." },
+  { key: "FM",  name: "Force Mentale", full: "Willpower",  desc: "La force mentale, le sang-froid et la résistance à la tentation, à la peur ou aux pouvoirs du Warp." },
+  { key: "Int", name: "Intellect",     full: "Intellect",  desc: "La capacité à observer, mémoriser, raisonner et exploiter des connaissances (histoire, technologie, médecine...)." },
+  { key: "Soc", name: "Sociabilité",   full: "Fellowship", desc: "Le charisme et la présence sociale : convaincre, mentir, détecter le mensonge, s'intégrer à un groupe." },
+  { key: "Spd", name: "Vitesse",       full: "Speed",      desc: "La vitesse de déplacement du personnage. Ne se dépense pas en XP comme les autres Attributs : dépend de l'Espèce." }
+];
+
+// Coût en XP pour acheter un rang d'Attribut (1 à 12)
+const ATTRIBUTE_XP_TABLE = {
+  1: { total: 0,   incremental: 0 },
+  2: { total: 4,   incremental: 4 },
+  3: { total: 10,  incremental: 6 },
+  4: { total: 20,  incremental: 10 },
+  5: { total: 35,  incremental: 15 },
+  6: { total: 55,  incremental: 20 },
+  7: { total: 80,  incremental: 25 },
+  8: { total: 110, incremental: 30 },
+  9: { total: 145, incremental: 35 },
+  10: { total: 185, incremental: 40 },
+  11: { total: 230, incremental: 45 },
+  12: { total: 280, incremental: 50 }
+};
+
+// Coût en XP pour acheter un rang de Compétence (0 à 8)
+const SKILL_XP_TABLE = {
+  0: { total: 0,  incremental: 0 },
+  1: { total: 2,  incremental: 2 },
+  2: { total: 6,  incremental: 4 },
+  3: { total: 12, incremental: 6 },
+  4: { total: 20, incremental: 8 },
+  5: { total: 30, incremental: 10 },
+  6: { total: 42, incremental: 12 },
+  7: { total: 56, incremental: 14 },
+  8: { total: 72, incremental: 16 }
+};
+
+// Maximum d'Attribut selon l'Espèce
+const ATTRIBUTE_MAX_BY_SPECIES = {
+  "Humain":            { F: 8,  E: 8,  A: 8,  I: 8,  FM: 8,  Int: 8,  Soc: 8, Spd: 8 },
+  "Ork":                { F: 12, E: 12, A: 7,  I: 7,  FM: 8,  Int: 7,  Soc: 7, Spd: 7 },
+  "Aeldari":            { F: 7,  E: 7,  A: 12, I: 12, FM: 12, Int: 10, Soc: 6, Spd: 10 },
+  "Adeptus Astartes":   { F: 10, E: 10, A: 9,  I: 9,  FM: 10, Int: 10, Soc: 8, Spd: 9 },
+  "Primaris Astartes":  { F: 12, E: 12, A: 9,  I: 9,  FM: 10, Int: 10, Soc: 8, Spd: 9 }
+};
+
+// Compétences (nom, Attribut associé, description reformulée)
+const SKILLS = [
+  { name: "Athlétisme",         attr: "F",   desc: "Courir, sauter, nager : l'ensemble des efforts physiques dépendant de la force." },
+  { name: "Capacité de Combat", attr: "I",   desc: "Maîtrise du combat rapproché, armé ou à mains nues." },
+  { name: "Capacité de Tir",    attr: "A",   desc: "Maîtrise des armes à distance : viser, entretenir, identifier une arme de tir." },
+  { name: "Commandement",       attr: "FM",  desc: "Inspirer le respect et pousser d'autres personnes à agir, parfois au-delà de leurs limites." },
+  { name: "Connaissance",       attr: "Int", desc: "Se rappeler un savoir issu de ses études, qu'il soit courant ou ésotérique." },
+  { name: "Duperie",            attr: "Soc", desc: "Mentir de façon convaincante, manipuler par les mots." },
+  { name: "Furtivité",          attr: "A",   desc: "Se cacher, se déplacer sans être repéré, neutraliser un système de sécurité." },
+  { name: "Intimidation",       attr: "FM",  desc: "Effrayer quelqu'un pour le faire céder, par la menace ou la coercition." },
+  { name: "Investigation",      attr: "Int", desc: "Déchiffrer des indices, mener des recherches, recouper des informations." },
+  { name: "Maîtrise Psychique", attr: "FM",  desc: "Manifester des pouvoirs psychiques (nécessite le mot-clé PSYKER)." },
+  { name: "Medicae",            attr: "Int", desc: "Diagnostiquer et soigner : maladies, poisons, premiers secours, chirurgie." },
+  { name: "Persuasion",         attr: "Soc", desc: "Convaincre et faire changer d'avis, par la logique, l'émotion ou la négociation." },
+  { name: "Pilotage",           attr: "A",   desc: "Contrôler un véhicule terrestre, aérien, spatial ou naval." },
+  { name: "Psychologie",        attr: "Soc", desc: "Percevoir les intentions réelles d'autrui, détecter un mensonge ou une attitude étrange." },
+  { name: "Ruse",                attr: "Soc", desc: "Agir et penser comme quelqu'un qui opère hors-la-loi : contacts, marché noir, plans tordus." },
+  { name: "Survie",             attr: "FM",  desc: "Trouver des ressources, s'abriter, suivre une piste ou s'orienter en milieu naturel." },
+  { name: "Technomaîtrise",     attr: "Int", desc: "Comprendre, utiliser, réparer ou démonter de la technologie." },
+  { name: "Vigilance",          attr: "Int", desc: "Repérer des détails, des changements, ou percevoir ce qui est caché." }
+];
+
+// Espèces jouables
+const SPECIES = [
+  {
+    name: "Humain",
+    xpCost: 0,
+    attrBonus: {},
+    skillBonus: {},
+    speed: 6,
+    size: "Moyenne",
+    abilities: []
+  },
+  {
+    name: "Adeptus Astartes",
+    xpCost: 160,
+    attrBonus: { A: 4, I: 4, Int: 3, F: 4, E: 4, FM: 3 },
+    skillBonus: { "Athlétisme": 3, "Vigilance": 3, "Capacité de Tir": 3, "Furtivité": 3, "Capacité de Combat": 3 },
+    speed: 7,
+    size: "Grande",
+    abilities: [
+      "Rempart de l'Humanité : icônes bonus égales au Rang lors d'une attaque réussie contre une Horde.",
+      "Honneur de la Chapelle : soumis aux ordres du Maître de Chapelle, doit respecter les traditions de sa Chapelle. Résolution +1.",
+      "Implants du Space Marine : immunisé contre l'état Saignement, bonus possible lié aux implants."
+    ]
+  },
+  {
+    name: "Primaris Astartes",
+    xpCost: 198,
+    attrBonus: { A: 4, I: 4, Int: 3, F: 5, E: 5, FM: 3 },
+    skillBonus: { "Athlétisme": 3, "Vigilance": 3, "Capacité de Tir": 4, "Furtivité": 3, "Capacité de Combat": 3 },
+    speed: 7,
+    size: "Grande",
+    abilities: [
+      "Rempart de l'Humanité : icônes bonus égales au Rang lors d'une attaque réussie contre une Horde.",
+      "Honneur de la Chapelle (Primaris) : Résolution +1, insensible aux impuretés du Patrimoine Génétique, +3 Blessures.",
+      "Implants du Space Marine : immunisé contre l'état Saignement, bonus possible lié aux implants."
+    ]
+  },
+  {
+    name: "Aeldari",
+    xpCost: 10,
+    attrBonus: { A: 3 },
+    skillBonus: {},
+    speed: 8,
+    size: "Moyenne",
+    abilities: [
+      "Émotion intense : +1 DN à tous les tests de Résolution ; un échec sur un test lié à la Force Mentale dans une scène émotionnelle donne de la Ruine au MJ.",
+      "Psychosensible : peut choisir le mot-clé PSYKER."
+    ]
+  },
+  {
+    name: "Ork",
+    xpCost: 20,
+    attrBonus: { F: 3, E: 3 },
+    skillBonus: {},
+    speed: 6,
+    size: "Grande",
+    abilities: [
+      "Orky : +1 dé bonus aux tests d'Intimidation.",
+      "Plus gros, c'est mieux : l'Influence se calcule avec la Force plutôt que la Sociabilité."
+    ]
+  }
+];
+
+
+// ==== js/data/archetypes.js ====
+// ============================================================
+// INDEX DES ARCHÉTYPES
+// Liste des 27 archétypes du manuel de base, avec palier et page.
+// Détails complets (attributs suggérés, mots-clés, dons...) à enrichir
+// au fur et à mesure de l'extraction des données du manuel.
+// ============================================================
+
+const ARCHETYPES = [
+  // Tier 1
+  { name: "Sœur Hospitalière",        tier: 1, page: 91 },
+  { name: "Prêtre du Ministorum",     tier: 1, page: 92 },
+  { name: "Garde Impérial",           tier: 1, page: 93 },
+  { name: "Acolyte de l'Inquisition", tier: 1, page: 94 },
+  { name: "Sage de l'Inquisition",    tier: 1, page: 95 },
+  { name: "Gangster",                 tier: 1, page: 96 },
+  { name: "Corsaire",                 tier: 1, page: 97 },
+  { name: "Ork Boy",                  tier: 1, page: 98 },
+
+  // Tier 2
+  { name: "Sœur de Bataille",         tier: 2, page: 99 },
+  { name: "Psyker Sanctionné",        tier: 2, page: 100 },
+  { name: "Skitarius",                tier: 2, page: 101 },
+  { name: "Assassin du Culte de la Mort", tier: 2, page: 102 },
+  { name: "Scion Tempestus",          tier: 2, page: 103 },
+  { name: "Rogue Trader",             tier: 2, page: 104 },
+  { name: "Scavvy",                   tier: 2, page: 105 },
+  { name: "Éclaireur Space Marine",   tier: 2, page: 106 },
+  { name: "Ranger",                   tier: 2, page: 107 },
+  { name: "Kommando",                 tier: 2, page: 108 },
+
+  // Tier 3
+  { name: "Tech-Prêtre",              tier: 3, page: 109 },
+  { name: "Croisé",                   tier: 3, page: 110 },
+  { name: "Commissaire Impérial",     tier: 3, page: 111 },
+  { name: "Desperado",                tier: 3, page: 112 },
+  { name: "Space Marine Tactique",    tier: 3, page: 113 },
+  { name: "Sorcier (Warlock Aeldari)",    tier: 3, page: 114 },
+  { name: "Ork Nob",                  tier: 3, page: 115 },
+
+  // Tier 4
+  { name: "Inquisiteur",              tier: 4, page: 116 },
+  { name: "Intercesseur Primaris",    tier: 4, page: 117 }
+];
+
+
+// ==== js/data/archetype-details.js ====
+// ============================================================
+// ARCHÉTYPES DÉTAILLÉS — reformulés en français à partir du manuel.
+// attrs: [F, E, A, I, FM, Int, Soc] (valeurs suggérées, Attribut de base inclus)
+// ============================================================
+
+const ARCHETYPE_DETAILS = {
+  "Sœur Hospitalière": {
+    species: "Humain", xpCost: 24, keywords: "IMPERIUM, ADEPTUS MINISTORUM, ADEPTA SORORITAS, [ORDRE]",
+    abilityName: "Compassion Loyale", abilityText: "Double Rang en dés bonus à tout test de Medicae sur un personnage au mot-clé IMPERIUM.",
+    wargear: "Armure Servo-Assistée Sororitas, outils de chirurgien, Baïonnette-Tronçonneuse (montée au poignet), Pistolet Laser, tenue Sororitas, exemplaire de la Règle des Sororitas.",
+    attrs: [2,2,2,2,3,3,3],
+    skillsSuggested: "Investigation 1, Medicae 3, Connaissance 2, Capacité de Combat 2",
+    talentsSuggested: "Par Sa Force Mentale, Orthopraxie, Bouclier de la Foi"
+  },
+  "Prêtre du Ministorum": {
+    species: "Humain", xpCost: 12, keywords: "IMPERIUM, ADEPTUS MINISTORUM",
+    abilityName: "Invective Ardente", abilityText: "Une fois par combat (Action Libre), prêchez la parole impériale : vous et vos alliés IMPERIUM soignez 1d3+Rang Stress.",
+    wargear: "Tronçonneuse (Chainsword), Pistolet Laser, Rosarius, Couteau, robes du Ministorum, kit de missionnaire.",
+    attrs: [1,2,2,2,3,2,3],
+    skillsSuggested: "Vigilance 2, Capacité de Tir 2, Psychologie 1, Intimidation 1, Commandement 2, Connaissance 2, Capacité de Combat 2",
+    talentsSuggested: "Flagellant, En Son Nom, Repentez-vous !"
+  },
+  "Garde Impérial": {
+    species: "Humain", xpCost: 6, keywords: "IMPERIUM, ASTRA MILITARUM, [RÉGIMENT]",
+    abilityName: "Attention, Chef !", abilityText: "Une fois par combat (Action Réflexive), déplacez-vous jusqu'à la moitié de votre Vitesse pour intercepter une attaque visant un allié à sa place ; votre Résistance est augmentée de +Rang pour ce calcul.",
+    wargear: "Armure Flak, Fusil Laser, Couteau, gamelle Munitorum, kit de toilette, exemplaire de l'Abécédaire Édifiant du Fantassin Impérial, 3 rations.",
+    attrs: [3,3,3,3,2,1,2],
+    skillsSuggested: "Athlétisme 2, Vigilance 1, Capacité de Tir 3, Survie 1, Capacité de Combat 1",
+    talentsSuggested: "Tir Fatal, Dur à Cuire, Humour Noir"
+  },
+  "Acolyte de l'Inquisition": {
+    species: "Humain", xpCost: 6, keywords: "IMPERIUM, INQUISITION, [TOUTE], [ORDO]",
+    abilityName: "Décret Inquisitorial", abilityText: "Invoquez le nom de votre Inquisiteur pour gagner +Rang dés bonus à un test social face à un personnage au mot-clé IMPERIUM.",
+    wargear: "Armure Flak, deux armes IMPERIUM au choix (Valeur ≤5, Rareté Peu Commune ou moins), symbole d'autorité.",
+    attrs: [2,3,2,2,3,3,1],
+    skillsSuggested: "Athlétisme 1, Capacité de Tir 2, Psychologie 3, Intimidation 1, Investigation 3, Connaissance 1",
+    talentsSuggested: "Toujours sur ses Gardes, Lecteur sur les Lèvres, Identité Secrète"
+  },
+  "Sage de l'Inquisition": {
+    species: "Humain", xpCost: 16, keywords: "ADEPTUS ADMINISTRATUM, IMPERIUM, INQUISITION, [ORDO]",
+    abilityName: "Archives de l'Administratum", abilityText: "+Rang dés bonus pour tout test visant à rassembler des informations à travers la bureaucratie impériale.",
+    wargear: "Robes de l'Administratum, Pistolet Laser, Couteau, plume automatique, dalle de données, 3 parchemins d'archives anciennes. Influence +1.",
+    attrs: [1,1,2,2,3,4,2],
+    skillsSuggested: "Vigilance 2, Capacité de Tir 1, Duperie 1, Investigation 2, Connaissance 3, Technomaîtrise 1",
+    talentsSuggested: "Augmétique, Déductif, Suppliant"
+  },
+  "Gangster": {
+    species: "Humain", xpCost: 2, keywords: "SCUM, [TOUTE]",
+    abilityName: "Fouineur", abilityText: "+Rang dés bonus aux tests de Ruse.",
+    wargear: "Couteau ou Épée, sac de couchage, gourde, couleurs de gang, une arme au choix parmi Pistolet Laser/Autopistolet/Hand Cannon/Stubber. Influence +1.",
+    attrs: [2,3,2,3,2,1,3],
+    skillsSuggested: "Vigilance 1, Capacité de Tir 2, Ruse 3, Duperie 1, Investigation 1, Furtivité 1, Survie 1, Capacité de Combat 2",
+    talentsSuggested: "Combattant Déloyal, Explorateur de Ruche, Quelconque"
+  },
+  "Corsaire": {
+    species: "Aeldari", xpCost: 16, keywords: "AELDARI, ANHRATHE, [COTERIE]",
+    abilityName: "Danser sur le Fil de la Lame", abilityText: "+Rang dés bonus pour faire ou résister à un test d'Athlétisme, en réponse à une peur ancestrale dissimulée par la témérité.",
+    wargear: "Armure de Corsaire, Pistolet à Fléchettes Shuriken, Lasblaster, Pierre-Esprit, 3 Grenades à Plasma, combinaison spatiale.",
+    attrs: [2,2,4,4,1,2,2],
+    skillsSuggested: "Athlétisme 3, Vigilance 1, Capacité de Tir 2, Pilotage 1, Capacité de Combat 1",
+    talentsSuggested: "Augmétique, Héritage du Deuil, Touché par le Destin"
+  },
+  "Ork Boy": {
+    species: "Ork", xpCost: 26, keywords: "ORK, [CLAN]",
+    abilityName: "On Fonce Dedans", abilityText: "+Rang dés bonus aux attaques de mêlée pour chaque allié engagé contre la même cible que vous.",
+    wargear: "Shoota, Slugga, Choppa, vêtements en lambeaux.",
+    attrs: [4,4,2,3,1,1,1],
+    skillsSuggested: "Athlétisme 1, Capacité de Tir 1, Intimidation 2, Capacité de Combat 3",
+    talentsSuggested: "Berserker, Brutaliste, Frénésie"
+  },
+  "Sœur de Bataille": {
+    species: "Humain", xpCost: 64, keywords: "IMPERIUM, ADEPTUS MINISTORUM, ADEPTA SORORITAS, [ORDRE]",
+    abilityName: "Pureté de la Foi", abilityText: "Vous et vos alliés à 15m gagnez Double Rang en dés bonus aux tests de Corruption, et à tout test résistant aux effets du Warp/Chaos.",
+    wargear: "Armure Servo-Assistée Sororitas, Chapelet Ecclesiasticus, tenue Sororitas, kit d'écriture, exemplaire de la Règle des Sororitas, plus équipement au choix.",
+    attrs: [3,4,4,4,4,2,2],
+    skillsSuggested: "Athlétisme 2, Vigilance 1, Capacité de Tir 3, Intimidation 1, Commandement 1, Connaissance 2, Capacité de Combat 3",
+    talentsSuggested: "Dur à Cuire, Orthopraxie, Bouclier de la Foi, Repentez-vous !"
+  },
+  "Psyker Sanctionné": {
+    species: "Humain", xpCost: 32, keywords: "IMPERIUM, ADEPTUS ASTRA TELEPATHICA, PSYKER, SCHOLASTIA PSYKANA",
+    abilityName: "Psyker", abilityText: "Vous possédez le mot-clé PSYKER. Vous connaissez les Aptitudes Universelles du Psyker, 1 Pouvoir Mineur et le pouvoir Fléau Psychique (Smite).",
+    wargear: "Pistolet Laser, Bâton de Force, Lame de Miséricorde Psykana, gamelle Munitorum, couverture, kit de toilette, 2 rations.",
+    attrs: [1,3,2,3,6,3,2],
+    skillsSuggested: "—",
+    talentsSuggested: "—"
+  },
+  "Skitarius": {
+    species: "Humain", xpCost: 28, keywords: "IMPERIUM, ADEPTUS MECHANICUS, SKITARII, [MONDE-FORGE]",
+    abilityName: "Fortement Augmenté", abilityText: "Immunisé au Saignement (ne saigne pas), +Rang dés bonus dans des circonstances liées à vos augmentations.",
+    wargear: "Outil Combiné, Fusil Galvanique, Cuirasse Auto Skitarii.",
+    attrs: [3,4,4,3,2,2,1],
+    skillsSuggested: "Athlétisme 1, Vigilance 1, Capacité de Tir 4, Investigation 2, Medicae 2, Technomaîtrise 4, Capacité de Combat 1",
+    talentsSuggested: "Augmétique, Bavardage Binaire, Cogitateur de Conversation, Rite de Magnométrie"
+  },
+  "Assassin du Culte de la Mort": {
+    species: "Humain", xpCost: 36, keywords: "IMPERIUM, ADEPTUS MINISTORUM",
+    abilityName: "Coup Frôlé", abilityText: "Utilisez votre Agilité à la place de votre Endurance pour les jets de Détermination.",
+    wargear: "Deux Lames de Puissance du Culte de la Mort, Combinaison Moulante, Couteau, Pistolet Laser, 3 doses de Stimm. Influence +1.",
+    attrs: [3,3,4,4,3,2,1],
+    skillsSuggested: "Athlétisme 3, Vigilance 1, Capacité de Tir 1, Intimidation 1, Investigation 1, Connaissance 1, Medicae/Furtivité 3, Capacité de Combat 4",
+    talentsSuggested: "Que le Sang Coule !, Éliminateur, Flagellant, Silencieux"
+  },
+  "Scion Tempestus": {
+    species: "Humain", xpCost: 52, keywords: "IMPERIUM, ASTRA MILITARUM, MILITARUM TEMPESTUS",
+    abilityName: "Soldat d'Élite", abilityText: "Dépenser de la Gloire pour augmenter les dégâts d'une arme au mot-clé ASTRA MILITARUM a un effet renforcé.",
+    wargear: "Carapace Tempestus, Fusil Laser Surchauffé, Grav-Chute, Couteau, gamelle Munitorum, Abécédaire Édifiant, dalle Monitron.",
+    attrs: [4,3,4,3,2,2,2],
+    skillsSuggested: "Athlétisme 2, Vigilance 2, Capacité de Tir 4, Commandement 1, Pilotage 2, Furtivité 2, Survie 2, Capacité de Combat 2",
+    talentsSuggested: "Tir Fatal, Dur à Cuire, Jargon [Compétence], Soldat d'Armes Spéciales"
+  },
+  "Rogue Trader": {
+    species: "Humain", xpCost: 36, keywords: "IMPERIUM, ROGUE TRADER, [DYNASTIE]",
+    abilityName: "Lettre de Marque", abilityText: "+Rang dés bonus à tous les tests de Persuasion et aux tests d'Influence pour acquérir des biens.",
+    wargear: "Frégate Impériale. Deux équipements au choix (Valeur ≤ Tier+4, Rareté Rare ou moins).",
+    attrs: [2,2,2,3,3,3,5],
+    skillsSuggested: "Vigilance 1, Capacité de Tir 1, Ruse 3, Duperie 3, Psychologie 2, Commandement 2, Persuasion 3, Pilotage 2, Capacité de Combat 1",
+    talentsSuggested: "Augmétique, Humour Noir, Malin des Bas-Fonds, Touché par le Destin"
+  },
+  "Scavvy": {
+    species: "Humain", xpCost: 16, keywords: "SCUM, [TOUTE]",
+    abilityName: "Mutant", abilityText: "Choisissez deux Mutations dans la liste des Mutations Scavvy. À chaque augmentation de Rang, vous pouvez en choisir une supplémentaire.",
+    wargear: "Pistolet Laser ou Autopistolet, Couteau, sac de couchage, gourde, vêtements en lambeaux. Influence −1.",
+    attrs: [3,4,3,3,2,1,3],
+    skillsSuggested: "Athlétisme 2, Vigilance 2, Capacité de Tir 1, Ruse 3, Duperie 2, Intimidation 1, Investigation 2, Persuasion 1, Furtivité 2, Survie 4, Technomaîtrise 1",
+    talentsSuggested: "Combattant Déloyal, Explorateur de Ruche, Silencieux, Quelconque"
+  },
+  "Éclaireur Space Marine": {
+    species: "Adeptus Astartes", xpCost: 170, keywords: "IMPERIUM, ADEPTUS ASTARTES, [CHAPITRE]",
+    abilityName: "Utiliser le Terrain", abilityText: "+Rang à un test de Furtivité lorsqu'un terrain permet de se dissimuler.",
+    wargear: "Voir équipement standard Adeptus Astartes (Armure d'Éclaireur, arme au choix du Chapitre).",
+    attrs: [null,null,null,null,null,null,null],
+    skillsSuggested: "Voir bonus d'Espèce Adeptus Astartes",
+    talentsSuggested: "—"
+  },
+  "Ranger": {
+    species: "Aeldari", xpCost: 34, keywords: "AELDARI, ASURYANI",
+    abilityName: "Depuis les Ombres", abilityText: "Bonus supplémentaire lorsqu'une pénalité de Vision ou de Couverture s'applique à une attaque impliquant vous ou votre cible.",
+    wargear: "Cape Caméléoline, Armure en Maille Aeldari, Fusil Long Ranger, Pistolet à Fléchettes Shuriken, Couteau, Pierre-Esprit, sac de couchage, couverture, lunette Magnoculaire.",
+    attrs: [2,3,5,3,3,3,1],
+    skillsSuggested: "Athlétisme 2, Vigilance 4, Capacité de Tir 3, Duperie 1, Psychologie 1, Connaissance 1, Furtivité 3, Survie 2",
+    talentsSuggested: "Héritage du Deuil, Tir Fatal, Éliminateur, Voies Maîtrisées"
+  },
+  "Kommando": {
+    species: "Ork", xpCost: 54, keywords: "ORK, [CLAN]",
+    abilityName: "Plan Rusé", abilityText: "Vous et vos alliés Orks à 15m gagnez +Rang dés bonus aux tests de Furtivité.",
+    wargear: "Shoota, Slugga, Choppa, 3 Stikkbombs, kit de survie.",
+    attrs: [4,4,4,3,1,1,1],
+    skillsSuggested: "Athlétisme 2, Vigilance 1, Capacité de Tir 1, Ruse 1, Intimidation 2, Furtivité 4, Survie 1, Technomaîtrise 2, Capacité de Combat 4",
+    talentsSuggested: "Brutaliste, Éliminateur, Plus de Dakka !, Silencieux"
+  },
+  "Tech-Prêtre": {
+    species: "Humain", xpCost: 44, keywords: "IMPERIUM, ADEPTUS MECHANICUS, CULTE MECHANICUS, [MONDE-FORGE]",
+    abilityName: "Rite de Réparation", abilityText: "Double Rang en Technomaîtrise pour réparer une machine ; ces tests prennent moitié moins de temps.",
+    wargear: "Hache Omnissienne, Pistolet Laser, un Mechadendrite, 2 Augmétiques au choix, Outil Combiné, Armure Servo-Assistée Légère, Sceau Omnissien. Influence +2.",
+    attrs: [2,3,2,2,3,7,1],
+    skillsSuggested: "Vigilance 2, Capacité de Tir 4, Investigation 1, Medicae 2, Pilotage 2, Connaissance 4, Technomaîtrise 6, Capacité de Combat 2",
+    talentsSuggested: "Bavardage Binaire, Déductif, Rite de Magnométrie, Rite de la Pensée Pure"
+  },
+  "Croisé": {
+    species: "Humain", xpCost: 54, keywords: "IMPERIUM, ADEPTUS MINISTORUM",
+    abilityName: "Armure de la Foi", abilityText: "Double Rang en dés bonus aux attaques de mêlée contre les cibles CHAOS ou HÉRÉTIQUE ; +Rang à votre Résolution.",
+    wargear: "Épée-Tronçonneuse Énergétique, Bouclier de Tempête, Armure Carapace, robes du Ministorum. Influence +1.",
+    attrs: [4,3,3,5,4,3,2],
+    skillsSuggested: "Athlétisme 3, Vigilance 3, Psychologie 3, Intimidation 1, Commandement 2, Connaissance 5, Capacité de Combat 5",
+    talentsSuggested: "Devoir Jusqu'à la Mort, Flagellant, Orthopraxie, Tenace"
+  },
+  "Commissaire Impérial": {
+    species: "Humain", xpCost: 76, keywords: "IMPERIUM, ASTRA MILITARUM, OFFICIO PREFECTUS",
+    abilityName: "Respect Redoutable", abilityText: "Vous et vos alliés à 15m (avec ligne de vue) gagnez Double Rang en dés bonus aux tests de Résolution ; Double Rang en Intimidation, y compris en Attaque d'Interaction.",
+    wargear: "Pistolet Bolt, Tronçonneuse (Chainsword), Manteau Flak, gamelle Munitorum, couverture, kit de toilette, Abécédaire Édifiant, 3 rations. Influence +3.",
+    attrs: [3,3,2,3,5,2,4],
+    skillsSuggested: "Athlétisme 1, Vigilance 3, Capacité de Tir 3, Psychologie 3, Intimidation 5, Commandement 5, Persuasion 3, Connaissance 2, Capacité de Combat 2",
+    talentsSuggested: "Augmétique, Intrépide, Tenace, Stoïque"
+  },
+  "Desperado": {
+    species: "Humain", xpCost: 52, keywords: "SCUM, [TOUTE]",
+    abilityName: "Proie de Valeur", abilityText: "+Rang dés bonus aux tests de Ruse, et à tout test pour traquer un individu.",
+    wargear: "Manteau Flak, Lunettes Preysense, cartes des Heartworlds, Outil Combiné, une arme à PROJECTILE et une arme de mêlée (Peu Commune ou moins). Influence +1.",
+    attrs: [2,3,5,4,2,4,4],
+    skillsSuggested: "Athlétisme 2, Vigilance 3, Capacité de Tir 3, Ruse 4, Duperie 1, Psychologie 2, Investigation 4, Medicae 1, Persuasion 1, Pilotage 1, Furtivité 3, Survie 2",
+    talentsSuggested: "Augmétique, Combattant Déloyal, Humour Noir, Jargon [Compétence]"
+  },
+  "Space Marine Tactique": {
+    species: "Adeptus Astartes", xpCost: 277, keywords: "IMPERIUM, ADEPTUS ASTARTES, [CHAPITRE]",
+    abilityName: "Polyvalence Tactique", abilityText: "Sur un Coup Critique, lancez deux fois sur la Table des Coups Critiques et choisissez le résultat.",
+    wargear: "Équipement standard Adeptus Astartes Tactique (armes/armure du Chapitre).",
+    attrs: [4,5,5,5,3,3,null],
+    skillsSuggested: "Athlétisme 3, Vigilance 3, Capacité de Tir 5, Commandement 1, Connaissance 1, Furtivité 3, Survie 1, Capacité de Combat 4",
+    talentsSuggested: "Voir Dons Adeptus Astartes"
+  },
+  "Sorcier (Warlock Aeldari)": {
+    species: "Aeldari", xpCost: 56, keywords: "AELDARI, ASURYANI, PSYKER, [CRAFTWORLD]",
+    abilityName: "Runes de Bataille", abilityText: "Vous possédez le mot-clé PSYKER. Vous connaissez les Aptitudes Universelles du Psyker, le pouvoir Fléau Psychique, et un pouvoir de la discipline Runes de Bataille.",
+    wargear: "Armure Runique, Lame Chantante, Pistolet à Fléchettes Shuriken, jeu de Runes en Os-Spectral, Pierre-Esprit. Influence +2.",
+    attrs: [2,3,4,5,7,4,2],
+    skillsSuggested: "—",
+    talentsSuggested: "—"
+  },
+  "Ork Nob": {
+    species: "Ork", xpCost: 56, keywords: "ORK, [CLAN]",
+    abilityName: "La Marée Verte", abilityText: "Vous commandez une horde de Boyz égale à Rang×3. Les Boyz perdus peuvent être remplacés entre les sessions à la discrétion du MJ.",
+    wargear: "Armure Balaise ('Eavy Armour), Slugga Bricolé, Choppa Bricolé. Influence +2.",
+    attrs: [5,5,2,4,3,1,2],
+    skillsSuggested: "Athlétisme 2, Vigilance 1, Capacité de Tir 2, Ruse 3, Intimidation 4, Commandement 3, Pilotage 2, Survie 2, Capacité de Combat 6",
+    talentsSuggested: "Augmétique, Brutaliste, Loi de la Horde, Plus de Dakka !"
+  },
+  "Inquisiteur": {
+    species: "Humain", xpCost: 110, keywords: "IMPERIUM, INQUISITION, [ORDO], [TOUTE]",
+    abilityName: "Autorité Absolue", abilityText: "Double Rang en dés bonus à tout test social contre un personnage au mot-clé IMPERIUM.",
+    wargear: "Rosette Inquisitoriale, deux armes au choix (Valeur ≤7, Rareté Très Rare ou moins), armure au choix.",
+    attrs: [3,4,3,3,6,6,2],
+    skillsSuggested: "Vigilance 3, Capacité de Tir 1, Ruse 2, Duperie 2, Psychologie 7*, Intimidation 3, Investigation 5*, Commandement 2, Medicae 1, Connaissance 2, Furtivité 2",
+    talentsSuggested: "Déductif, Intrépide, Orthopraxie, Stoïque"
+  },
+  "Intercesseur Primaris": {
+    species: "Primaris Astartes", xpCost: 300, keywords: "ADEPTUS ASTARTES, IMPERIUM, PRIMARIS, [CHAPITRE]",
+    abilityName: "Concentration d'Intercesseur", abilityText: "Double Rang en dés bonus à tout test de Capacité de Tir pour une arme au mot-clé PRIMARIS.",
+    wargear: "Armure Tacticus Mk X, Fusil Bolt, Pistolet Bolt Lourd, Couteau de Combat Astartes, 3 Grenades à Fragmentation, 3 Grenades Krak, reliquaire d'apaisement balistique.",
+    attrs: [6,6,6,5,3,3,1],
+    skillsSuggested: "Voir bonus d'Espèce Primaris Astartes",
+    talentsSuggested: "—"
+  }
+};
+
+
+// ==== js/data/talents.js ====
+// ============================================================
+// DONS (Talents) — reformulés à partir du manuel, usage personnel.
+// xp: coût en XP · req: prérequis (texte libre) · desc: résumé de l'effet
+// ============================================================
+
+const TALENTS = [
+  { name: "Sens Aiguisé", xp: 20, req: "", desc: "Choisissez un sens : dés bonus égaux au Rang sur les tests de Vigilance liés à ce sens." },
+  { name: "Ange de la Mort", xp: 30, req: "Rang 2+, Espèce Adeptus Astartes", desc: "Dégâts bonus égaux au Rang avec tronçonneuses, épées/poings tonnerre, armes bolt et armes à mains nues." },
+  { name: "Fléau des Armures", xp: 20, req: "Capacité de Combat 2+", desc: "En attaque de mêlée réussie, convertit les Icônes Exaltées en réduction de Résilience de la cible plutôt qu'en dégâts bonus." },
+  { name: "Augmétique", xp: "20 + valeur", req: "", desc: "Remplace une partie du corps par une augmétique (implant cybernétique) ; peut être pris plusieurs fois." },
+  { name: "Traître", xp: 20, req: "Mot-clé CHAOS", desc: "Sacrifice rituel d'un individu pour gagner un point de Colère ; +1 Corruption." },
+  { name: "Berserker", xp: 20, req: "", desc: "Gagne un point de Colère en voyant un Coup Critique ou un Saignement à proximité." },
+  { name: "Bavardage Binaire", xp: 20, req: "Mot-clé ADEPTUS MECHANICUS", desc: "Double Rang en dés bonus pour instruire ou interroger des servo-automates." },
+  { name: "Combattant Aveugle", xp: 20, req: "Vigilance 3+", desc: "L'état Aveuglé n'affecte pas vos tests de Capacité de Combat." },
+  { name: "Que le Sang Coule !", xp: 20, req: "Capacité de Combat 2+", desc: "Dépensez une Icône Exaltée sur une attaque de Capacité de Combat réussie pour infliger l'état Saignement." },
+  { name: "Bombardement", xp: 40, req: "Rang 2+, mot-clé militaire ou de faction", desc: "Une fois par session, appelle une frappe dévastatrice (20 dégâts + Double Rang DE) sur une zone désignée." },
+  { name: "Brutaliste", xp: 20, req: "Force 3+", desc: "Toutes vos armes de mêlée (mains nues incluses) gagnent le trait Brutal ; dégâts supplémentaires si l'arme l'avait déjà." },
+  { name: "Familier du Chaos", xp: 20, req: "Mot-clé CHAOS", desc: "Un démon mineur devient votre serviteur (peu fiable) ; +2 Corruption." },
+  { name: "Cogitateur de Conversation", xp: 10, req: "Mot-clé ADEPTUS MECHANICUS", desc: "Peut utiliser Technologie à la place des compétences sociales pour un test, une fois par Régroupement/Répit." },
+  { name: "Contre-Attaque", xp: 30, req: "Capacité de Combat 5+", desc: "Réplique en mêlée après avoir été attaqué, jusqu'à Rang fois par Round ; impossible de se déplacer au tour suivant." },
+  { name: "Tir Fatal", xp: 20, req: "Capacité de Tir 2+", desc: "Double le bonus de dégâts d'un Tir Ciblé après avoir visé." },
+  { name: "Mort ou Gloire !", xp: 20, req: "Humain", desc: "Peut charger la source d'une Peur et attaquer au lieu de faire le test de Peur." },
+  { name: "Déductif", xp: 20, req: "Intellect 3+", desc: "Test d'Intellect pour apprendre des informations sur une cible ; dés bonus égaux au Rang contre elle ensuite." },
+  { name: "Dévots", xp: 30, req: "Commandement 4+", desc: "Gagne une Horde de partisans dévoués qui peuvent s'interposer pour encaisser une attaque à votre place." },
+  { name: "Dur à Cuire", xp: 20, req: "", desc: "Évite de mourir en cas de dépassement des Blessures max ; soigne 1 Blessure (une fois par Régroupement)." },
+  { name: "Combattant Déloyal", xp: 20, req: "", desc: "En Attaque d'Interaction avec 2 Icônes dépensées, inflige une Condition supplémentaire (Aveuglé, à terre, Entravé ou Étourdi)." },
+  { name: "Savant de Discipline", xp: 30, req: "Maîtrise Psychique 4+, 2 pouvoirs d'une même discipline", desc: "Réduit de 1 le DD des tests pour activer un pouvoir de la discipline choisie." },
+  { name: "Voix Perturbante", xp: 20, req: "", desc: "Dés bonus égaux au Rang en Intimidation/Commandement vocaux ; pénalité aux tests sociaux avec certains publics." },
+  { name: "Ambidextre au Combat", xp: 20, req: "", desc: "Réduit la pénalité de Multi-Attaque en combattant à deux armes (une par main)." },
+  { name: "Devoir Jusqu'à la Mort", xp: 20, req: "Force Mentale 3+, mot-clé IMPERIUM", desc: "Peut agir normalement un tour de plus après avoir dépassé ses Blessures max avant de commencer à mourir." },
+  { name: "Éliminateur", xp: 20, req: "Furtivité 2+", desc: "Ajoute son Score de Furtivité en dégâts bonus contre une cible qui ne vous a pas repéré." },
+  { name: "Artiste de l'Évasion", xp: 20, req: "", desc: "Double Rang en dés bonus pour se libérer d'une entrave ou d'une prise." },
+  { name: "Toujours sur ses Gardes", xp: 20, req: "", desc: "Double Rang de bonus à la Vigilance Passive." },
+  { name: "Favorisé par le Warp", xp: 40, req: "Mot-clé PSYKER", desc: "Peut relancer un résultat de table des Périls du Warp (le nouveau résultat s'applique)." },
+  { name: "Peur", xp: 30, req: "", desc: "Un test d'Intimidation réussi force la cible à faire un test de Peur." },
+  { name: "Intrépide", xp: 30, req: "Force Mentale 4+", desc: "Réussit automatiquement tout test de Peur ; immunisé aux Attaques d'Interaction d'Intimidation." },
+  { name: "Insensible à la Douleur", xp: 40, req: "Endurance 4+", desc: "Pas de pénalité de DD liée aux Blessures ; +Rang au trait Blessures." },
+  { name: "Flagellant", xp: 20, req: "Mot-clé IMPERIUM", desc: "S'inflige des Blessures rituelles chaque jour en échange de bonus à la Détermination/Conviction et à la Frénésie." },
+  { name: "Frénésie", xp: 20, req: "", desc: "Peut devenir Frénétique en Action de Combat." },
+  { name: "Charge Furieuse", xp: 20, req: "Athlétisme 2+ et Capacité de Combat 2+", desc: "Bonus égal au Rang aux dégâts de mêlée lors d'une attaque après une Charge." },
+  { name: "Humour Noir", xp: 20, req: "", desc: "Une blague grinçante (test de Sociabilité) restaure du Choc à vous et vos alliés proches." },
+  { name: "Robuste", xp: 30, req: "Endurance 3+", desc: "Test d'Endurance en Action de Combat pour récupérer du Choc, plus efficace en cas de réussite." },
+  { name: "Haine [Mot-clé]", xp: 30, req: "", desc: "Dés bonus (Double Rang) en mêlée contre un mot-clé choisi ; pénalité sociale envers ce même mot-clé." },
+  { name: "Explorateur de Ruche", xp: 20, req: "Mot-clé IMPERIUM", desc: "Dés bonus égaux au Rang en Furtivité/Survie en environnement urbain." },
+  { name: "Jargon [Compétence]", xp: 20, req: "Rang 1+ dans une compétence technique", desc: "Utilise un jargon spécialisé pour impressionner ou distraire un interlocuteur en conversation." },
+  { name: "Héritage du Deuil", xp: 20, req: "Espèce Aeldari", desc: "Annule la pénalité d'Émotion Intense de l'espèce ; le groupe gagne de la Gloire quand vous survivez à la mort." },
+  { name: "Laisse Brûler la Galaxie", xp: 20, req: "Mot-clé CHAOS", desc: "+1 Corruption ; le groupe gagne de la Gloire en mettant hors de combat des ennemis puissants." },
+  { name: "Lecteur sur les Lèvres", xp: 20, req: "", desc: "Test de Vigilance pour lire sur les lèvres à distance." },
+  { name: "Efficacité Lobotomisée", xp: 20, req: "Humain", desc: "Double Rang en bonus à la Conviction/Résolution ; ne bénéficie plus du bonus de Palier au Choc max." },
+  { name: "Maître Érudit [Mot-clé]", xp: 30, req: "Connaissance 3+", desc: "Choisissez un mot-clé (culture, espèce, domaine ésotérique) : Double Rang en dés bonus pour tout ce qui s'y rapporte." },
+  { name: "Marque du Chaos", xp: 30, req: "Mot-clé [MARQUE DU CHAOS]", desc: "Choisissez la faveur d'un Dieu Sombre (bonus spécifique par dieu) ; +1 Corruption." },
+  { name: "Voies Maîtrisées", xp: 20, req: "Espèce Aeldari, mot-clé ASURYANI", desc: "Bonus supplémentaire égal au Rang sur une Voie Aeldari déjà maîtrisée." },
+  { name: "Imitateur de Voix", xp: 20, req: "Duperie 3+", desc: "Étudie puis imite la voix d'une personne pour tromper avec un bonus (Double Rang)." },
+  { name: "Loi de la Horde", xp: 20, req: "Espèce Ork", desc: "Bonus (Double Rang) aux tests de Résolution pour vous et les Orks alliés proches." },
+  { name: "Plus de Dakka !", xp: 35, req: "Espèce Ork", desc: "Augmente la Salve de vos armes de +Rang." },
+  { name: "Pair Noble", xp: 30, req: "Persuasion 3+", desc: "Bonus (Double Rang) aux tests sociaux quand le statut social entre en jeu." },
+  { name: "Orthopraxie", xp: 20, req: "Mot-clé IMPERIUM", desc: "Récite des litanies en Action Simple pour gagner un bonus temporaire de Force Mentale." },
+  { name: "Paranoïaque", xp: 20, req: "Ruse 3+", desc: "Une fois par session, interroge un réseau de contacts pour obtenir une information." },
+  { name: "Perspective Primaris", xp: 40, req: "Espèce Primaris Astartes", desc: "Bonus aux tests de Résolution/Corruption et grand bonus d'Connaissance sur les événements anciens." },
+  { name: "Maîtrise du Prométhéum", xp: 20, req: "Mot-clé IMPERIUM", desc: "Dégâts bonus avec les armes incendiaires ; gain de Colère en tuant un ennemi par le feu." },
+  { name: "Rite de Peur", xp: 30, req: "Mot-clé ADEPTUS MECHANICUS", desc: "Émet un son infrasonique en cône qui force un test de Peur chez les cibles proches." },
+  { name: "Rite de Magnométrie", xp: 20, req: "Mot-clé ADEPTUS MECHANICUS", desc: "Manipule des objets métalliques à distance et peut léviter au-dessus de surfaces métalliques." },
+  { name: "Rite de la Pensée Pure", xp: 20, req: "Mot-clé ADEPTUS MECHANICUS", desc: "Bonus aux tests de Résolution, Peur, résistance sociale, et Investigation." },
+  { name: "Malin des Bas-Fonds", xp: 20, req: "Humain", desc: "Grand bonus de résistance aux substances chimiques ; bonus en Ruse." },
+  { name: "Identité Secrète", xp: 20, req: "Mot-clé INQUISITION", desc: "Maintient une couverture ; un test de Duperie est requis si elle est mise à l'épreuve." },
+  { name: "Esquive", xp: 30, req: "Initiative 3+", desc: "Réaction défensive en mêlée : bonus (Double Rang) à la Défense et à la Résilience pour une attaque." },
+  { name: "Silencieux", xp: 20, req: "", desc: "Peut se déplacer furtivement à pleine Vitesse sans pénalité supplémentaire au Score de Furtivité." },
+  { name: "Frappe Simultanée", xp: 30, req: "Tir 4+ ou Capacité de Combat 4+", desc: "Attaque à deux armes légères/pistolets en une seule action, dégâts combinés." },
+  { name: "Attaque Fracassante", xp: 20, req: "Capacité de Combat 2+", desc: "Dégâts bonus égaux au Rang sur une Attaque Totale." },
+  { name: "Soldat d'Armes Spéciales", xp: "20 + valeur", req: "Capacité de Tir 3+, mot-clé ASTRA MILITARUM", desc: "Remplace son arme principale par une arme spéciale (fusil à pompe, fuseur, lance-plasma...)." },
+  { name: "Stoïque", xp: 20, req: "", desc: "Impose une pénalité (Double Rang) aux tests d'Intuition faits contre vous." },
+  { name: "Tempête de Mort", xp: 30, req: "Capacité de Combat 4+", desc: "Réduit fortement la pénalité de DD d'une Multi-Attaque au corps à corps." },
+  { name: "Suppliant", xp: 20, req: "Espèce Humaine", desc: "Bonus égal au Rang en s'adressant à des supérieurs sociaux dans les normes de l'Imperium." },
+  { name: "Présence Suprême [Compétence]", xp: 30, req: "Compétence 4+ au choix", desc: "Une Attaque d'Interaction touche plusieurs cibles ou une Horde entière sans DD supplémentaire." },
+  { name: "Tenace", xp: 30, req: "", desc: "Récupère du Choc pour chaque Icône Exaltée obtenue en jet de Détermination." },
+  { name: "La Chair est Faible", xp: 30, req: "", desc: "Corps largement augmétique : plus besoin de respirer, immunisé au Saignement, bonus Technologie/Détermination, pénalité Persuasion." },
+  { name: "Touché par le Destin", xp: 20, req: "", desc: "Commence chaque session avec des Points de Colère supplémentaires (Rang)." },
+  { name: "Arme Fétiche", xp: 30, req: "", desc: "Choisissez une arme précise : dégâts bonus (Double Rang) avec elle uniquement." },
+  { name: "Transhumain [Attribut]", xp: 60, req: "Attribut choisi à 5+", desc: "Double Rang en dés bonus pour tout test utilisant l'Attribut choisi." },
+  { name: "Double Concentration", xp: 20, req: "Maîtrise Psychique 4+", desc: "Réduit de 2 la pénalité de DD liée au maintien de plusieurs pouvoirs psychiques." },
+  { name: "Insolite [Trait]", xp: 40, req: "", desc: "Augmente un Trait au choix (Défense, Résilience, Résolution, Choc, Détermination, Vitesse, Blessures...) de +Rang." },
+  { name: "Surnaturel [Compétence]", xp: 60, req: "Compétence 4+ au choix", desc: "Réduit les malus de DD (Double Rang) pour la compétence choisie, sans changer la difficulté de base." },
+  { name: "Quelconque", xp: 20, req: "Mot-clé IMPERIUM", desc: "Passe inaperçu : les nobles vous ignorent, pénalité (Double Rang) pour qu'on vous remarque en foule." },
+  { name: "Esprit Dénaturé", xp: 30, req: "Maîtrise Psychique 4+", desc: "Permet d'apprendre des pouvoirs d'une discipline psychique supplémentaire (coût réductible en Corruption)." },
+
+  // --- Dons de Foi (nécessitent la plupart du temps ADEPTUS MINISTORUM ou ADEPTA SORORITAS) ---
+  { name: "Pureté Réconfortante", xp: 40, req: "Mot-clé ADEPTUS MINISTORUM/SORORITAS", desc: "[Foi] +1 Foi. Dépensez 1 Foi pour garantir la réussite des tests de Résolution/Conviction d'un allié jusqu'à la fin du Round." },
+  { name: "Par Sa Force Mentale", xp: 20, req: "Mot-clé ADEPTUS MINISTORUM/SORORITAS", desc: "[Foi] +1 Foi. En aidant un allié IMPERIUM, dépensez 1 Foi pour tripler les dés bonus donnés." },
+  { name: "Lumière Consacrée", xp: 20, req: "Mot-clé ADEPTUS MINISTORUM", desc: "[Foi] +1 Foi. Dépensez 1 Foi pour donner un bonus (Double Rang) aux tests de Peur/Corruption des alliés proches." },
+  { name: "Guidage Divin", xp: 20, req: "Mot-clé ADEPTUS MINISTORUM/SORORITAS", desc: "[Foi] +1 Foi. Dépensez 1 Foi pour donner un bonus (Double Rang) au Tir d'un allié pendant 1 Round." },
+  { name: "En Son Nom", xp: 20, req: "Mot-clé ADEPTUS MINISTORUM/SORORITAS, Connaissance 1+", desc: "[Foi] +1 Foi. Dépensez 1 Foi pour un bonus (Double Rang) à un test de Persuasion/Commandement contre une cible IMPERIUM." },
+  { name: "Bénédiction Inspirée", xp: 25, req: "Mot-clé ADEPTUS MINISTORUM", desc: "[Foi] +1 Foi. Dépensez 1 Foi pour restaurer du Choc à vous et vos alliés IMPERIUM proches." },
+  { name: "Litanie de Haine", xp: 20, req: "Mot-clé ADEPTUS MINISTORUM/SORORITAS, don Haine", desc: "[Foi] +1 Foi. Dépensez 1 Foi et une Action Simple pour étendre les effets de votre don Haine à vos alliés proches." },
+  { name: "Larmes du Martyr", xp: 20, req: "Mot-clé ADEPTUS MINISTORUM/SORORITAS, Force Mentale 3+", desc: "[Foi] +1 Foi. Sacrifiez vos propres Blessures (dans la limite du Palier) pour en soigner le double à une cible." },
+  { name: "Repentez-vous !", xp: 20, req: "Mot-clé ADEPTUS MINISTORUM/SORORITAS, Force Mentale 3+", desc: "[Foi] +1 Foi. Test d'Intimidation opposé pour forcer un adepte du Culte Impérial à se repentir." },
+  { name: "Courroux Vertueux", xp: 20, req: "Mot-clé ADEPTUS MINISTORUM/SORORITAS, Force Mentale 3+", desc: "[Foi] +1 Foi. Dépensez 1 Foi pour gagner de la Colère, partageable avec un allié IMPERIUM." },
+  { name: "Bouclier de la Foi", xp: 20, req: "Mot-clé ADEPTA SORORITAS, Force Mentale 3+", desc: "[Foi] +1 Foi. Dépensez 1 Foi pour ignorer un pouvoir psychique ou ses effets jusqu'à la fin du Round." },
+  { name: "La Passion", xp: 20, req: "Mot-clé ADEPTUS MINISTORUM/SORORITAS", desc: "[Foi] +1 Foi. Dépensez 1 Foi pour un bonus (Double Rang) au Capacité de Combat d'un allié pendant 1 Round." },
+  { name: "L'Empereur Protège", xp: 30, req: "Mot-clé ADEPTUS MINISTORUM/SORORITAS, au moins 1 Foi", desc: "[Foi] +1 Foi. Dépensez 2 Foi pour faire rater complètement une attaque dirigée contre vous." }
+];
+
+
+// ==== js/data/wargear.js ====
+// ============================================================
+// ARMURERIE — Armes, Armures, Traits d'armes, Munitions
+// Statistiques reprises telles quelles du manuel (données factuelles/mécaniques).
+// Descriptions de Traits reformulées en français, à usage personnel.
+// ============================================================
+
+// Colonnes armes de mêlée : name, dmg (formule dégâts), ed, ap, range, traits, value, rarity, keywords
+const MELEE_WEAPONS = {
+  "Armes Blanches": [
+    { name: "Couteau", dmg: "(F) +2", ed: 2, ap: "–", range: "Lancer F x4", traits: "", value: 2, rarity: "Commune", kw: "LAME, [TOUTES]" },
+    { name: "Couteau de Combat Astartes", dmg: "(F) +3", ed: 2, ap: -1, range: "–", traits: "Fiable", value: 3, rarity: "Peu commune", kw: "LAME, ADEPTUS ASTARTES" },
+    { name: "Épée", dmg: "(F) +3", ed: 3, ap: "–", range: "–", traits: "Parade", value: 3, rarity: "Commune", kw: "LAME, [TOUTES]" },
+    { name: "Mono-Couteau", dmg: "(F) +3", ed: 2, ap: -1, range: "–", traits: "Perforant (1)", value: 3, rarity: "Peu commune", kw: "LAME, IMPERIUM, SCUM" },
+    { name: "Gourdin Industriel", dmg: "(F) +4", ed: 2, ap: "–", range: "–", traits: "Brutal, Peu maniable (1)", value: 3, rarity: "Peu commune", kw: "[TOUTES]" }
+  ],
+  "Armes à Tronçonneuse": [
+    { name: "Baïonnette-Tronçonneuse", dmg: "(F) +4", ed: 1, ap: "–", range: "–", traits: "Brutal", value: 3, rarity: "Rare", kw: "TRONÇONNEUSE, IMPERIUM, CHAOS" },
+    { name: "Tronçonneuse (Chainsword)", dmg: "(F) +5", ed: 4, ap: "–", range: "–", traits: "Brutal, Parade", value: 4, rarity: "Peu commune", kw: "TRONÇONNEUSE, AELDARI, IMPERIUM, CHAOS" },
+    { name: "Hache-Tronçonneuse", dmg: "(F) +5", ed: 5, ap: "–", range: "–", traits: "Brutal, Perforant (1)", value: 5, rarity: "Rare", kw: "TRONÇONNEUSE, CHAOS" },
+    { name: "Éviscérateur", dmg: "(F) +6", ed: 6, ap: -4, range: "2", traits: "Brutal, Peu maniable (2)", value: 6, rarity: "Rare", kw: "TRONÇONNEUSE, 2-MAINS, ADEPTUS ASTARTES, MINISTORUM, SORORITAS" },
+    { name: "Poing-Tronçonneuse", dmg: "(F) +7", ed: 6, ap: -4, range: "–", traits: "Brutal, Peu maniable (3)", value: 10, rarity: "Très rare", kw: "TRONÇONNEUSE, CHAMP DE PUISSANCE, IMPERIUM, CHAOS, ADEPTUS ASTARTES" }
+  ],
+  "Armes Exotiques": [
+    { name: "Fouet", dmg: "(F) +1", ed: 1, ap: "–", range: "4", traits: "Douloureux", value: 2, rarity: "Commune", kw: "PRIMITIF, [TOUTES]" },
+    { name: "Fouet Neural", dmg: "(F) +3", ed: 2, ap: -2, range: "4", traits: "Douloureux", value: 5, rarity: "Rare", kw: "EXOTIQUE, SORORITAS" },
+    { name: "Fouet Électrique", dmg: "(F) +4", ed: 2, ap: "–", range: "4", traits: "Douloureux, Perforant (2)", value: 4, rarity: "Très rare", kw: "EXOTIQUE, [TOUTES]" },
+    { name: "Matraque Électrique", dmg: "(F) +4", ed: 4, ap: -1, range: "1", traits: "Douloureux, Brutal", value: 5, rarity: "Peu commune", kw: "EXOTIQUE, ADEPTUS ARBITES" }
+  ],
+  "Armes de Force": [
+    { name: "Bâton de Force", dmg: "(F) +4", ed: 2, ap: -1, range: "2", traits: "Brutal, Force", value: 2, rarity: "Peu commune", kw: "FORCE, AELDARI, 2-MAINS, INQUISITION, ADEPTUS ASTARTES, ASTRA TELEPATHICA" },
+    { name: "Épée de Force", dmg: "(F) +5", ed: 4, ap: -3, range: "–", traits: "Force, Parade", value: 6, rarity: "Rare", kw: "FORCE, AELDARI, INQUISITION, ADEPTUS ASTARTES" },
+    { name: "Hache de Force", dmg: "(F) +5", ed: 5, ap: -2, range: "–", traits: "Force", value: 6, rarity: "Très rare", kw: "FORCE, INQUISITION, ADEPTUS ASTARTES" },
+    { name: "Marteau Némésis Anti-Démon", dmg: "(F) +8", ed: 6, ap: -3, range: "2", traits: "Brutal, Force, Peu maniable (2)", value: 10, rarity: "Unique", kw: "FORCE, 2-MAINS, INQUISITION, ADEPTUS ASTARTES" }
+  ],
+  "Armes à Champ de Puissance": [
+    { name: "Lame de Puissance du Culte de la Mort", dmg: "(F) +5", ed: 4, ap: -2, range: "–", traits: "Parade", value: 6, rarity: "Très rare", kw: "CHAMP DE PUISSANCE, IMPERIUM, MINISTORUM" },
+    { name: "Épée-Tronçonneuse Énergétique", dmg: "(F) +5", ed: 4, ap: -3, range: "–", traits: "Parade", value: 6, rarity: "Rare", kw: "CHAMP DE PUISSANCE, IMPERIUM, AELDARI" },
+    { name: "Hache Omnissienne", dmg: "(F) +5", ed: 5, ap: -2, range: "2", traits: "–", value: 6, rarity: "Très rare", kw: "CHAMP DE PUISSANCE, 2-MAINS, ADEPTUS MECHANICUS" },
+    { name: "Hache Énergétique", dmg: "(F) +5", ed: 5, ap: -2, range: "–", traits: "Perforant (1)", value: 6, rarity: "Rare", kw: "CHAMP DE PUISSANCE, IMPERIUM, ADEPTUS ASTARTES, ADEPTUS MECHANICUS, AELDARI" },
+    { name: "Poing Énergétique", dmg: "(F) +5", ed: 5, ap: -3, range: "–", traits: "Brutal, Peu maniable (2)", value: 8, rarity: "Très rare", kw: "CHAMP DE PUISSANCE, IMPERIUM, ADEPTUS ASTARTES" },
+    { name: "Marteau-Tonnerre", dmg: "(F) +8", ed: 6, ap: -3, range: "2", traits: "Brutal, Peu maniable (2)", value: 9, rarity: "Unique", kw: "CHAMP DE PUISSANCE, 2-MAINS, IMPERIUM, ADEPTUS ASTARTES, INQUISITION" }
+  ],
+  "Armes de Mêlée Aeldari": [
+    { name: "Lance Chantante", dmg: "(F) +6", ed: 5, ap: "–", range: "2, lancer F x5", traits: "Assaut, Force, Arme du Warp", value: 11, rarity: "Unique", kw: "FORCE, AELDARI, ASURYANI" },
+    { name: "Lame Chantante", dmg: "(F) +6", ed: 5, ap: "–", range: "–", traits: "Force, Parade, Arme du Warp", value: 9, rarity: "Très rare", kw: "FORCE, AELDARI, ASURYANI" },
+    { name: "Sabre du Vide", dmg: "(F) +5", ed: 4, ap: -3, range: "–", traits: "Brutal, Parade", value: 6, rarity: "Très rare", kw: "CHAMP DE PUISSANCE, AELDARI, ANHRATHE" }
+  ],
+  "Armes de Mêlée Ork": [
+    { name: "Choppa", dmg: "(F) +3", ed: 3, ap: "–", range: "–", traits: "Fiable, Waaagh!", value: 2, rarity: "Commune", kw: "LAME, ORK" },
+    { name: "Bâton de Sorcier Ork", dmg: "(F) +4", ed: 1, ap: -1, range: "2", traits: "Force, Waaagh!", value: 5, rarity: "Très rare", kw: "FORCE, 2-MAINS, ORK" },
+    { name: "Choppa-Tronçonneuse", dmg: "(F) +5", ed: 4, ap: "–", range: "–", traits: "Brutal, Waaagh!", value: 5, rarity: "Très rare", kw: "TRONÇONNEUSE, ORK" },
+    { name: "Grande Choppa", dmg: "(F) +5", ed: 5, ap: -1, range: "–", traits: "Waaagh!", value: 4, rarity: "Rare", kw: "LAME, 2-MAINS, ORK" },
+    { name: "Griffe Énergétique", dmg: "(F) +6", ed: 5, ap: -3, range: "1", traits: "Brutal, Peu maniable (3), Waaagh!", value: 8, rarity: "Très rare", kw: "CHAMP DE PUISSANCE, ORK" }
+  ]
+};
+
+// Colonnes armes à distance : dmg, ed, ap, short/med/long, salvo, traits, value, rarity, keywords
+const RANGED_WEAPONS = {
+  "Armes Bolt": [
+    { name: "Pistolet Bolt", dmg: 10, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 1, traits: "Brutal, Pistolet", value: 4, rarity: "Peu commune", kw: "BOLT, IMPERIUM" },
+    { name: "Pistolet Bolt Lourd", dmg: 10, ed: 1, ap: -1, short: 6, med: 12, long: 18, salvo: 1, traits: "Brutal, Pistolet", value: 7, rarity: "Très rare", kw: "BOLT, IMPERIUM, ADEPTUS ASTARTES, PRIMARIS" },
+    { name: "Bolter", dmg: 10, ed: 1, ap: "–", short: 12, med: 24, long: 36, salvo: 2, traits: "Brutal, Tir Rapide (2)", value: 6, rarity: "Peu commune", kw: "BOLT, IMPERIUM" },
+    { name: "Fusil Bolt", dmg: 10, ed: 1, ap: -1, short: 15, med: 30, long: 45, salvo: 2, traits: "Brutal, Tir Rapide (2)", value: 7, rarity: "Très rare", kw: "BOLT, IMPERIUM, ADEPTUS ASTARTES, PRIMARIS" },
+    { name: "Bolter Tempête", dmg: 10, ed: 1, ap: "–", short: 12, med: 24, long: 36, salvo: 4, traits: "Brutal, Lourd (3), Tir Rapide (3)", value: 6, rarity: "Rare", kw: "BOLT, IMPERIUM" },
+    { name: "Bolter d'Assaut", dmg: 12, ed: 2, ap: -1, short: 9, med: 18, long: 27, salvo: 3, traits: "Assaut, Brutal, Tir Rapide (2)", value: 8, rarity: "Très rare", kw: "BOLT, IMPERIUM, ADEPTUS ASTARTES, PRIMARIS" },
+    { name: "Bolter Lourd", dmg: 12, ed: 2, ap: -1, short: 18, med: 36, long: 54, salvo: 3, traits: "Brutal, Lourd (4), Tir Rapide (4)", value: 6, rarity: "Peu commune", kw: "BOLT, IMPERIUM" }
+  ],
+  "Armes Laser": [
+    { name: "Pistolet Laser", dmg: 7, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 1, traits: "Pistolet, Fiable", value: 3, rarity: "Commune", kw: "LAS, IMPERIUM" },
+    { name: "Pistolet Laser Surchauffé", dmg: 7, ed: 1, ap: -2, short: 3, med: 6, long: 9, salvo: 1, traits: "Pistolet, Fiable", value: 6, rarity: "Rare", kw: "LAS, IMPERIUM, ASTRA MILITARUM" },
+    { name: "Fusil Laser (Lasgun)", dmg: 7, ed: 1, ap: "–", short: 12, med: 24, long: 36, salvo: 2, traits: "Tir Rapide (1), Fiable", value: 3, rarity: "Commune", kw: "LAS, IMPERIUM" },
+    { name: "Fusil Laser Surchauffé", dmg: 7, ed: 1, ap: -2, short: 9, med: 18, long: 27, salvo: 2, traits: "Tir Rapide (1), Fiable", value: 6, rarity: "Rare", kw: "LAS, IMPERIUM, ASTRA MILITARUM" },
+    { name: "Fusil-Mitrailleur Laser Surchauffé", dmg: 10, ed: 1, ap: -2, short: 12, med: 24, long: 36, salvo: 4, traits: "Lourd (4), Fiable", value: 6, rarity: "Rare", kw: "LAS, IMPERIUM, ASTRA MILITARUM" },
+    { name: "Longue Las", dmg: 10, ed: 1, ap: "–", short: 18, med: 36, long: 54, salvo: 0, traits: "Sniper (1), Fiable", value: 6, rarity: "Peu commune", kw: "LAS, IMPERIUM, ASTRA MILITARUM" },
+    { name: "Canon Laser", dmg: 18, ed: 3, ap: -3, short: 24, med: 48, long: 72, salvo: 1, traits: "Lourd (8), Fiable", value: 9, rarity: "Peu commune", kw: "LAS, IMPERIUM" }
+  ],
+  "Armes Plasma": [
+    { name: "Pistolet Plasma", dmg: 15, ed: 1, ap: -3, short: 6, med: 12, long: 18, salvo: 1, traits: "Pistolet, Surcharge", value: 6, rarity: "Rare", kw: "PLASMA, IMPERIUM" },
+    { name: "Fusil Plasma", dmg: 15, ed: 1, ap: -3, short: 12, med: 24, long: 36, salvo: 2, traits: "Tir Rapide (1), Surcharge", value: 6, rarity: "Rare", kw: "PLASMA, IMPERIUM" },
+    { name: "Canon Plasma", dmg: 15, ed: 2, ap: -3, short: 18, med: 36, long: 54, salvo: 3, traits: "Lourd (8), Surcharge", value: 7, rarity: "Très rare", kw: "PLASMA, IMPERIUM" }
+  ],
+  "Armes à Fusion (Melta)": [
+    { name: "Pistolet à Fusion", dmg: 16, ed: 1, ap: -4, short: 3, med: 6, long: 9, salvo: 1, traits: "Fusion, Pistolet", value: 6, rarity: "Très rare", kw: "MELTA, IMPERIUM, ADEPTUS ASTARTES, SORORITAS" },
+    { name: "Fuseur (Meltagun)", dmg: 16, ed: 2, ap: -4, short: 6, med: 12, long: 18, salvo: 1, traits: "Assaut, Fusion", value: 6, rarity: "Peu commune", kw: "MELTA, IMPERIUM" },
+    { name: "Multi-Fuseur", dmg: 16, ed: 3, ap: -4, short: 12, med: 24, long: 36, salvo: 1, traits: "Lourd (8), Fusion", value: 7, rarity: "Rare", kw: "MELTA, IMPERIUM" }
+  ],
+  "Armes à Projectiles": [
+    { name: "Autopistolet", dmg: 7, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 2, traits: "Pistolet", value: 3, rarity: "Commune", kw: "PROJECTILE, IMPERIUM, SCUM" },
+    { name: "Pistolet de Poing", dmg: 9, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 1, traits: "Pistolet", value: 4, rarity: "Commune", kw: "PROJECTILE, IMPERIUM, SCUM" },
+    { name: "Fusil Automatique (Autogun)", dmg: 7, ed: 1, ap: "–", short: 12, med: 24, long: 36, salvo: 3, traits: "Tir Rapide (1)", value: 3, rarity: "Commune", kw: "PROJECTILE, IMPERIUM, SCUM" },
+    { name: "Pistolet à Percussion (Stubber)", dmg: 7, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 1, traits: "Pistolet", value: 2, rarity: "Commune", kw: "PROJECTILE, IMPERIUM, SCUM" },
+    { name: "Pistolet à Aiguilles", dmg: 8, ed: 2, ap: "–", short: 6, med: 12, long: 18, salvo: 1, traits: "Douloureux, Inflige (Empoisonné 4), Pistolet, Silencieux", value: 6, rarity: "Très rare", kw: "AIGUILLE, IMPERIUM" },
+    { name: "Canon à Percussion (Stubcannon)", dmg: 9, ed: 1, ap: "–", short: 9, med: 18, long: 27, salvo: 1, traits: "Brutal", value: 3, rarity: "Commune", kw: "PROJECTILE, IMPERIUM, SCUM" },
+    { name: "Fusil à Pompe", dmg: 8, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 1, traits: "Assaut, Dispersion", value: 3, rarity: "Commune", kw: "PROJECTILE, IMPERIUM, SCUM" },
+    { name: "Fusil à Pompe de Combat", dmg: 9, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 2, traits: "Assaut, Tir Rapide (1), Dispersion", value: 3, rarity: "Peu commune", kw: "PROJECTILE, IMPERIUM" },
+    { name: "Fusil à Pompe Astartes", dmg: 10, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 2, traits: "Assaut, Dispersion, Fiable", value: 6, rarity: "Rare", kw: "PROJECTILE, IMPERIUM, ADEPTUS ASTARTES" },
+    { name: "Fusil à Aiguilles", dmg: 8, ed: 2, ap: "–", short: 14, med: 28, long: 42, salvo: 2, traits: "Douloureux, Silencieux, Inflige (Empoisonné 4)", value: 6, rarity: "Très rare", kw: "AIGUILLE, IMPERIUM" },
+    { name: "Pistolet à Percussion Lourd", dmg: 10, ed: 2, ap: "–", short: 18, med: 36, long: 54, salvo: 3, traits: "Lourd (4)", value: 5, rarity: "Peu commune", kw: "PROJECTILE, IMPERIUM, SCUM" },
+    { name: "Fusil de Précision Astartes", dmg: 10, ed: 1, ap: "–", short: 18, med: 36, long: 54, salvo: 0, traits: "Sniper (2), Silencieux", value: 6, rarity: "Peu commune", kw: "PROJECTILE, IMPERIUM, ADEPTUS ASTARTES" },
+    { name: "Canon d'Assaut", dmg: 14, ed: 2, ap: -1, short: 12, med: 24, long: 36, salvo: 6, traits: "Lourd (8)", value: 6, rarity: "Peu commune", kw: "PROJECTILE, IMPERIUM, ADEPTUS ASTARTES" },
+    { name: "Autocanon", dmg: 16, ed: 1, ap: -1, short: 24, med: 48, long: 72, salvo: 3, traits: "Lourd (8)", value: 5, rarity: "Commune", kw: "PROJECTILE, IMPERIUM" }
+  ],
+  "Armes à Flammes": [
+    { name: "Pistolet Incendiaire", dmg: 7, ed: 1, ap: "–", short: 3, med: 6, long: 9, salvo: 1, traits: "Lance-Flammes, Pistolet", value: 5, rarity: "Peu commune", kw: "FEU, IMPERIUM" },
+    { name: "Lance-Flammes", dmg: 10, ed: 1, ap: "–", short: 4, med: 8, long: 12, salvo: 1, traits: "Assaut, Lance-Flammes", value: 5, rarity: "Peu commune", kw: "FEU, IMPERIUM" },
+    { name: "Lance-Flammes Lourd", dmg: 12, ed: 2, ap: -1, short: 4, med: 8, long: 12, salvo: 2, traits: "Lance-Flammes, Lourd (6)", value: 5, rarity: "Peu commune", kw: "FEU, IMPERIUM" }
+  ],
+  "Armes Adeptus Mechanicus": [
+    { name: "Pistolet à Arc", dmg: 14, ed: 1, ap: -1, short: 6, med: 12, long: 18, salvo: 1, traits: "Arc (2), Pistolet", value: 5, rarity: "Rare", kw: "ARC, ADEPTUS MECHANICUS" },
+    { name: "Pistolet au Radium", dmg: 7, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 1, traits: "Pistolet, Rad (2)", value: 6, rarity: "Rare", kw: "PROJECTILE, ADEPTUS MECHANICUS" },
+    { name: "Fusil Galvanique", dmg: 10, ed: 1, ap: "–", short: 15, med: 30, long: 45, salvo: 2, traits: "Tir Rapide (1), Perforant (1)", value: 5, rarity: "Rare", kw: "PROJECTILE, ADEPTUS MECHANICUS" },
+    { name: "Fusil à Arc", dmg: 14, ed: 1, ap: -1, short: 12, med: 24, long: 36, salvo: 2, traits: "Arc (2), Tir Rapide (1)", value: 6, rarity: "Rare", kw: "ARC, ADEPTUS MECHANICUS" },
+    { name: "Carabine au Radium", dmg: 7, ed: 1, ap: "–", short: 9, med: 18, long: 27, salvo: 3, traits: "Assaut, Rad (2)", value: 6, rarity: "Très rare", kw: "PROJECTILE, ADEPTUS MECHANICUS" },
+    { name: "Blaster Volkite", dmg: 14, ed: 2, ap: "–", short: 12, med: 24, long: 48, salvo: 2, traits: "Explosion (2), Lourd (4), Inflige (En Feu), Tir Rapide (2)", value: 11, rarity: "Unique", kw: "ADEPTUS MECHANICUS, FEU" }
+  ],
+  "Grenades et Missiles": [
+    { name: "Grenade à Fragmentation", dmg: 10, ed: 4, ap: "–", short: "F x4m / Lanceur", med: "", long: "", salvo: "–", traits: "Explosion (6)", value: 2, rarity: "Commune", kw: "EXPLOSIF, IMPERIUM" },
+    { name: "Grenade Plasma", dmg: 10, ed: 5, ap: -1, short: "F x4m / Lanceur", med: "", long: "", salvo: "–", traits: "Explosion (6)", value: 5, rarity: "Très rare", kw: "EXPLOSIF, AELDARI" },
+    { name: "Grenade Krak", dmg: 14, ed: 5, ap: -2, short: "F x4m / Lanceur", med: "", long: "", salvo: "–", traits: "Explosion (4)", value: 4, rarity: "Peu commune", kw: "EXPLOSIF, IMPERIUM" },
+    { name: "Lance-Grenades Tempestus", dmg: "Profil de la grenade tirée", ed: "", ap: "", short: 14, med: 28, long: 42, salvo: "–", traits: "Assaut", value: 6, rarity: "Peu commune", kw: "EXPLOSIF, IMPERIUM, ASTRA MILITARUM" },
+    { name: "Missile à Fragmentation", dmg: 12, ed: 5, ap: "–", short: "–", med: "–", long: "–", salvo: "–", traits: "Explosion (10)", value: 4, rarity: "Commune", kw: "EXPLOSIF, IMPERIUM" },
+    { name: "Missile Krak", dmg: 16, ed: 6, ap: -2, short: "–", med: "–", long: "–", salvo: "–", traits: "Explosion (4)", value: 6, rarity: "Commune", kw: "EXPLOSIF, IMPERIUM" },
+    { name: "Lance-Missiles", dmg: "Profil du missile tiré", ed: "", ap: "", short: 24, med: 48, long: 72, salvo: "–", traits: "Lourd (6)", value: 4, rarity: "Commune", kw: "EXPLOSIF, IMPERIUM" },
+    { name: "Lance-Missiles Cyclone", dmg: "Profil du missile tiré", ed: "", ap: "", short: 18, med: 36, long: 54, salvo: "–", traits: "Lourd (8)", value: 11, rarity: "Très rare", kw: "EXPLOSIF, IMPERIUM, ADEPTUS ASTARTES" }
+  ],
+  "Armes à Distance Aeldari": [
+    { name: "Lasblaster", dmg: 7, ed: 1, ap: "–", short: 12, med: 24, long: 36, salvo: 4, traits: "Assaut", value: 5, rarity: "Très rare", kw: "LAS, AELDARI" },
+    { name: "Catapulte Shuriken", dmg: 10, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 3, traits: "Assaut, Perforant (3)", value: 6, rarity: "Rare", kw: "SHURIKEN, AELDARI, ASURYANI" },
+    { name: "Pistolet Shuriken", dmg: 10, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 2, traits: "Pistolet, Perforant (3)", value: 6, rarity: "Rare", kw: "SHURIKEN, AELDARI, ASURYANI" },
+    { name: "Fusil Long du Ranger", dmg: 10, ed: 1, ap: "–", short: 18, med: 36, long: 54, salvo: 0, traits: "Sniper (4)", value: 7, rarity: "Très rare", kw: "LAS, AELDARI" },
+    { name: "Fusil à Fusion Aeldari", dmg: 16, ed: 2, ap: -4, short: 6, med: 12, long: 18, salvo: 1, traits: "Assaut, Fusion", value: 6, rarity: "Très rare", kw: "MELTA, AELDARI" }
+  ],
+  "Armes à Distance Ork": [
+    { name: "Slugga", dmg: 10, ed: 1, ap: "–", short: 6, med: 12, long: 18, salvo: 1, traits: "Pistolet, Waaagh!", value: 3, rarity: "Commune", kw: "PROJECTILE, ORK" },
+    { name: "Shoota", dmg: 10, ed: 1, ap: "–", short: 9, med: 18, long: 27, salvo: 2, traits: "Assaut, Waaagh!", value: 4, rarity: "Peu commune", kw: "PROJECTILE, ORK" },
+    { name: "Burna", dmg: 10, ed: 1, ap: "–", short: 4, med: 8, long: 12, salvo: 1, traits: "Assaut, Lance-Flammes", value: 5, rarity: "Peu commune", kw: "FEU, ORK" },
+    { name: "Grande Shoota", dmg: 12, ed: 2, ap: "–", short: 18, med: 36, long: 54, salvo: 3, traits: "Assaut, Waaagh!", value: 5, rarity: "Peu commune", kw: "PROJECTILE, ORK" },
+    { name: "Snazzgun", dmg: 12, ed: 2, ap: -2, short: 12, med: 24, long: 36, salvo: 3, traits: "Lourd (4), Kustom", value: 8, rarity: "Unique", kw: "ORK" },
+    { name: "Rokkit Launcha", dmg: 16, ed: "1d3", ap: -2, short: 12, med: 24, long: 36, salvo: "–", traits: "Assaut, Explosion (4)", value: 7, rarity: "Rare", kw: "EXPLOSIF, ORK" },
+    { name: "Stikkbomb", dmg: 9, ed: 5, ap: "–", short: "F x4m / Lanceur", med: "", long: "", salvo: "–", traits: "Explosion (6)", value: 2, rarity: "Peu commune", kw: "EXPLOSIF, ORK" }
+  ]
+};
+
+// Table des munitions
+const AMMO_TABLE = [
+  { name: "Projectile", value: 1, rarity: "Commune" },
+  { name: "Laser", value: 2, rarity: "Commune" },
+  { name: "Flamme", value: 2, rarity: "Commune" },
+  { name: "Bolt", value: 2, rarity: "Peu commune" },
+  { name: "Plasma", value: 2, rarity: "Rare" },
+  { name: "Fusion (Melta)", value: 2, rarity: "Rare" },
+  { name: "Shuriken", value: 2, rarity: "Très rare" }
+];
+
+// Traits d'armes — définitions reformulées
+const WEAPON_TRAITS = [
+  { name: "Douloureux", desc: "Chaque Blessure infligée cause aussi 1 point de Choc." },
+  { name: "Arc (X)", desc: "Gagne des DE bonus égaux à sa valeur contre les véhicules." },
+  { name: "Assaut", desc: "Peut être tiré pendant un Sprint, avec +2 DD à l'attaque." },
+  { name: "Explosion (X)", desc: "Touche une zone : test de Tir DD3 pour centrer l'explosion ; le rayon en mètres est égal à la valeur." },
+  { name: "Brutal", desc: "Sur les Dés de Dégâts Supplémentaires : résultats 1-2 = 0 dégât, 3-4 = 1 dégât, 5-6 = 2 dégâts." },
+  { name: "Inflige (État)", desc: "Une Blessure infligée impose l'État indiqué à la cible (avec un DD de résistance si un chiffre est précisé)." },
+  { name: "Force", desc: "Un Psyker ajoute la moitié de sa Volonté aux dégâts ; un non-Psyker subit -2 aux dégâts." },
+  { name: "Lance-Flammes", desc: "Ignore la couverture, touche tout ce qui se trouve sur la ligne entre le tireur et la cible." },
+  { name: "Lourd (X)", desc: "Nécessite une Force minimale égale à la valeur, sinon +2 DD et risque de tomber à terre sur une Complication." },
+  { name: "Kustom", desc: "À l'acquisition, remplace ce trait par un autre trait au choix (valeur (X) déterminée par 1d3)." },
+  { name: "Fusion (Melta)", desc: "À courte portée : DE 1-2 = 0 dégât, 3-4 = 1 dégât, 5-6 = 2 dégâts (encore plus dévastateur contre véhicules)." },
+  { name: "Parade", desc: "+1 Défense contre les attaques de mêlée tant que l'arme est en main." },
+  { name: "Pistolet", desc: "Peut être utilisé au corps à corps (Engagé) sans pénalité." },
+  { name: "Rad (X)", desc: "Ajoute sa valeur au résultat de chaque Dé de Dégât Supplémentaire." },
+  { name: "Tir Rapide (X)", desc: "À courte portée, gagne des Dés de Dégâts Supplémentaires égaux à sa valeur." },
+  { name: "Fiable", desc: "Ignore la première Complication liée à l'arme par scène ; +1 dé bonus pour l'entretien/réparation." },
+  { name: "Perforant (X)", desc: "En dépensant une Icône Exaltée, la Pénétration d'Armure s'améliore de la valeur pour cette attaque." },
+  { name: "Silencieux", desc: "Réduit de seulement 2 (au lieu de plus) la Discrétion lors de son utilisation." },
+  { name: "Sniper (X)", desc: "En Visant, +1 dé bonus à l'attaque et DE supplémentaires égaux à la valeur." },
+  { name: "Explosion Large (Spread)", desc: "À courte portée, peut toucher plusieurs cibles proches les unes des autres (ou une Horde entière avec bonus)." },
+  { name: "Surcharge", desc: "Mode surchargé optionnel : +3 DE si touché, mais 1d6 Blessures Mortelles pour le tireur sur une Complication." },
+  { name: "Peu maniable (X)", desc: "Le DD des attaques augmente de la valeur indiquée." },
+  { name: "Waaagh!", desc: "Un Ork gagne +1 dé bonus avec cette arme, et +1 DE supplémentaire s'il est Blessé." },
+  { name: "Arme du Warp", desc: "Dégâts égaux à la Résilience Totale de la cible moins 4, sauf si la valeur listée est supérieure." },
+  { name: "2-Mains", desc: "Nécessite les deux mains pour être maniée efficacement." }
+];
+
+// Armures : name, ar (valeur armure), traits, value, rarity, keywords
+const ARMOUR = {
+  "Armures Standards": [
+    { name: "Armure Primitive", ar: 2, traits: "Encombrant (2)", value: 2, rarity: "Commune", kw: "LOURDE, PRIMITIF" },
+    { name: "Combinaison Moulante", ar: 2, traits: "–", value: 3, rarity: "Rare", kw: "LÉGÈRE, IMPERIUM, MINISTORUM" },
+    { name: "Armure en Maille", ar: 3, traits: "–", value: 3, rarity: "Rare", kw: "LÉGÈRE, IMPERIUM, [TOUTES]" },
+    { name: "Armure Flak", ar: 3, traits: "–", value: 4, rarity: "Commune", kw: "FLAK, IMPERIUM, ASTRA MILITARUM" },
+    { name: "Manteau Flak", ar: 3, traits: "–", value: 4, rarity: "Peu commune", kw: "FLAK, IMPERIUM, ASTRA MILITARUM" },
+    { name: "Cuirasse Auto Skitarii", ar: 4, traits: "–", value: 5, rarity: "Rare", kw: "LOURDE, IMPERIUM, ADEPTUS MECHANICUS, SKITARII" },
+    { name: "Armure Carapace", ar: 4, traits: "Encombrant (1)", value: 5, rarity: "Peu commune", kw: "IMPERIUM, ADEPTUS ASTARTES, ASTRA MILITARUM" },
+    { name: "Carapace Tempestus", ar: 4, traits: "–", value: 6, rarity: "Rare", kw: "LOURDE, IMPERIUM, ASTRA MILITARUM, MILITARUM TEMPESTUS" }
+  ],
+  "Armures Servo-Assistées": [
+    { name: "Armure Servo-Assistée Légère", ar: 4, traits: "Motorisée (1)", value: 6, rarity: "Très rare", kw: "SERVO-ASSISTÉE, IMPERIUM" },
+    { name: "Armure Servo-Assistée Sororitas", ar: 5, traits: "Motorisée (2)", value: 6, rarity: "Très rare", kw: "SERVO-ASSISTÉE, IMPERIUM, SORORITAS" },
+    { name: "Armure Servo-Assistée Ignatus", ar: 5, traits: "Motorisée (2)", value: 7, rarity: "Très rare", kw: "SERVO-ASSISTÉE, IMPERIUM, INQUISITION" },
+    { name: "Armure Servo-Assistée Lourde", ar: 6, traits: "Encombrant (1), Encombrante, Motorisée (3)", value: 8, rarity: "Très rare", kw: "LOURDE, SERVO-ASSISTÉE, IMPERIUM, INQUISITION" }
+  ],
+  "Champs de Puissance": [
+    { name: "Bouclier de Tempête", ar: "*2", traits: "Encombrant (1), Champ de Puissance, Bouclier", value: 8, rarity: "Unique", kw: "CHAMP DE FORCE, IMPERIUM, ADEPTUS ASTARTES, MINISTORUM, INQUISITION" },
+    { name: "Champ Réfracteur", ar: "*3", traits: "Champ de Puissance", value: 5, rarity: "Rare", kw: "CHAMP DE FORCE, IMPERIUM, ASTRA MILITARUM" },
+    { name: "Rosarius", ar: "*4", traits: "Champ de Puissance", value: 7, rarity: "Très rare", kw: "CHAMP DE FORCE, IMPERIUM, ADEPTUS ASTARTES, MINISTORUM" }
+  ],
+  "Armures Astartes": [
+    { name: "Armure d'Éclaireur", ar: 4, traits: "–", value: 5, rarity: "Rare", kw: "IMPERIUM, ADEPTUS ASTARTES" },
+    { name: "Aquila Mk VII", ar: 5, traits: "Motorisée (3)", value: 8, rarity: "Très rare", kw: "SERVO-ASSISTÉE, IMPERIUM, ADEPTUS ASTARTES" },
+    { name: "Tacticus Mk X", ar: 5, traits: "Motorisée (4)", value: 9, rarity: "Très rare", kw: "SERVO-ASSISTÉE, IMPERIUM, ADEPTUS ASTARTES, PRIMARIS" },
+    { name: "Armure Terminator", ar: 7, traits: "Encombrante, Motorisée (4)", value: 10, rarity: "Unique", kw: "SERVO-ASSISTÉE, IMPERIUM, ADEPTUS ASTARTES" }
+  ],
+  "Armures Aeldari": [
+    { name: "Armure de Corsaire", ar: 3, traits: "–", value: 4, rarity: "Rare", kw: "LÉGÈRE, AELDARI, ANHRATHE" },
+    { name: "Armure en Maille Aeldari", ar: 3, traits: "–", value: 4, rarity: "Très rare", kw: "LÉGÈRE, AELDARI, ASURYANI" },
+    { name: "Armure Runique", ar: "*4", traits: "Champ de Puissance", value: 6, rarity: "Unique", kw: "CHAMP DE FORCE, AELDARI, ASURYANI" },
+    { name: "Armure en Maille Lourde", ar: 4, traits: "–", value: 6, rarity: "Très rare", kw: "AELDARI, ANHRATHE" },
+    { name: "Harnais du Vide", ar: 5, traits: "Encombrant (1)", value: 7, rarity: "Rare", kw: "AELDARI, ANHRATHE" },
+    { name: "Bouclier Miroitant", ar: "*2", traits: "Champ de Puissance, Bouclier", value: 7, rarity: "Unique", kw: "CHAMP DE FORCE, AELDARI, ASURYANI" }
+  ],
+  "Armures Ork": [
+    { name: "Flak Ork", ar: 2, traits: "–", value: 2, rarity: "Peu commune", kw: "PRIMITIF, ORK" },
+    { name: "Armure Balaise ('Eavy Armour)", ar: 4, traits: "'Ere We Go, Encombrant (1)", value: 3, rarity: "Peu commune", kw: "LOURDE, PRIMITIF, ORK" },
+    { name: "Méga-Armure", ar: 7, traits: "'Ere We Go, Encombrante, Motorisée (4)", value: 9, rarity: "Très rare", kw: "SERVO-ASSISTÉE, ORK" }
+  ]
+};
+
+
+// ==== js/data/psychic.js ====
+// ============================================================
+// POUVOIRS PSYCHIQUES — reformulés en français à partir du manuel.
+// dn peut être un nombre ou une formule ("Défense de la cible", etc.)
+// ============================================================
+
+// Aptitudes universelles (gratuites pour tout PSYKER, ne comptent pas comme Pouvoirs)
+const PSYKER_ABILITIES = [
+  { name: "Psyniscience", dn: "3", activation: "Action Libre", duration: "Instantané", range: "50 m", effect: "Détecte la présence du Warp à proximité (distorsions, pouvoirs en cours d'activation ou maintenus). Ne révèle ni la source ni la présence d'un Psyker. En cas d'échec, vous subissez l'état Peur." },
+  { name: "Repousser le Sorcier (Deny the Witch)", dn: "2 + DD du pouvoir adverse", activation: "Action*", duration: "Instantané", range: "50 m", effect: "Tout PSYKER conscient de l'activation d'un pouvoir à portée peut tenter de l'empêcher ou de mettre fin à un pouvoir Maintenu adverse." }
+];
+
+// Pouvoirs Mineurs (accessibles à tout PSYKER, indépendamment de la discipline)
+const MINOR_PSYCHIC_POWERS = [
+  { name: "Camouflage (Chameleon)", xp: "8", dn: "5", activation: "Action", duration: "Maintenu", range: "Personnel", effect: "+5 dés bonus en Furtivité et +1 Défense contre le tir tant que le pouvoir est maintenu." },
+  { name: "Sommation (Compel)", xp: "10", dn: "5", activation: "Action Simple", duration: "1 Round", range: "5 m", effect: "Force une créature proche à obéir à un ordre simple et bref, sauf réussite d'un test de Force Mentale DD 4." },
+  { name: "Dissimuler les Phénomènes", xp: "5", dn: "3", activation: "Action Complète", duration: "Maintenu", range: "Personnel", effect: "Masque votre présence psychique contre la détection (ex. Psyniscience) tant que le pouvoir est maintenu." },
+  { name: "Conjurer une Flamme", xp: "10", dn: "4", activation: "Mouvement", duration: "Maintenu", range: "Personnel", effect: "Crée une flamme réelle de taille variable, immunisée à ses propres effets tant que maintenue." },
+  { name: "Engourdir la Douleur", xp: "8", dn: "4", activation: "Action Simple", duration: "1 Round", range: "5 m", effect: "La cible (alliée ou vous-même) réduit de 1 tout le Stress subi pendant la durée." },
+  { name: "Flash Sonore", xp: "8", dn: "4", activation: "Action", duration: "Instantané", range: "5 m", effect: "Tout le monde à portée doit réussir un test d'Endurance DD 3 ou subir 1 Stress et l'état Aveuglé pendant 1 round." },
+  { name: "Invoquer la Chance", xp: "10", dn: "4", activation: "Action Simple", duration: "1 Round", range: "Personnel", effect: "Gagnez +1 dé bonus à un test de votre choix pendant la durée du pouvoir." },
+  { name: "Infliger la Douleur", xp: "8", dn: "4", activation: "Action", duration: "Maintenu", range: "5 m", effect: "La cible subit 1d3 Stress et doit réussir DD 3 Force Mentale ou être Étourdie ; peut être maintenu pour prolonger l'effet." },
+  { name: "Subvertir une Machine", xp: "10", dn: "4", activation: "Action", duration: "Instantané", range: "25 m", effect: "Bloque temporairement un mécanisme (1 minute), réparable via un test de Technomaîtrise DD 3." },
+  { name: "Lévitation Mineure (Hover)", xp: "7", dn: "4", activation: "Action Simple", duration: "Maintenu", range: "Personnel", effect: "Flotte librement, déplacement vertical lent (moitié Vitesse), pas de vol horizontal véritable." },
+  { name: "Torche Psychique", xp: "5", dn: "2", activation: "Action Simple", duration: "Maintenu", range: "5 m", effect: "Conjure un orbe de lumière flottant obéissant à des ordres mentaux simples." },
+  { name: "Main Fantôme", xp: "8", dn: "4", activation: "Action Complète", duration: "Maintenu", range: "10 m", effect: "Manifeste une main invisible capable d'effectuer des tâches simples (appuyer un bouton, ouvrir une porte...) à portée de vue." },
+  { name: "Force Mentale (Mental Force)", xp: "8", dn: "3", activation: "Action", duration: "Instantané", range: "15 m", effect: "Pousse une cible visible ; celle-ci doit réussir DD 4 Agilité ou être mise à terre." },
+  { name: "Voix d'Outre-Monde", xp: "5", dn: "3", activation: "Action", duration: "Maintenu", range: "25 m", effect: "Fait apparaître des voix ou sons fantomatiques depuis un lieu ou objet à portée de vue." }
+];
+
+const PSYCHIC_DISCIPLINES = {
+  "Discipline Universelle": [
+    { name: "Fléau Psychique (Smite)", xp: "0 (1er) / 10 (suivants)", dn: "Défense de la cible", activation: "Action", duration: "Instantané", range: "35 m", multi: "Oui", effect: "Lance un projectile d'énergie psychique pure sur un ennemi ; en cas de réussite, 1d3 Blessures Mortelles." }
+  ],
+  "Biomancie": [
+    { name: "Affaiblir (Enfeeble)", xp: "15", dn: "Défense de la cible", activation: "Action", duration: "Maintenu", range: "10 m", multi: "Oui", effect: "La Force de la cible est réduite de 1 et elle subit 1 Stress à chaque début de tour tant que le pouvoir est maintenu." },
+    { name: "Sangsue de Vie (Life Leech)", xp: "15", dn: "Défense de la cible", activation: "Action", duration: "Instantané", range: "5 m", effect: "La cible subit 1d6 Stress et 1d3 Blessures ; vous récupérez la moitié de ces montants." },
+    { name: "Vitesse du Warp", xp: "15", dn: "7", activation: "Action", duration: "Maintenu", range: "Personnel", effect: "Vitesse doublée, une Action supplémentaire par round, +1 Défense tant que le pouvoir est maintenu." },
+    { name: "Forme Fantôme (Phantom Form)", xp: "15", dn: "7", activation: "Action", duration: "Maintenu", range: "Personnel", effect: "Traverse les objets solides, Vitesse réduite de moitié tant que le pouvoir est maintenu." },
+    { name: "Régénération", xp: "15", dn: "8", activation: "Action", duration: "Maintenu", range: "Personnel", effect: "Soigne 1 Blessure par round tant que le pouvoir est maintenu (peut régénérer des membres avec le temps)." },
+    { name: "Modeler la Chair (Shape Flesh)", xp: "20", dn: "6", activation: "Action", duration: "Maintenu", range: "Personnel", effect: "Modifie votre apparence physique à volonté (imiter un individu, etc.) tant que le pouvoir est maintenu." }
+  ],
+  "Divination": [
+    { name: "Avertissement (Forewarning)", xp: "15", dn: "6", activation: "Action Complète", duration: "1 Combat", range: "Personnel", effect: "Entrevoit le déroulement d'un affrontement à venir pour mieux anticiper les attaques adverses." },
+    { name: "Prescience", xp: "15", dn: "7", activation: "30 minutes", duration: "1 Scène", range: "Personnel", effect: "Permet de relancer des dés lors de la scène à venir, en anticipant les probabilités futures." },
+    { name: "Malchance (Misfortune)", xp: "15", dn: "Défense de la cible", activation: "Action Complète", duration: "Maintenu", range: "30 m", multi: "Oui", effect: "La cible devient Vulnérable (1) et Entravée (1) tant que le pouvoir est maintenu." },
+    { name: "Psychométrie", xp: "15", dn: "4", activation: "Action Complète", duration: "Maintenu", range: "10 m", effect: "Perçoit des échos du passé émotionnellement chargés liés à un lieu ou un objet." },
+    { name: "Regard du Devin (Scrier's Gaze)", xp: "5", dn: "6", activation: "Action Complète (ou 10 min)", duration: "Maintenu", range: "5000 m", effect: "Projette votre esprit à distance pour observer un lieu connu, même hors de vue directe." }
+  ],
+  "Pyromancie": [
+    { name: "Forme Ardente (Fiery Form)", xp: "15", dn: "7", activation: "Action", duration: "Maintenu", range: "Personnel", effect: "Vous vous embrasez sans dommage pour vous-même ; toute créature à 2m subit 10+1DE dégâts par round." },
+    { name: "Souffle de Flamme", xp: "5", dn: "5", activation: "Action", duration: "Instantané", range: "5 m", effect: "Crache un jet de feu warp sur une ligne de 5m (trait Lance-Flammes)." },
+    { name: "Fièvre Mentale (Mindfire)", xp: "15", dn: "Force Mentale de la cible", activation: "Action", duration: "Maintenu", range: "100 m", effect: "Élève la température interne de la cible, qui devient Entravée." },
+    { name: "Rayon en Fusion (Molten Beam)", xp: "20", dn: "Défense de la cible", activation: "Action", duration: "Instantané", range: "10 m", effect: "Faisceau d'énergie brûlant en ligne droite qui fait fondre le métal et enflamme l'air." },
+    { name: "Combustion Spontanée", xp: "10", dn: "Défense de la cible", activation: "Action", duration: "Instantané", range: "20 m", multi: "Oui", effect: "12+1DE dégâts ; la cible doit réussir DD 4 Agilité ou prendre feu." },
+    { name: "Mur de Flammes", xp: "15", dn: "7", activation: "Action", duration: "Maintenu", range: "20 m", effect: "Conjure un mur de flammes modelable (jusqu'à 3×20×10 m) tant que le pouvoir est maintenu." }
+  ],
+  "Télékinésie": [
+    { name: "Assaut Télékinétique (Assail)", xp: "10", dn: "Défense de la cible", activation: "Action", duration: "Instantané", range: "20 m", multi: "Oui", effect: "Projette un objet massif sur la cible : 10+1DE dégâts." },
+    { name: "Écraser (Crush)", xp: "10", dn: "Défense de la cible", activation: "Action", duration: "Maintenu", range: "20 m", multi: "Oui", effect: "10+1DE dégâts et test de Force ou Force Mentale DD 5 pour éviter d'être Entravé." },
+    { name: "Lévitation", xp: "8", dn: "5", activation: "Action", duration: "Maintenu", range: "Personnel", effect: "Vol libre à Vitesse normale ; 1 Stress par heure de maintien." },
+    { name: "Dôme Télékinétique", xp: "15", dn: "5", activation: "Action Complète", duration: "Maintenu", range: "Personnel", effect: "Barrière invisible : utilisez votre Détermination contre les Blessures Mortelles tant que maintenu." },
+    { name: "Distorsion Gravitationnelle (Grav-Warp)", xp: "20", dn: "Force Mentale de la cible +2", activation: "Action", duration: "Maintenu", range: "50 m", multi: "Oui", effect: "Exerce une pression gravitationnelle sur la cible (Entrave, changement de position, etc.)." },
+    { name: "Onde de Choc (Shock Wave)", xp: "15", dn: "7", activation: "Action", duration: "Instantané", range: "5 m", effect: "Explosion mentale radiale : 12+1DE dégâts, test d'Agilité DD 5 ou mise à terre." }
+  ],
+  "Télépathie": [
+    { name: "Effacement (Erasure)", xp: "15", dn: "Force Mentale de la cible +2", activation: "Action Complète", duration: "Instantané", range: "30 m", multi: "Oui", effect: "Efface un souvenir récent de la cible (jusqu'à Rang heures)." },
+    { name: "Brouiller l'Esprit (Fog the Mind)", xp: "15", dn: "4", activation: "Action Complète", duration: "Maintenu", range: "10 m", effect: "Les ennemis à portée doivent réussir DD 6 Force Mentale ou devenir Entravés (2) et Étourdis." },
+    { name: "Sonde Mentale (Mind Probe)", xp: "15", dn: "Opposé Force Mentale", activation: "Action Complète", duration: "Maintenu", range: "30 m", effect: "En cas de victoire au test opposé, sonde l'esprit de la cible pour en extraire des secrets." },
+    { name: "Cri Psychique (Psychic Shriek)", xp: "10", dn: "Force Mentale de la cible", activation: "Action", duration: "Instantané", range: "50 m", multi: "Oui", effect: "1d3+3 Stress et test de Force Mentale DD 5 ou état Étourdi." },
+    { name: "Télépathie", xp: "5", dn: "3", activation: "Action", duration: "Maintenu", range: "100 m", multi: "Oui", effect: "Communication mentale directe, sans ligne de vue nécessaire." },
+    { name: "Terrifier", xp: "15", dn: "5", activation: "Action Complète", duration: "Instantané", range: "10 m", effect: "Tous les ennemis à portée doivent réussir un test de Peur DD 5." }
+  ],
+  "Maléfique (Maleficarum)": [
+    { name: "Flamme Sombre (Dark Flame)", xp: "15", dn: "7", activation: "Action", duration: "Instantané", range: "20 m", effect: "Zone de 6m : 1d3 + niveau de Corruption en Stress, et test d'Endurance DD 5 ou 1d3 Blessures Mortelles." },
+    { name: "Possession", xp: "20", dn: "Opposé Force Mentale", activation: "Action Complète", duration: "Maintenu", range: "30 m", effect: "En cas de victoire au test opposé, domine totalement la volonté et le corps de la cible." },
+    { name: "Flétrissure de l'Âme (Soul Shrivel)", xp: "20", dn: "Défense de la cible", activation: "Action", duration: "Instantané", range: "20 m", multi: "Oui", effect: "1d3 Blessures Mortelles et test de Corruption DD 3." },
+    { name: "Toucher de la Corruption", xp: "15", dn: "Défense de la cible", activation: "Action", duration: "Maintenu", range: "Contact", multi: "Oui", effect: "La cible gagne 1 Corruption et une mutation mineure aléatoire, temporaire, tant que le pouvoir est maintenu." },
+    { name: "Regard Infernal (Infernal Gaze)", xp: "10", dn: "Défense de la cible", activation: "Action", duration: "Maintenu", range: "25 m", multi: "Oui", effect: "La cible perd temporairement 1 Intellect et risque des hallucinations si elle rate DD 7 Force Mentale." }
+  ],
+  "Runes de Bataille": [
+    { name: "Dissimuler / Révéler", xp: "20", dn: "5", activation: "Action", duration: "Maintenu", range: "25 m", multi: "Oui", effect: "Dissimuler : bonus de Défense/Discrétion pour vous et vos alliés proches. Révéler : effet inverse contre des ennemis." },
+    { name: "Enhardir / Terrifier (Embolden/Horrify)", xp: "20", dn: "5", activation: "Action", duration: "Maintenu", range: "25 m", effect: "Enhardir : bonus de Résolution pour vos alliés proches. Terrifier : pénalité équivalente infligée aux ennemis." },
+    { name: "Renforcer / Affaiblir (Empower/Enervate)", xp: "30", dn: "7", activation: "Action", duration: "Maintenu", range: "25 m", effect: "Renforcer : bonus de dégâts pour vos alliés proches. Affaiblir : pénalité équivalente infligée aux ennemis." },
+    { name: "Améliorer / Drainer (Enhance/Drain)", xp: "30", dn: "7", activation: "Action", duration: "Maintenu", range: "25 m", effect: "Améliorer : dés bonus de combat pour vos alliés. Drainer : pénalité équivalente infligée aux ennemis." },
+    { name: "Protéger / Maudire (Protect/Jinx)", xp: "20", dn: "5", activation: "Action", duration: "Maintenu", range: "25 m", effect: "Protéger : bonus de Résistance pour vos alliés proches. Maudire : pénalité équivalente infligée aux ennemis." },
+    { name: "Accélérer / Entraver (Quicken/Restrain)", xp: "20", dn: "5", activation: "Action", duration: "Maintenu", range: "25 m", effect: "Accélérer : rapidité surnaturelle pour vos alliés proches. Entraver : ralentissement infligé aux ennemis." }
+  ]
+};
+
+
+// ==== js/data/factions.js ====
+// ============================================================
+// FACTIONS — reformulé à partir du manuel, usage personnel.
+// archetypes: [{name, tier}] référence les entrées de ARCHETYPE_DETAILS.
+// ============================================================
+
+const FACTIONS = [
+  {
+    name: "Adepta Sororitas",
+    keywords: "IMPERIUM, ADEPTUS MINISTORUM, ADEPTA SORORITAS, [ORDRE]",
+    placeholderNote: "Le mot-clé [ORDRE] peut être remplacé par un Ordre précis (Militant, Hospitallier, Dialogus, Famulous, Sabine, Pronatus...) qui peut donner des dés bonus selon le contexte.",
+    overview: "Sororité guerrière de l'Ecclesiarchy, les Sœurs de Bataille combinent ferveur religieuse absolue et discipline militaire pour combattre l'hérésie et la corruption. Issues de la Schola Progenium, elles constituent le bras armé du culte impérial.",
+    archetypes: [{ name: "Sœur Hospitalière", tier: 1 }, { name: "Sœur de Bataille", tier: 2 }]
+  },
+  {
+    name: "Adeptus Astra Telepathica",
+    keywords: "IMPERIUM, ADEPTUS ASTRA TELEPATHICA, PSYKER, SCHOLASTIA PSYKANA",
+    placeholderNote: "",
+    overview: "Organisation chargée de recenser, former et encadrer les Psykers humains de l'Imperium, notamment via les Vaisseaux Noirs qui collectent le tribut psychique de chaque monde. Sans elle, l'Astronomican qui guide la navigation interstellaire cesserait de fonctionner.",
+    archetypes: [{ name: "Psyker Sanctionné", tier: 2 }]
+  },
+  {
+    name: "Adeptus Mechanicus",
+    keywords: "IMPERIUM, ADEPTUS MECHANICUS, [MONDE-FORGE]",
+    placeholderNote: "Le mot-clé [MONDE-FORGE] identifie le monde d'origine du personnage au sein du Culte Mechanicus.",
+    overview: "Culte technologique vénérant la machine comme émanation du divin, l'Adeptus Mechanicus maintient et étudie la technologie de l'Imperium. Ses adeptes remplacent souvent une grande partie de leur corps par des augmétiques, jusqu'à devenir méconnaissables comme humains.",
+    archetypes: [{ name: "Skitarius", tier: 2 }, { name: "Tech-Prêtre", tier: 3 }]
+  },
+  {
+    name: "Adeptus Ministorum",
+    keywords: "IMPERIUM, ADEPTUS MINISTORUM",
+    placeholderNote: "",
+    overview: "Aussi appelé l'Ecclesiarchy, c'est l'église officielle du Culte Impérial, vouée à l'adoration de l'Empereur comme divinité. Prêtres, missionnaires et fanatiques y prêchent la parole impériale à travers la galaxie, parfois avec autant de zèle que de violence.",
+    archetypes: [{ name: "Prêtre du Ministorum", tier: 1 }, { name: "Assassin du Culte de la Mort", tier: 2 }, { name: "Croisé", tier: 3 }]
+  },
+  {
+    name: "Astra Militarum",
+    keywords: "IMPERIUM, ASTRA MILITARUM, [RÉGIMENT]",
+    placeholderNote: "Le mot-clé [RÉGIMENT] peut être remplacé par le nom du régiment d'origine, qui peut accorder des bonus liés à sa spécialité et son histoire.",
+    overview: "La Garde Impériale, immense armée de conscrits humains prélevés sur chaque monde de l'Imperium. Peu individuellement héroïque, sa force réside dans le nombre, la discipline et le sacrifice au nom de l'Empereur.",
+    archetypes: [{ name: "Garde Impérial", tier: 1 }, { name: "Scion Tempestus", tier: 2 }, { name: "Commissaire Impérial", tier: 3 }]
+  },
+  {
+    name: "Inquisition",
+    keywords: "IMPERIUM, INQUISITION, [ORDO]",
+    placeholderNote: "Le mot-clé [ORDO] identifie l'Ordo d'appartenance (Hereticus, Malleus, Xenos...) et détermine la nature des ennemis traqués en priorité.",
+    overview: "Organisation secrète disposant d'une autorité quasi illimitée pour traquer et éliminer les menaces internes à l'Imperium : hérétiques, mutants, xenos infiltrés et corruption démoniaque. Ses agents opèrent souvent dans l'ombre, au-dessus des lois ordinaires.",
+    archetypes: [{ name: "Acolyte de l'Inquisition", tier: 1 }, { name: "Sage de l'Inquisition", tier: 1 }, { name: "Inquisiteur", tier: 4 }]
+  },
+  {
+    name: "Dynasties Rogue Trader",
+    keywords: "IMPERIUM, ROGUE TRADER, [DYNASTIE]",
+    placeholderNote: "Le mot-clé [DYNASTIE] identifie la lignée marchande du personnage.",
+    overview: "Détenteurs d'une Lettre de Marque impériale ancestrale, les Rogue Traders opèrent hors des frontières et des lois habituelles de l'Imperium pour explorer, commercer et conquérir en son nom — et pour leur propre fortune.",
+    archetypes: [{ name: "Rogue Trader", tier: 2 }]
+  },
+  {
+    name: "Scum",
+    keywords: "SCUM, [TOUTE]",
+    placeholderNote: "",
+    overview: "Les laissés-pour-compte de l'Imperium : criminels, marginaux, habitants des bas-fonds. Sans protection officielle, ils survivent grâce à leur ingéniosité, leurs contacts illégaux et leur connaissance des recoins les plus sombres des mondes-ruches.",
+    archetypes: [{ name: "Gangster", tier: 1 }, { name: "Scavvy", tier: 2 }, { name: "Desperado", tier: 3 }]
+  },
+  {
+    name: "Adeptus Astartes",
+    keywords: "IMPERIUM, ADEPTUS ASTARTES, [CHAPITRE]",
+    placeholderNote: "Le mot-clé [CHAPITRE] identifie le Chapitre de Space Marines d'appartenance, qui peut accorder des dons ou traits propres à ses traditions.",
+    overview: "Guerriers surhumains issus d'une modification génétique poussée, les Space Marines sont l'élite militaire de l'Imperium, organisés en un millier de Chapitres indépendants d'environ mille frères de bataille chacun.",
+    archetypes: [{ name: "Éclaireur Space Marine", tier: 2 }, { name: "Space Marine Tactique", tier: 3 }, { name: "Intercesseur Primaris", tier: 4 }]
+  },
+  {
+    name: "Aeldari",
+    keywords: "AELDARI, ASURYANI / ANHRATHE, [CRAFTWORLD] / [COTERIE]",
+    placeholderNote: "Le mot-clé [CRAFTWORLD] (Asuryani) ou [COTERIE] (Corsaires/Anhrathe) identifie l'origine précise du personnage.",
+    overview: "Espèce ancienne et déclinante, dotée d'une agilité et d'une perception hors du commun mais hantée par la chute de leur civilisation passée. Les Asuryani vivent sur d'immenses Croiseurs-Mondes (Craftworlds), tandis que les Corsaires pillent la galaxie à bord de flottes pirates.",
+    archetypes: [{ name: "Corsaire", tier: 1 }, { name: "Ranger", tier: 2 }, { name: "Sorcier (Warlock Aeldari)", tier: 3 }]
+  },
+  {
+    name: "Orks",
+    keywords: "ORK, [CLAN]",
+    placeholderNote: "Le mot-clé [CLAN] identifie le clan Ork d'origine (Goffs, Evil Sunz, Bad Moons...) et ses spécialités culturelles.",
+    overview: "Espèce fongique belliqueuse dont chaque individu naît pour le combat. Robustes, nombreux et animés par une croyance psychique collective qui rend littéralement leurs machines bricolées fonctionnelles (« ça marche parce qu'ils y croient »), les Orks ne vivent que pour le Waaagh!.",
+    archetypes: [{ name: "Ork Boy", tier: 1 }, { name: "Kommando", tier: 2 }, { name: "Ork Nob", tier: 3 }]
+  },
+  {
+    name: "Chaos",
+    keywords: "CHAOS, [MARQUE DU CHAOS]",
+    placeholderNote: "Le mot-clé [MARQUE DU CHAOS] peut être remplacé par le nom du Dieu du Chaos vénéré (Khorne, Tzeentch, Nurgle, Slaanesh) lorsque le personnage lui est dévoué.",
+    overview: "Puissances warp nées des émotions et pulsions des créatures sensibles, les Dieux du Chaos corrompent, séduisent et détruisent tout ce qui s'approche trop près du Warp. Le Chaos n'a pas d'Archétype de personnage dédié dans le manuel de base ; il s'incarne surtout via la Corruption, les Mutations et certains Dons/Talents spécifiques disponibles à d'autres Archétypes qui succombent à sa tentation."
+  }
+];
+
+
+// ==== js/data/mutations.js ====
+// ============================================================
+// MUTATIONS — reformulé en français à partir du manuel.
+// Test de Mutation : Conviction contre DD 3 (+ Niveau de Corruption).
+// En cas d'échec : jet de sévérité (1d6) puis d66 sur la table correspondante
+// (+10 par mutation déjà possédée).
+// ============================================================
+
+const MUTATION_SEVERITY_TABLE = [
+  { roll: "1-2", severity: "Subtile" },
+  { roll: "3-4", severity: "Mineure" },
+  { roll: "5-6", severity: "Sévère" }
+];
+
+const MUTATIONS = {
+  "Subtile": [
+    { roll: "11–16", name: "Lueur Rouge dans les Yeux", effect: "+1 dé bonus en Vigilance ; +1 DD pour toute action visuelle en pleine lumière." },
+    { roll: "21–26", name: "Voix de l'Aurélien", effect: "+Rang dés bonus à tout test social ; les Psykers à 25m doivent relancer leurs Dés de Courroux sans Complication." },
+    { roll: "31–33", name: "Ombre Vivante", effect: "+1 DD pour résister à un pouvoir psychique ; détecte automatiquement les embuscades comme si un point de Gloire était dépensé." },
+    { roll: "34–36", name: "Chair Diaphane", effect: "−1 Résistance de Base et Stress Max ; +1 DD contre le contact douloureux ; Double Rang en Vigilance tactile." },
+    { roll: "41–43", name: "Visions", effect: "Sur une Complication au Dé de Courroux, déclenchez une vision aléatoire (table Visions) ; +3 DD à toute autre action pendant la scène." },
+    { roll: "44–46", name: "Échos", effect: "Sur une Complication, relancez vos Dés de Courroux une fois par test jusqu'à la fin de la scène (sauf Complication ou Critique)." },
+    { roll: "51–53", name: "Âme Flétrie", effect: "+1 DD aux tests de Corruption/Aberration pour vous et autrui à 10m ; +1 dé bonus contre les poisons." },
+    { roll: "54–56", name: "Enfant du Warp (Wyrdling)", effect: "Gagnez le mot-clé PSYKER (si vous ne l'aviez pas) et un Pouvoir Mineur au choix du MJ." }
+  ],
+  "Mineure": [
+    { roll: "11–16", name: "Difforme", effect: "−1 Stress Max ; résistance accrue à la douleur et aux menaces sociales, mais aspect dérangeant." },
+    { roll: "21–26", name: "Grotesque", effect: "+1 dé bonus en Intimidation, mais pénalité sociale ailleurs en raison de votre apparence repoussante." },
+    { roll: "31–33", name: "Peau Bestiale", effect: "+1 Résistance ; +1 dé bonus en Intimidation, avec une contrepartie sociale." },
+    { roll: "34–43", name: "Brute", effect: "+1 Force et Endurance ; la plupart des outils et équipements deviennent trop petits pour vous." },
+    { roll: "44–46", name: "Cornes, Piques, Crocs ou Griffes", effect: "Permet des attaques de mêlée improvisées ; +2 DD aux interactions sociales lorsque visibles." },
+    { roll: "51–53", name: "Miasme Corrosif", effect: "Sur une Complication, un objet d'équipement peut se désintégrer." },
+    { roll: "54–56", name: "Sang Toxique", effect: "Les soins médicaux sur vous deviennent risqués et plus difficiles (Medicae pénalisé)." }
+  ],
+  "Sévère": [
+    { roll: "11–12", name: "Membres Supplémentaires", effect: "Développe des membres additionnels utilisables pour des tâches ou attaques supplémentaires, au prix d'une apparence clairement inhumaine." },
+    { roll: "13–14", name: "Aberration", effect: "Transformation physique profonde et visible ; pénalité sociale importante en société civilisée, compensée par un bénéfice physique variable." },
+    { roll: "15–16", name: "Chair Corrompue", effect: "+2 Endurance ; tout test de Medicae effectué sur vous subit +2 DD." },
+    { roll: "21–22", name: "Ailes", effect: "Vol possible à Vitesse doublée ; vêtements et armures du torse doivent être modifiés." },
+    { roll: "23–24", name: "Corps Serpentin", effect: "Bonus de mobilité au bas du corps ; vêtements/armures des jambes doivent être adaptés." },
+    { roll: "25–26", name: "Pulsion Cannibale", effect: "+2 Force et Endurance ; nécessité de consommer de la chair sentante chaque semaine." },
+    { roll: "31–32", name: "Flétri", effect: "−1 Endurance, +2 Force Mentale." },
+    { roll: "33–34", name: "Vive Ardeur", effect: "+2 Vitesse et +1 dé bonus en Athlétisme ; pénalité sociale minimale de +2 DD due à un comportement erratique." },
+    { roll: "35–36", name: "Chair-Métal", effect: "+2 Blessures et Stress ; l'armure portée ne peut plus être retirée, fusionnée à la chair." },
+    { roll: "41–42", name: "Bile Corrosive", effect: "+3 DD pour tout soin médical reçu ; l'état Saignement projette un liquide corrosif dangereux." },
+    { roll: "43–44", name: "Corpulent", effect: "+2 Endurance ; +1 dé bonus en Intimidation grâce à votre masse imposante." },
+    { roll: "45–46", name: "Excès d'Yeux", effect: "+2 Vigilance, +3 Vigilance Passive, +2 Défense ; apparence dérangeante pénalisant le social." },
+    { roll: "51–52", name: "Vie Endurante", effect: "Ne peut mourir normalement ; chaque Blessure Traumatique inflige 1d6 points de Corruption à la place." },
+    { roll: "53–54", name: "Aquatique", effect: "L'eau n'est plus un Terrain Difficile ; nage à Vitesse normale sans test d'Athlétisme." },
+    { roll: "55–56", name: "Amorphe", effect: "Incapable de porter vêtements ou armure ; +2 Endurance grâce à la réorganisation des organes." },
+    { roll: "61–63", name: "Affligé", effect: "+3 Blessures ; +2 dés bonus en Intimidation, mais pénalité sociale minimale de +2 DD." },
+    { roll: "64+", name: "Le Warp Fait Chair", effect: "Cumule Ailes, Enfant du Warp et Cornes/Piques/Crocs/Griffes ; relancez 2 mutations supplémentaires sur cette table." }
+  ]
+};
+
+// Mutations spécifiques accessibles à l'Archétype Scavvy (voir Don « Mutant »)
+const SCAVVY_MUTATIONS = [
+  "Lueur Rouge dans les Yeux", "Voix de l'Aurélien", "Ombre Vivante", "Chair Diaphane",
+  "Âme Flétrie", "Enfant du Warp (Wyrdling)", "Difforme", "Grotesque", "Peau Bestiale",
+  "Brute", "Sang Toxique", "Flétri", "Vive Ardeur"
+];
+
+
+// ==== js/rules.js ====
+// ============================================================
+// CALCULS DÉRIVÉS — formules officielles (manuel de règles)
+// ============================================================
+
+function getSpecies(name) {
+  return SPECIES.find(s => s.name === name) || SPECIES[0];
+}
+
+// Total d'un Attribut = score acheté + bonus d'Espèce
+function attributeTotal(c, key) {
+  const species = getSpecies(c.species);
+  const score = (c.attributes && c.attributes[key]) || 1;
+  const bonus = (species.attrBonus && species.attrBonus[key]) || 0;
+  return score + bonus;
+}
+
+// Total d'une Compétence = rang acheté + Total de l'Attribut associé + bonus d'Espèce
+function skillTotal(c, skillName) {
+  const skill = SKILLS.find(s => s.name === skillName);
+  if (!skill) return 0;
+  const species = getSpecies(c.species);
+  const rank = (c.skills && c.skills[skillName]) || 0;
+  const attrTot = attributeTotal(c, skill.attr);
+  const speciesSkillBonus = (species.skillBonus && species.skillBonus[skillName]) || 0;
+  return rank + attrTot + speciesSkillBonus;
+}
+
+// Meilleure Armure équipée (pour la Résistance)
+function bestArmourRating(c) {
+  if (!c.armours || c.armours.length === 0) return 0;
+  let best = 0;
+  c.armours.forEach(a => {
+    const ar = parseInt(String(a.ar).replace("*", ""), 10);
+    if (!isNaN(ar) && ar > best) best = ar;
+  });
+  return best;
+}
+
+function computeDerived(c) {
+  const species = getSpecies(c.species);
+  const I = attributeTotal(c, "I");
+  const E = attributeTotal(c, "E");
+  const FM = attributeTotal(c, "FM");
+  const Soc = attributeTotal(c, "Soc");
+  const vigilanceTotal = skillTotal(c, "Vigilance");
+  const armourAR = bestArmourRating(c);
+
+  return {
+    defense: I - 1,
+    resistanceBase: E + 1,
+    resistanceArmour: armourAR,
+    resistanceTotal: E + 1 + armourAR,
+    blessuresMax: E + (2 * c.tier),
+    stressMax: FM + c.tier,
+    determination: E,
+    resolution: Math.max(1, FM - 1),
+    conviction: FM,
+    influence: Math.max(0, Soc - 1),
+    richesse: c.tier + (c.richesseBonus || 0),
+    taille: species.size,
+    vitesse: species.speed,
+    vigilancePassive: Math.ceil(vigilanceTotal / 2),
+    blessuresGravesMax: c.tier + 1
+  };
+}
+
+// ---------- Calcul de l'XP dépensée ----------
+
+function talentXpValue(talentName) {
+  const t = TALENTS.find(t => t.name === talentName);
+  if (!t) return 0;
+  const n = parseInt(String(t.xp), 10);
+  return isNaN(n) ? 0 : n;
+}
+
+function computeXpSpent(c) {
+  let total = 0;
+  const species = getSpecies(c.species);
+  total += species.xpCost || 0;
+
+  Object.entries(c.attributes || {}).forEach(([key, rating]) => {
+    total += (ATTRIBUTE_XP_TABLE[rating] || { total: 0 }).total;
+  });
+  Object.entries(c.skills || {}).forEach(([name, rating]) => {
+    total += (SKILL_XP_TABLE[rating] || { total: 0 }).total;
+  });
+  (c.talents || []).forEach(name => { total += talentXpValue(name); });
+  total += (c.richesseBonus || 0); // 1 XP par point de Richesse supplémentaire
+
+  return total;
+}
+
+
+// ==== js/storage.js ====
+// ============================================================
+// STOCKAGE LOCAL DES PERSONNAGES
+// Utilise le localStorage du navigateur (site statique, aucun serveur).
+// ============================================================
+
+const STORAGE_KEY = "wg_characters_v2";
+
+function loadCharacters() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    console.error("Erreur de lecture du stockage :", e);
+    return [];
+  }
+}
+
+function saveCharacters(characters) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
+    return true;
+  } catch (e) {
+    console.error("Erreur d'écriture du stockage (image trop lourde ?) :", e);
+    alert("Erreur d'enregistrement : le stockage local est peut-être plein (l'image du portrait est-elle très volumineuse ?).");
+    return false;
+  }
+}
+
+function createBlankCharacter(name) {
+  const attrs = {};
+  ATTRIBUTES.forEach(a => { if (a.key !== "Spd") attrs[a.key] = 1; });
+
+  const skills = {};
+  SKILLS.forEach(s => { skills[s.name] = 0; });
+
+  return {
+    id: "char_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
+    playerName: "",
+    name: name || "Nouveau Personnage",
+    image: null,
+    species: "Humain",
+    archetype: "",
+    historique: "",
+    faction: "",
+    motsCles: "",
+    tier: 1,
+    rang: 1,
+    xpTotal: 0,
+    attributes: attrs,
+    skills: skills,
+    talents: [],
+    weapons: [],
+    armours: [],
+    equipment: [],
+    wounds: 0,
+    shock: 0,
+    corruption: 0,
+    foiMax: 0,
+    foiCurrent: 0,
+    fureur: 0,
+    gloire: 0,
+    richesseBonus: 0,
+    blessuresGraves: ["", "", "", "", "", ""],
+    blessuresGuerre: "",
+    mutations: "",
+    psychicPowers: [],
+    notes: "",
+    cadreCampagne: "",
+    bonusCadreCampagne: "",
+    createdAt: new Date().toISOString()
+  };
+}
+
+// Ajoute les valeurs par défaut à un personnage sauvegardé avec un ancien schéma
+function migrateCharacter(c) {
+  const blank = createBlankCharacter(c.name);
+  const merged = Object.assign({}, blank, c);
+  // Migration ancienne clé "wargear" (liste de textes) -> equipment
+  if (c.wargear && Array.isArray(c.wargear) && (!c.weapons || c.weapons.length === 0) && (!c.equipment || c.equipment.length === 0)) {
+    merged.equipment = c.wargear.slice();
+  }
+  return merged;
+}
+
+function upsertCharacter(character) {
+  const chars = loadCharacters();
+  const idx = chars.findIndex(c => c.id === character.id);
+  if (idx >= 0) {
+    chars[idx] = character;
+  } else {
+    chars.push(character);
+  }
+  return saveCharacters(chars);
+}
+
+function deleteCharacter(id) {
+  const chars = loadCharacters().filter(c => c.id !== id);
+  saveCharacters(chars);
+}
+
+function getCharacter(id) {
+  const c = loadCharacters().find(c => c.id === id) || null;
+  return c ? migrateCharacter(c) : null;
+}
+
+
+// ==== js/app.js ====
+// ============================================================
+// APPLICATION — routage entre vues + rendu
+// ============================================================
+
+let state = {
+  view: "list",       // "list" | "sheet" | "codex" | "print"
+  characterId: null,
+  codexTab: "attributs"
+};
+
+function switchTab(view) {
+  state.view = view;
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.view === view));
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === "view-" + view));
+  if (view === "list") renderCharacterList();
+  if (view === "codex") renderCodex();
+}
+
+// ---------- Vue : Liste des personnages ----------
+
+function renderCharacterList() {
+  const chars = loadCharacters();
+  const container = document.getElementById("char-list");
+
+  if (chars.length === 0) {
+    container.innerHTML = `<div class="empty-state">Aucun personnage pour l'instant.<br>Créez-en un pour commencer.</div>`;
+    return;
+  }
+
+  container.innerHTML = chars.map(c => `
+    <div class="char-card" data-id="${c.id}">
+      ${c.image ? `<img class="char-thumb" src="${c.image}" alt="">` : `<div class="char-thumb char-thumb-empty">✠</div>`}
+      <div class="char-card-info">
+        <div class="cname">${escapeHtml(c.name)}</div>
+        <div class="cmeta">${escapeHtml(c.species)} · ${escapeHtml(c.archetype || "Archétype non défini")} · Palier ${c.tier}</div>
+      </div>
+    </div>
+  `).join("");
+
+  container.querySelectorAll(".char-card").forEach(card => {
+    card.addEventListener("click", () => openCharacterSheet(card.dataset.id));
+  });
+}
+
+function newCharacter() {
+  const c = createBlankCharacter("Nouveau Personnage");
+  upsertCharacter(c);
+  openCharacterSheet(c.id);
+}
+
+function openCharacterSheet(id) {
+  state.characterId = id;
+  switchTab("sheet");
+  renderCharacterSheet();
+}
+
+// ---------- Vue : Fiche de personnage (édition) ----------
+
+function renderCharacterSheet() {
+  const c = getCharacter(state.characterId);
+  if (!c) { switchTab("list"); return; }
+  const derived = computeDerived(c);
+  const xpSpent = computeXpSpent(c);
+
+  const attrHtml = ATTRIBUTES.filter(a => a.key !== "Spd").map(a => `
+    <div class="stat-box">
+      <span class="stat-name">${a.name}<small>${a.key}</small></span>
+      <input type="number" min="1" max="12" value="${(c.attributes && c.attributes[a.key]) || 1}" data-attr="${a.key}">
+      <span class="stat-total">Total ${attributeTotal(c, a.key)}</span>
+    </div>
+  `).join("");
+
+  const skillHtml = SKILLS.map(s => `
+    <div class="stat-box">
+      <span class="stat-name">${s.name}<small>${s.attr}</small></span>
+      <input type="number" min="0" max="8" value="${(c.skills && c.skills[s.name]) || 0}" data-skill="${s.name}">
+      <span class="stat-total">Total ${skillTotal(c, s.name)}</span>
+    </div>
+  `).join("");
+
+  const talentsHtml = renderTalentList(c.talents);
+  const weaponsHtml = renderWeaponRows(c.weapons);
+  const armoursHtml = renderArmourRows(c.armours);
+  const equipmentHtml = renderTagList(c.equipment, "equipment");
+  const psychicHtml = renderPsychicRows(c.psychicPowers);
+
+  const speciesOptions = SPECIES.map(s => `<option value="${s.name}" ${c.species === s.name ? "selected" : ""}>${s.name}</option>`).join("");
+  const archetypeOptions = `<option value="">— Aucun —</option>` + ARCHETYPES.map(a =>
+    `<option value="${a.name}" ${c.archetype === a.name ? "selected" : ""}>${a.name} (Palier ${a.tier})</option>`
+  ).join("");
+
+  document.getElementById("sheet-content").innerHTML = `
+    <div class="panel">
+      <div class="portrait-row">
+        <div class="portrait-preview" id="portrait-preview">
+          ${c.image ? `<img src="${c.image}" alt="Portrait">` : `<span>✠</span>`}
+        </div>
+        <div class="portrait-controls">
+          <label>Portrait du personnage</label>
+          <input type="file" id="f-image" accept="image/*">
+          ${c.image ? `<button class="btn btn-danger" id="remove-image" type="button">Retirer l'image</button>` : ""}
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Nom du Joueur</label><input type="text" id="f-playername" value="${escapeHtml(c.playerName || "")}"></div>
+        <div class="field"><label>Nom du Personnage</label><input type="text" id="f-name" value="${escapeHtml(c.name)}"></div>
+      </div>
+      <div class="field-row-4">
+        <div class="field"><label>Tier</label><input type="number" id="f-tier" min="1" max="4" value="${c.tier}"></div>
+        <div class="field"><label>Rang</label><input type="number" id="f-rang" min="1" value="${c.rang || 1}"></div>
+        <div class="field"><label>Espèce</label><select id="f-species">${speciesOptions}</select></div>
+        <div class="field"><label>Archétype</label><select id="f-archetype">${archetypeOptions}</select></div>
+      </div>
+      <div class="btn-row" style="margin-top:-0.4rem;margin-bottom:0.6rem;">
+        <button class="btn" id="apply-archetype" type="button">Appliquer les valeurs suggérées de l'Archétype</button>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Faction</label><input type="text" id="f-faction" value="${escapeHtml(c.faction || "")}"></div>
+        <div class="field"><label>Mots-Clés</label><input type="text" id="f-motscles" value="${escapeHtml(c.motsCles || "")}" placeholder="IMPERIUM, ADEPTUS ASTARTES..."></div>
+      </div>
+      <div class="field">
+        <label>Historique</label>
+        <textarea id="f-historique" rows="2">${escapeHtml(c.historique || "")}</textarea>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Attributs</h2>
+      <div class="stat-grid">${attrHtml}</div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Compétences</h2>
+      <div class="stat-grid">${skillHtml}</div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Traits Dérivés</h2>
+      <div class="derived-grid">
+        <div class="derived-box"><span>Défense</span><strong>${derived.defense}</strong><small>= Init −1</small></div>
+        <div class="derived-box"><span>Résistance</span><strong>${derived.resistanceTotal}</strong><small>= End +1 (+Armure ${derived.resistanceArmour})</small></div>
+        <div class="derived-box"><span>Blessures Max</span><strong>${derived.blessuresMax}</strong><small>= End + 2×Tier</small></div>
+        <div class="derived-box"><span>Stress Max</span><strong>${derived.stressMax}</strong><small>= FM + Tier</small></div>
+        <div class="derived-box"><span>Détermination</span><strong>${derived.determination}</strong><small>= End</small></div>
+        <div class="derived-box"><span>Résolution</span><strong>${derived.resolution}</strong><small>= FM −1</small></div>
+        <div class="derived-box"><span>Conviction</span><strong>${derived.conviction}</strong><small>= FM</small></div>
+        <div class="derived-box"><span>Influence</span><strong>${derived.influence}</strong><small>= Soc −1</small></div>
+        <div class="derived-box"><span>Richesse</span><strong>${derived.richesse}</strong><small>= Tier${c.richesseBonus ? " +" + c.richesseBonus : ""}</small></div>
+        <div class="derived-box"><span>Taille</span><strong>${derived.taille}</strong><small>Espèce</small></div>
+        <div class="derived-box"><span>Vitesse</span><strong>${derived.vitesse}</strong><small>Espèce</small></div>
+        <div class="derived-box"><span>Vigilance Passive</span><strong>${derived.vigilancePassive}</strong><small>= Vigilance / 2</small></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Ressources</h2>
+      <div class="stat-grid">
+        <div class="stat-box"><span class="stat-name">Blessures (actuelles)<small>Max ${derived.blessuresMax}</small></span><input type="number" id="f-wounds" min="0" value="${c.wounds || 0}"></div>
+        <div class="stat-box"><span class="stat-name">Stress (actuel)<small>Max ${derived.stressMax}</small></span><input type="number" id="f-shock" min="0" value="${c.shock || 0}"></div>
+        <div class="stat-box"><span class="stat-name">Corruption<small>/ 25</small></span><input type="number" id="f-corruption" min="0" max="25" value="${c.corruption || 0}"></div>
+        <div class="stat-box"><span class="stat-name">Fureur (Colère)</span><input type="number" id="f-fureur" min="0" value="${c.fureur || 0}"></div>
+        <div class="stat-box"><span class="stat-name">Gloire</span><input type="number" id="f-gloire" min="0" value="${c.gloire || 0}"></div>
+        <div class="stat-box"><span class="stat-name">Richesse bonus<small>+1 XP/point</small></span><input type="number" id="f-richessebonus" min="0" max="4" value="${c.richesseBonus || 0}"></div>
+        <div class="stat-box"><span class="stat-name">Foi (Max)</span><input type="number" id="f-foimax" min="0" value="${c.foiMax || 0}"></div>
+        <div class="stat-box"><span class="stat-name">Foi (actuelle)</span><input type="number" id="f-foicurrent" min="0" value="${c.foiCurrent || 0}"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Points d'Expérience</h2>
+      <div class="xp-summary">Total PX : <strong>${c.xpTotal || 0}</strong> — PX dépensée (estimée) : <strong>${xpSpent}</strong> — PX Actuel (restant) : <strong>${(c.xpTotal || 0) - xpSpent}</strong></div>
+      <div class="field" style="margin-top:0.6rem;max-width:200px;">
+        <label>Total PX gagnée</label>
+        <input type="number" id="f-xptotal" min="0" value="${c.xpTotal || 0}">
+      </div>
+      <p class="note">Le calcul d'XP dépensée est une estimation (Attributs + Compétences + Espèce + Dons reconnus + Richesse bonus).</p>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Dons</h2>
+      <div id="talent-list">${talentsHtml}</div>
+      <div class="list-tag-input">
+        <select id="new-talent-select">
+          <option value="">— Choisir un don du Codex —</option>
+          ${TALENTS.map(t => `<option value="${escapeHtml(t.name)}">${escapeHtml(t.name)} (${t.xp} XP)</option>`).join("")}
+        </select>
+        <button class="btn" id="add-talent" type="button">Ajouter</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Armes</h2>
+      <div style="overflow-x:auto;">
+        <table class="codex-table sheet-equip-table" id="weapons-table">
+          <thead><tr><th>Nom</th><th>Réserve</th><th>Dégâts</th><th>DS</th><th>PA</th><th>Salve</th><th>Portée</th><th>Traits</th><th></th></tr></thead>
+          <tbody>${weaponsHtml}</tbody>
+        </table>
+      </div>
+      <div class="list-tag-input">
+        <select id="new-weapon-select">
+          <option value="">— Ajouter une arme du Codex —</option>
+          <optgroup label="Mêlée">
+            ${Object.entries(MELEE_WEAPONS).flatMap(([cat, items]) => items.map((w, i) => `<option value="melee|${cat}|${i}">${escapeHtml(w.name)}</option>`)).join("")}
+          </optgroup>
+          <optgroup label="Distance">
+            ${Object.entries(RANGED_WEAPONS).flatMap(([cat, items]) => items.map((w, i) => `<option value="ranged|${cat}|${i}">${escapeHtml(w.name)}</option>`)).join("")}
+          </optgroup>
+        </select>
+        <button class="btn" id="add-weapon" type="button">Ajouter</button>
+      </div>
+      <div class="list-tag-input">
+        <input type="text" id="new-weapon-custom" placeholder="...ou arme personnalisée (nom uniquement)">
+        <button class="btn" id="add-weapon-custom" type="button">Ajouter</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Armure</h2>
+      <div style="overflow-x:auto;">
+        <table class="codex-table sheet-equip-table" id="armours-table">
+          <thead><tr><th>Nom</th><th>AR</th><th>Traits</th><th></th></tr></thead>
+          <tbody>${armoursHtml}</tbody>
+        </table>
+      </div>
+      <div class="list-tag-input">
+        <select id="new-armour-select">
+          <option value="">— Ajouter une armure du Codex —</option>
+          ${Object.entries(ARMOUR).flatMap(([cat, items]) => items.map((a, i) => `<option value="${cat}|${i}">${escapeHtml(a.name)}</option>`)).join("")}
+        </select>
+        <button class="btn" id="add-armour" type="button">Ajouter</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Équipement (objets divers)</h2>
+      <div id="equipment-list">${equipmentHtml}</div>
+      <div class="list-tag-input">
+        <input type="text" id="new-equipment" placeholder="Ajouter un objet...">
+        <button class="btn" id="add-equipment" type="button">Ajouter</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Blessures Graves <small class="note">(max simultanées : ${derived.blessuresGravesMax})</small></h2>
+      <div class="graves-list">
+        ${(c.blessuresGraves || ["","","","","",""]).map((v, i) => `
+          <div class="field-inline"><label>${i + 1}.</label><input type="text" data-grave="${i}" value="${escapeHtml(v)}"></div>
+        `).join("")}
+      </div>
+      <div class="field-row" style="margin-top:0.8rem;">
+        <div class="field"><label>Blessures de Guerre</label><textarea id="f-blessuresguerre" rows="3">${escapeHtml(c.blessuresGuerre || "")}</textarea></div>
+        <div class="field"><label>Mutations</label><textarea id="f-mutations" rows="3">${escapeHtml(c.mutations || "")}</textarea></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Pouvoirs Psychiques</h2>
+      <div style="overflow-x:auto;">
+        <table class="codex-table sheet-equip-table" id="psychic-table">
+          <thead><tr><th>Pouvoir</th><th>SD</th><th>Activation</th><th>Durée</th><th>Portée</th><th>Cible</th><th>Effet</th><th></th></tr></thead>
+          <tbody>${psychicHtml}</tbody>
+        </table>
+      </div>
+      <button class="btn" id="add-psychic" type="button">+ Ajouter une ligne vide</button>
+      <div class="list-tag-input" style="margin-top:0.5rem;">
+        <select id="new-psychic-select">
+          <option value="">— Pré-remplir depuis le Codex —</option>
+          ${PSYKER_ABILITIES.map((p, i) => `<option value="ability|${i}">${escapeHtml(p.name)} (aptitude gratuite)</option>`).join("")}
+          ${MINOR_PSYCHIC_POWERS.map((p, i) => `<option value="minor|${i}">${escapeHtml(p.name)} (mineur, ${p.xp} XP)</option>`).join("")}
+          ${Object.entries(PSYCHIC_DISCIPLINES).flatMap(([disc, powers]) => powers.map((p, i) => `<option value="disc|${disc}|${i}">${escapeHtml(p.name)} (${disc}, ${p.xp} XP)</option>`)).join("")}
+        </select>
+        <button class="btn" id="add-psychic-from-codex" type="button">Ajouter</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Cadre de Campagne</h2>
+      <div class="field"><label>Cadre de Campagne</label><textarea id="f-cadre" rows="2">${escapeHtml(c.cadreCampagne || "")}</textarea></div>
+      <div class="field"><label>Bonus de Cadre de Campagne</label><textarea id="f-cadrebonus" rows="2">${escapeHtml(c.bonusCadreCampagne || "")}</textarea></div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Notes</h2>
+      <textarea id="f-notes" rows="4">${escapeHtml(c.notes || "")}</textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" id="back-to-list" type="button">&larr; Retour</button>
+      <button class="btn btn-primary" id="save-char" type="button">Enregistrer</button>
+      <button class="btn" id="print-char" type="button">Fiche Imprimable</button>
+      <button class="btn btn-danger" id="delete-char" type="button">Supprimer</button>
+    </div>
+  `;
+
+  bindSheetEvents(c);
+}
+
+function bindSheetEvents(c) {
+  document.getElementById("back-to-list").addEventListener("click", () => switchTab("list"));
+  document.getElementById("save-char").addEventListener("click", saveCharacterFromForm);
+  document.getElementById("print-char").addEventListener("click", () => {
+    saveCharacterFromForm(true);
+    openPrintSheet(c.id);
+  });
+  document.getElementById("delete-char").addEventListener("click", () => {
+    if (confirm("Supprimer définitivement ce personnage ?")) {
+      deleteCharacter(c.id);
+      switchTab("list");
+    }
+  });
+
+  // Portrait
+  document.getElementById("f-image").addEventListener("change", (e) => handleImageUpload(e, c.id));
+  const removeBtn = document.getElementById("remove-image");
+  if (removeBtn) removeBtn.addEventListener("click", () => {
+    const cur = getCharacter(c.id);
+    cur.image = null;
+    upsertCharacter(cur);
+    renderCharacterSheet();
+  });
+
+  // Talents
+  document.getElementById("add-talent").addEventListener("click", () => {
+    const select = document.getElementById("new-talent-select");
+    if (!select.value) return;
+    mutateCharacter(c.id, cur => cur.talents.push(select.value));
+  });
+
+  // Appliquer les suggestions d'Archétype
+  document.getElementById("apply-archetype").addEventListener("click", () => {
+    const archName = document.getElementById("f-archetype").value;
+    const d = ARCHETYPE_DETAILS[archName];
+    if (!d) { alert("Choisissez d'abord un Archétype dans la liste, ou aucune donnée détaillée n'est disponible pour celui-ci."); return; }
+    if (!confirm(`Appliquer les valeurs suggérées de "${archName}" ? Cela va définir l'Espèce, les Attributs (si disponibles), et ajouter les Dons/Équipement suggérés à ce qui existe déjà.`)) return;
+    mutateCharacter(c.id, cur => {
+      cur.species = d.species;
+      cur.motsCles = d.keywords;
+      const faction = FACTIONS.find(f => f.archetypes && f.archetypes.some(a => a.name === archName));
+      if (faction) cur.faction = faction.name;
+      const attrKeys = ATTRIBUTES.filter(a => a.key !== "Spd").map(a => a.key);
+      if (!d.attrs.some(v => v == null)) {
+        attrKeys.forEach((k, i) => { cur.attributes[k] = d.attrs[i]; });
+      }
+      if (d.wargear && d.wargear !== "—") cur.equipment.push(d.wargear);
+      if (d.talentsSuggested && d.talentsSuggested !== "—" && !d.talentsSuggested.startsWith("Voir")) {
+        d.talentsSuggested.split(",").map(s => s.trim()).forEach(name => {
+          const match = TALENTS.find(t => t.name === name);
+          if (match && !cur.talents.includes(match.name)) cur.talents.push(match.name);
+        });
+      }
+    });
+  });
+
+  // Armes
+  document.getElementById("add-weapon").addEventListener("click", () => {
+    const val = document.getElementById("new-weapon-select").value;
+    if (!val) return;
+    const [type, cat, idx] = val.split("|");
+    const source = type === "melee" ? MELEE_WEAPONS : RANGED_WEAPONS;
+    const w = source[cat][parseInt(idx, 10)];
+    const snapshot = Object.assign({ type, reserve: "" }, w);
+    mutateCharacter(c.id, cur => cur.weapons.push(snapshot));
+  });
+  document.getElementById("add-weapon-custom").addEventListener("click", () => {
+    const input = document.getElementById("new-weapon-custom");
+    const val = input.value.trim();
+    if (!val) return;
+    mutateCharacter(c.id, cur => cur.weapons.push({ name: val, type: "custom", dmg: "–", ed: "–", ap: "–", traits: "", reserve: "" }));
+  });
+
+  // Armure
+  document.getElementById("add-armour").addEventListener("click", () => {
+    const val = document.getElementById("new-armour-select").value;
+    if (!val) return;
+    const [cat, idx] = val.split("|");
+    const a = ARMOUR[cat][parseInt(idx, 10)];
+    mutateCharacter(c.id, cur => cur.armours.push(Object.assign({}, a)));
+  });
+
+  // Équipement général
+  document.getElementById("add-equipment").addEventListener("click", () => {
+    const input = document.getElementById("new-equipment");
+    const val = input.value.trim();
+    if (!val) return;
+    mutateCharacter(c.id, cur => cur.equipment.push(val));
+  });
+
+  // Pouvoirs psychiques
+  document.getElementById("add-psychic").addEventListener("click", () => {
+    mutateCharacter(c.id, cur => cur.psychicPowers.push({ name: "", sd: "", activation: "", duree: "", portee: "", cible: "", effet: "" }));
+  });
+  document.getElementById("add-psychic-from-codex").addEventListener("click", () => {
+    const val = document.getElementById("new-psychic-select").value;
+    if (!val) return;
+    const parts = val.split("|");
+    let p;
+    if (parts[0] === "ability") p = PSYKER_ABILITIES[parseInt(parts[1], 10)];
+    else if (parts[0] === "minor") p = MINOR_PSYCHIC_POWERS[parseInt(parts[1], 10)];
+    else p = PSYCHIC_DISCIPLINES[parts[1]][parseInt(parts[2], 10)];
+    mutateCharacter(c.id, cur => cur.psychicPowers.push({
+      name: p.name, sd: p.dn, activation: p.activation, duree: p.duration,
+      portee: p.range, cible: p.multi || "", effet: p.effect
+    }));
+  });
+
+  // Édition inline des lignes Pouvoirs Psychiques
+  document.getElementById("psychic-table").addEventListener("change", (e) => {
+    const idx = e.target.dataset.pidx;
+    const field = e.target.dataset.pfield;
+    if (idx === undefined || !field) return;
+    mutateCharacter(c.id, cur => { cur.psychicPowers[idx][field] = e.target.value; }, false);
+  });
+
+  // Édition inline Réserve des armes
+  document.getElementById("weapons-table").addEventListener("change", (e) => {
+    const idx = e.target.dataset.widx;
+    if (idx === undefined) return;
+    mutateCharacter(c.id, cur => { cur.weapons[idx].reserve = e.target.value; }, false);
+  });
+}
+
+// Applique une mutation au personnage en partant de l'état ACTUEL du
+// formulaire (pas seulement de la dernière version enregistrée), pour ne
+// jamais perdre une modification en cours (Attributs, Notes...) quand on
+// clique sur "Ajouter" ou "Supprimer" sur une autre section de la fiche.
+// rerender=false évite de perdre le focus d'un champ texte en cours de frappe.
+function mutateCharacter(id, mutator, rerender = true) {
+  const stored = getCharacter(id);
+  const cur = document.getElementById("f-name") ? readFormAsCharacter(stored) : stored;
+  mutator(cur);
+  upsertCharacter(cur);
+  if (rerender) renderCharacterSheet();
+}
+
+function renderTalentList(talents) {
+  if (!talents || talents.length === 0) return `<div class="note">Aucun don pour l'instant.</div>`;
+  return talents.map((name, i) => {
+    const t = TALENTS.find(t => t.name === name);
+    return `<div class="talent-row">
+      <div>
+        <strong>${escapeHtml(name)}</strong>${t ? ` <span class="entry-tag">${t.xp} XP</span>` : ""}
+        ${t && t.req ? `<div class="note">Prérequis : ${escapeHtml(t.req)}</div>` : ""}
+        ${t ? `<div class="note">${escapeHtml(t.desc)}</div>` : ""}
+      </div>
+      <button class="btn btn-danger" data-del-field="talents" data-del-idx="${i}" type="button">&times;</button>
+    </div>`;
+  }).join("");
+}
+
+function renderWeaponRows(weapons) {
+  if (!weapons || weapons.length === 0) return `<tr><td colspan="9" class="note">Aucune arme équipée.</td></tr>`;
+  return weapons.map((w, i) => {
+    const range = w.type === "ranged" ? `${w.short}/${w.med}/${w.long}` : (w.range || "–");
+    return `<tr>
+      <td>${escapeHtml(w.name)}</td>
+      <td><input type="text" data-widx="${i}" value="${escapeHtml(w.reserve || "")}" style="width:4rem;"></td>
+      <td>${w.dmg}</td>
+      <td>${w.ed}</td>
+      <td>${w.ap}</td>
+      <td>${w.salvo != null ? w.salvo : "–"}</td>
+      <td>${range}</td>
+      <td>${w.traits || "–"}</td>
+      <td><button class="btn btn-danger" data-del-field="weapons" data-del-idx="${i}" type="button">&times;</button></td>
+    </tr>`;
+  }).join("");
+}
+
+function renderArmourRows(armours) {
+  if (!armours || armours.length === 0) return `<tr><td colspan="4" class="note">Aucune armure équipée.</td></tr>`;
+  return armours.map((a, i) => `<tr>
+    <td>${escapeHtml(a.name)}</td>
+    <td>${a.ar}</td>
+    <td>${a.traits || "–"}</td>
+    <td><button class="btn btn-danger" data-del-field="armours" data-del-idx="${i}" type="button">&times;</button></td>
+  </tr>`).join("");
+}
+
+function renderPsychicRows(powers) {
+  if (!powers || powers.length === 0) return `<tr><td colspan="8" class="note">Aucun pouvoir enregistré.</td></tr>`;
+  const cols = ["name","sd","activation","duree","portee","cible","effet"];
+  return powers.map((p, i) => `<tr>
+    ${cols.map(col => `<td><input type="text" data-pidx="${i}" data-pfield="${col}" value="${escapeHtml(p[col] || "")}" style="width:${col === "effet" ? "12rem" : col === "name" ? "8rem" : "5rem"};"></td>`).join("")}
+    <td><button class="btn btn-danger" data-del-field="psychicPowers" data-del-idx="${i}" type="button">&times;</button></td>
+  </tr>`).join("");
+}
+
+function renderTagList(items, field) {
+  if (!items || items.length === 0) return `<div class="note">Aucun élément pour l'instant.</div>`;
+  return items.map((item, i) => `
+    <span class="tag-chip">${escapeHtml(item)} <button data-del-field="${field}" data-del-idx="${i}" type="button">&times;</button></span>
+  `).join("");
+}
+
+// ---------- Photo ----------
+
+function handleImageUpload(e, charId) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      const maxDim = 500;
+      let w = img.width, h = img.height;
+      if (w > h && w > maxDim) { h = Math.round(h * maxDim / w); w = maxDim; }
+      else if (h > maxDim) { w = Math.round(w * maxDim / h); h = maxDim; }
+      const canvas = document.createElement("canvas");
+      canvas.width = w; canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+      const cur = getCharacter(charId);
+      cur.image = dataUrl;
+      upsertCharacter(cur);
+      renderCharacterSheet();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ---------- Sauvegarde du formulaire ----------
+
+function readFormAsCharacter(base) {
+  const c = Object.assign({}, base);
+  c.playerName = val("f-playername");
+  c.name = val("f-name") || "Sans nom";
+  c.tier = intVal("f-tier", 1);
+  c.rang = intVal("f-rang", 1);
+  c.species = val("f-species");
+  c.archetype = val("f-archetype");
+  c.faction = val("f-faction");
+  c.motsCles = val("f-motscles");
+  c.historique = val("f-historique");
+  c.xpTotal = intVal("f-xptotal", 0);
+  c.wounds = intVal("f-wounds", 0);
+  c.shock = intVal("f-shock", 0);
+  c.corruption = intVal("f-corruption", 0);
+  c.fureur = intVal("f-fureur", 0);
+  c.gloire = intVal("f-gloire", 0);
+  c.richesseBonus = intVal("f-richessebonus", 0);
+  c.foiMax = intVal("f-foimax", 0);
+  c.foiCurrent = intVal("f-foicurrent", 0);
+  c.blessuresGuerre = val("f-blessuresguerre");
+  c.mutations = val("f-mutations");
+  c.cadreCampagne = val("f-cadre");
+  c.bonusCadreCampagne = val("f-cadrebonus");
+  c.notes = val("f-notes");
+
+  c.attributes = {};
+  document.querySelectorAll("input[data-attr]").forEach(inp => {
+    c.attributes[inp.dataset.attr] = parseInt(inp.value, 10) || 1;
+  });
+  c.skills = {};
+  document.querySelectorAll("input[data-skill]").forEach(inp => {
+    c.skills[inp.dataset.skill] = parseInt(inp.value, 10) || 0;
+  });
+  c.blessuresGraves = [];
+  document.querySelectorAll("input[data-grave]").forEach(inp => {
+    c.blessuresGraves[parseInt(inp.dataset.grave, 10)] = inp.value;
+  });
+
+  return c;
+}
+
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : "";
+}
+function intVal(id, fallback) {
+  const el = document.getElementById(id);
+  const n = el ? parseInt(el.value, 10) : NaN;
+  return isNaN(n) ? fallback : n;
+}
+
+function saveCharacterFromForm(silent) {
+  const base = getCharacter(state.characterId);
+  const updated = readFormAsCharacter(base);
+  upsertCharacter(updated);
+  if (!silent) switchTab("list");
+}
+
+// ---------- Vue : Codex ----------
+
+function renderCodex() {
+  const container = document.getElementById("codex-content");
+  document.querySelectorAll(".subtab-btn").forEach(b => b.classList.toggle("active", b.dataset.codex === state.codexTab));
+
+  if (state.codexTab === "attributs") {
+    container.innerHTML = ATTRIBUTES.map(a => `
+      <div class="codex-entry">
+        <span class="entry-name">${a.name}</span><span class="entry-tag">${a.key}</span>
+        <div class="entry-desc">${a.desc}</div>
+      </div>
+    `).join("");
+  }
+
+  if (state.codexTab === "competences") {
+    container.innerHTML = SKILLS.map(s => `
+      <div class="codex-entry">
+        <span class="entry-name">${s.name}</span><span class="entry-tag">${s.attr}</span>
+        <div class="entry-desc">${s.desc}</div>
+      </div>
+    `).join("");
+  }
+
+  if (state.codexTab === "especes") {
+    container.innerHTML = SPECIES.map(s => `
+      <div class="codex-entry">
+        <span class="entry-name">${s.name}</span><span class="entry-tag">${s.xpCost} XP · Vitesse ${s.speed} · Taille ${s.size}</span>
+        <div class="entry-desc">${s.abilities.length ? s.abilities.join("<br>") : "Aucun trait particulier — plus de points d'expérience à répartir librement."}</div>
+      </div>
+    `).join("");
+  }
+
+  if (state.codexTab === "archetypes") {
+    const byTier = [1,2,3,4].map(t => `
+      <h3 class="codex-subhead">PALIER ${t}</h3>
+      ${ARCHETYPES.filter(a => a.tier === t).map(a => {
+        const d = ARCHETYPE_DETAILS[a.name];
+        if (!d) return `<div class="codex-entry"><span class="entry-name">${a.name}</span><span class="entry-tag">p.${a.page}</span></div>`;
+        const attrLabels = ATTRIBUTES.filter(x => x.key !== "Spd").map(x => x.key);
+        const attrLine = d.attrs.some(v => v == null) ? "Voir bonus d'Espèce" : attrLabels.map((k,i) => `${k} ${d.attrs[i]}`).join(" · ");
+        return `<div class="codex-entry">
+          <span class="entry-name">${a.name}</span><span class="entry-tag">${d.species} · ${d.xpCost} XP</span>
+          <div class="entry-desc"><em>Mots-clés :</em> ${d.keywords}</div>
+          <div class="entry-desc"><strong>${d.abilityName}</strong> — ${d.abilityText}</div>
+          <div class="entry-desc"><em>Attributs suggérés :</em> ${attrLine}</div>
+          <div class="entry-desc"><em>Compétences suggérées :</em> ${d.skillsSuggested}</div>
+          <div class="entry-desc"><em>Dons suggérés :</em> ${d.talentsSuggested}</div>
+          <div class="entry-desc"><em>Équipement :</em> ${d.wargear}</div>
+        </div>`;
+      }).join("")}
+    `).join("");
+    container.innerHTML = byTier;
+  }
+
+  if (state.codexTab === "dons") {
+    const q = (document.getElementById("codex-search").value || "").toLowerCase();
+    const filtered = TALENTS.filter(t => t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q));
+    container.innerHTML = filtered.map(t => `
+      <div class="codex-entry">
+        <span class="entry-name">${t.name}</span><span class="entry-tag">${t.xp} XP</span>
+        ${t.req ? `<div class="entry-desc"><em>Prérequis :</em> ${t.req}</div>` : ""}
+        <div class="entry-desc">${t.desc}</div>
+      </div>
+    `).join("") || `<p class="note">Aucun don ne correspond à « ${escapeHtml(q)} ».</p>`;
+  }
+
+  if (state.codexTab === "armurerie") {
+    const q = (document.getElementById("codex-search").value || "").toLowerCase();
+    let html = "";
+    html += `<h3 class="codex-subhead">ARMES DE MÊLÉE</h3>`;
+    Object.entries(MELEE_WEAPONS).forEach(([cat, items]) => {
+      const filtered = items.filter(w => w.name.toLowerCase().includes(q));
+      if (filtered.length === 0) return;
+      html += renderMeleeTable(cat, filtered);
+    });
+    html += `<h3 class="codex-subhead">ARMES À DISTANCE</h3>`;
+    Object.entries(RANGED_WEAPONS).forEach(([cat, items]) => {
+      const filtered = items.filter(w => w.name.toLowerCase().includes(q));
+      if (filtered.length === 0) return;
+      html += renderRangedTable(cat, filtered);
+    });
+    html += `<h3 class="codex-subhead">ARMURES</h3>`;
+    Object.entries(ARMOUR).forEach(([cat, items]) => {
+      const filtered = items.filter(a => a.name.toLowerCase().includes(q));
+      if (filtered.length === 0) return;
+      html += renderArmourTable(cat, filtered);
+    });
+    if (!q) {
+      html += `<h3 class="codex-subhead">TRAITS D'ARMES</h3>`;
+      html += WEAPON_TRAITS.map(t => `<div class="codex-entry"><span class="entry-name">${t.name}</span><div class="entry-desc">${t.desc}</div></div>`).join("");
+    }
+    container.innerHTML = html;
+  }
+
+  if (state.codexTab === "psychique") {
+    const q = (document.getElementById("codex-search").value || "").toLowerCase();
+    let html = "";
+    if (!q) {
+      html += `<h3 class="codex-subhead">APTITUDES UNIVERSELLES (gratuites, tout PSYKER)</h3>`;
+      html += PSYKER_ABILITIES.map(p => renderPowerEntry(p, true)).join("");
+      html += `<h3 class="codex-subhead">POUVOIRS MINEURS</h3>`;
+      html += MINOR_PSYCHIC_POWERS.filter(p => p.name.toLowerCase().includes(q)).map(p => renderPowerEntry(p)).join("");
+    }
+    Object.entries(PSYCHIC_DISCIPLINES).forEach(([disc, powers]) => {
+      const filtered = powers.filter(p => p.name.toLowerCase().includes(q));
+      if (filtered.length === 0) return;
+      html += `<h3 class="codex-subhead">${disc.toUpperCase()}</h3>`;
+      html += filtered.map(p => renderPowerEntry(p)).join("");
+    });
+    if (q) {
+      const minorFiltered = MINOR_PSYCHIC_POWERS.filter(p => p.name.toLowerCase().includes(q));
+      if (minorFiltered.length) html = `<h3 class="codex-subhead">POUVOIRS MINEURS</h3>` + minorFiltered.map(p => renderPowerEntry(p)).join("") + html;
+    }
+    container.innerHTML = html || `<p class="note">Aucun pouvoir ne correspond à « ${escapeHtml(q)} ».</p>`;
+  }
+
+  if (state.codexTab === "factions") {
+    container.innerHTML = FACTIONS.map(f => `
+      <div class="codex-entry">
+        <span class="entry-name">${f.name}</span><span class="entry-tag">${f.keywords}</span>
+        <div class="entry-desc">${f.overview}</div>
+        ${f.placeholderNote ? `<div class="entry-desc"><em>${f.placeholderNote}</em></div>` : ""}
+        ${f.archetypes && f.archetypes.length ? `<div class="entry-desc"><em>Archétypes :</em> ${f.archetypes.map(a => `${a.name} (Palier ${a.tier})`).join(", ")}</div>` : ""}
+      </div>
+    `).join("");
+  }
+
+  if (state.codexTab === "mutations") {
+    const q = (document.getElementById("codex-search").value || "").toLowerCase();
+    let html = `<p class="note">Test de Mutation : Conviction contre DD 3 (+ Niveau de Corruption). En cas d'échec, jet de sévérité 1d6 (1-2 Subtile, 3-4 Mineure, 5-6 Sévère) puis d66 sur la table (+10 par mutation déjà possédée).</p>`;
+    Object.entries(MUTATIONS).forEach(([severity, list]) => {
+      const filtered = list.filter(m => m.name.toLowerCase().includes(q));
+      if (filtered.length === 0) return;
+      html += `<h3 class="codex-subhead">${severity.toUpperCase()}</h3>`;
+      html += filtered.map(m => `
+        <div class="codex-entry">
+          <span class="entry-name">${m.name}</span><span class="entry-tag">d66 : ${m.roll}</span>
+          <div class="entry-desc">${m.effect}</div>
+        </div>
+      `).join("");
+    });
+    if (!q) {
+      html += `<h3 class="codex-subhead">MUTATIONS SCAVVY</h3><p class="entry-desc">${SCAVVY_MUTATIONS.join(", ")}</p>`;
+    }
+    container.innerHTML = html;
+  }
+}
+
+function renderPowerEntry(p, isAbility) {
+  return `<div class="codex-entry">
+    <span class="entry-name">${p.name}</span><span class="entry-tag">${isAbility ? "Gratuit" : (p.xp + " XP")} · DD ${p.dn}</span>
+    <div class="entry-desc"><em>${p.activation} · ${p.duration} · Portée ${p.range}${p.multi ? " · Multi-cible: " + p.multi : ""}</em></div>
+    <div class="entry-desc">${p.effect}</div>
+  </div>`;
+}
+
+function renderMeleeTable(cat, items) {
+  const rows = items.map(w => `<tr><td>${w.name}</td><td>${w.dmg}</td><td>${w.ed}</td><td>${w.ap}</td><td>${w.range}</td><td>${w.traits || "–"}</td><td>${w.value}</td><td>${w.rarity}</td></tr>`).join("");
+  return `<div class="table-wrap"><div class="note">${cat}</div>
+    <table class="codex-table"><thead><tr><th>Nom</th><th>Dégâts</th><th>DS</th><th>PA</th><th>Portée</th><th>Traits</th><th>Val.</th><th>Rareté</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function renderRangedTable(cat, items) {
+  const rows = items.map(w => `<tr><td>${w.name}</td><td>${w.dmg}</td><td>${w.ed}</td><td>${w.ap}</td><td>${w.short}/${w.med}/${w.long}</td><td>${w.salvo}</td><td>${w.traits || "–"}</td><td>${w.value}</td><td>${w.rarity}</td></tr>`).join("");
+  return `<div class="table-wrap"><div class="note">${cat}</div>
+    <table class="codex-table"><thead><tr><th>Nom</th><th>Dégâts</th><th>DS</th><th>PA</th><th>Portée</th><th>Salve</th><th>Traits</th><th>Val.</th><th>Rareté</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function renderArmourTable(cat, items) {
+  const rows = items.map(a => `<tr><td>${a.name}</td><td>${a.ar}</td><td>${a.traits}</td><td>${a.value}</td><td>${a.rarity}</td></tr>`).join("");
+  return `<div class="table-wrap"><div class="note">${cat}</div>
+    <table class="codex-table"><thead><tr><th>Nom</th><th>AR</th><th>Traits</th><th>Val.</th><th>Rareté</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function switchCodexTab(tab) {
+  state.codexTab = tab;
+  renderCodex();
+}
+
+// ---------- Vue : Fiche imprimable ----------
+
+function openPrintSheet(id) {
+  state.characterId = id;
+  switchTab("print");
+  renderPrintSheet();
+}
+
+function renderPrintSheet() {
+  const c = getCharacter(state.characterId);
+  if (!c) { switchTab("list"); return; }
+  const d = computeDerived(c);
+
+  const attrRow = (label) => ATTRIBUTES.filter(a => a.key !== "Spd").map(a => {
+    const score = (c.attributes && c.attributes[a.key]) || 1;
+    const species = getSpecies(c.species);
+    const bonus = (species.attrBonus && species.attrBonus[a.key]) || 0;
+    const total = score + bonus;
+    if (label === "score") return `<td>${score}</td>`;
+    if (label === "bonus") return `<td>${bonus}</td>`;
+    return `<td><strong>${total}</strong></td>`;
+  }).join("");
+
+  const skillLeft = SKILLS.slice(0, 9);
+  const skillRight = SKILLS.slice(9);
+  const skillRow = (s) => `<tr><td>${s.name} <small>(${s.attr})</small></td><td>${(c.skills && c.skills[s.name]) || 0}</td><td><strong>${skillTotal(c, s.name)}</strong></td></tr>`;
+
+  const weaponsRows = (c.weapons || []).map(w => {
+    const range = w.type === "ranged" ? `${w.short}/${w.med}/${w.long}` : (w.range || "–");
+    return `<tr><td>${escapeHtml(w.name)}</td><td>${escapeHtml(w.reserve || "")}</td><td>${w.dmg}</td><td>${w.ed}</td><td>${w.ap}</td><td>${w.salvo != null ? w.salvo : "–"}</td><td>${range}</td><td>${w.traits || "–"}</td></tr>`;
+  }).join("") || `<tr><td colspan="8">—</td></tr>`;
+
+  const armourRows = (c.armours || []).map(a => `<tr><td>${escapeHtml(a.name)}</td><td>${a.ar}</td><td>${a.traits || "–"}</td></tr>`).join("") || `<tr><td colspan="3">—</td></tr>`;
+
+  const talentsText = (c.talents || []).map(name => {
+    const t = TALENTS.find(t => t.name === name);
+    return `<div class="pt-talent"><strong>${escapeHtml(name)}</strong>${t ? ` — ${escapeHtml(t.desc)}` : ""}</div>`;
+  }).join("") || `<div class="pt-empty">—</div>`;
+
+  const psychicRows = (c.psychicPowers || []).filter(p => p.name).map(p =>
+    `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.sd)}</td><td>${escapeHtml(p.activation)}</td><td>${escapeHtml(p.duree)}</td><td>${escapeHtml(p.portee)}</td><td>${escapeHtml(p.cible)}</td><td>${escapeHtml(p.effet)}</td></tr>`
+  ).join("") || `<tr><td colspan="7">—</td></tr>`;
+
+  const gravesRows = (c.blessuresGraves || []).map((g, i) => `<div class="pt-grave">${i+1}. ${escapeHtml(g || "—")}</div>`).join("");
+
+  document.getElementById("print-content").innerHTML = `
+    <div class="print-sheet">
+      <div class="pt-header">
+        <div class="pt-portrait">${c.image ? `<img src="${c.image}" alt="">` : ""}</div>
+        <div class="pt-identity">
+          <h1>${escapeHtml(c.name)}</h1>
+          <div>Joueur : ${escapeHtml(c.playerName || "—")}</div>
+          <div>Tier : ${c.tier} &nbsp; Rang : ${c.rang || 1} &nbsp; Espèce : ${escapeHtml(c.species)} &nbsp; Archétype : ${escapeHtml(c.archetype || "—")}</div>
+          <div>Faction : ${escapeHtml(c.faction || "—")} &nbsp; Mots-Clés : ${escapeHtml(c.motsCles || "—")}</div>
+          <div>Historique : ${escapeHtml(c.historique || "—")}</div>
+        </div>
+      </div>
+
+      <div class="pt-grid-2">
+        <div>
+          <h2>Attributs</h2>
+          <table class="pt-table">
+            <thead><tr><th></th>${ATTRIBUTES.filter(a=>a.key!=="Spd").map(a=>`<th>${a.key}</th>`).join("")}</tr></thead>
+            <tbody>
+              <tr><td>Score</td>${attrRow("score")}</tr>
+              <tr><td>Bonus</td>${attrRow("bonus")}</tr>
+              <tr><td>Total</td>${attrRow("total")}</tr>
+            </tbody>
+          </table>
+
+          <h2>Traits Dérivés</h2>
+          <table class="pt-table pt-derived">
+            <tbody>
+              <tr><td>Défense</td><td>${d.defense}</td><td>Taille</td><td>${d.taille}</td></tr>
+              <tr><td>Résistance</td><td>${d.resistanceTotal}</td><td>Vitesse</td><td>${d.vitesse}</td></tr>
+              <tr><td>Blessures Max</td><td>${d.blessuresMax}</td><td>Actuelles</td><td>${c.wounds || 0}</td></tr>
+              <tr><td>Stress Max</td><td>${d.stressMax}</td><td>Actuel</td><td>${c.shock || 0}</td></tr>
+              <tr><td>Détermination</td><td>${d.determination}</td><td>Résolution</td><td>${d.resolution}</td></tr>
+              <tr><td>Conviction</td><td>${d.conviction}</td><td>Corruption</td><td>${c.corruption || 0} / 25</td></tr>
+              <tr><td>Influence</td><td>${d.influence}</td><td>Richesse</td><td>${d.richesse}</td></tr>
+              <tr><td>Vigilance Passive</td><td>${d.vigilancePassive}</td><td>Furtivité</td><td>${skillTotal(c,"Furtivité")}</td></tr>
+              <tr><td>Fureur</td><td>${c.fureur || 0}</td><td>Gloire</td><td>${c.gloire || 0}</td></tr>
+              <tr><td>Foi</td><td>${c.foiCurrent || 0} / ${c.foiMax || 0}</td><td>PX Actuel</td><td>${(c.xpTotal||0) - computeXpSpent(c)}</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h2>Compétences</h2>
+          <table class="pt-table">
+            <thead><tr><th>Compétence</th><th>Score</th><th>Total</th></tr></thead>
+            <tbody>${skillLeft.map(skillRow).join("")}${skillRight.map(skillRow).join("")}</tbody>
+          </table>
+        </div>
+      </div>
+
+      <h2>Armes</h2>
+      <table class="pt-table">
+        <thead><tr><th>Armes</th><th>Réserve</th><th>Dégâts</th><th>DS</th><th>PA</th><th>Salve</th><th>Portée</th><th>Traits</th></tr></thead>
+        <tbody>${weaponsRows}</tbody>
+      </table>
+
+      <h2>Armure</h2>
+      <table class="pt-table">
+        <thead><tr><th>Armure</th><th>AR</th><th>Traits</th></tr></thead>
+        <tbody>${armourRows}</tbody>
+      </table>
+
+      <div class="pt-equip-line"><strong>Équipement :</strong> ${escapeHtml((c.equipment || []).join(", ") || "—")}</div>
+
+      <h2>Talents &amp; Aptitudes</h2>
+      <div class="pt-talents">${talentsText}</div>
+
+      <h2>Blessures Graves, Blessures de Guerre &amp; Mutations</h2>
+      <div class="pt-grid-3">
+        <div><h3>Blessures Graves</h3>${gravesRows}</div>
+        <div><h3>Blessures de Guerre</h3><p>${escapeHtml(c.blessuresGuerre || "—")}</p></div>
+        <div><h3>Mutations</h3><p>${escapeHtml(c.mutations || "—")}</p></div>
+      </div>
+
+      <h2>Pouvoirs Psychiques</h2>
+      <table class="pt-table">
+        <thead><tr><th>Pouvoir</th><th>SD</th><th>Activation</th><th>Durée</th><th>Portée</th><th>Cible</th><th>Effet</th></tr></thead>
+        <tbody>${psychicRows}</tbody>
+      </table>
+
+      <h2>Notes</h2>
+      <p>${escapeHtml(c.notes || "—")}</p>
+
+      ${(c.cadreCampagne || c.bonusCadreCampagne) ? `
+      <h2>Cadre de Campagne</h2>
+      <p>${escapeHtml(c.cadreCampagne || "—")}</p>
+      <p><em>${escapeHtml(c.bonusCadreCampagne || "")}</em></p>` : ""}
+    </div>
+  `;
+}
+
+// ---------- Utilitaires ----------
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str == null ? "" : String(str);
+  return div.innerHTML;
+}
+
+// ---------- Initialisation ----------
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => switchTab(btn.dataset.view));
+  });
+
+  // Délégation de suppression liée une seule fois sur le conteneur persistant
+  // (sheet-content survit aux ré-affichages ; seul son innerHTML change),
+  // pour éviter d'empiler des écouteurs à chaque rendu.
+  document.getElementById("sheet-content").addEventListener("click", (e) => {
+    const delBtn = e.target.closest("[data-del-field]");
+    if (delBtn && state.characterId) {
+      const field = delBtn.dataset.delField;
+      const idx = parseInt(delBtn.dataset.delIdx, 10);
+      mutateCharacter(state.characterId, cur => { cur[field].splice(idx, 1); });
+    }
+  });
+  document.querySelectorAll(".subtab-btn").forEach(btn => {
+    btn.addEventListener("click", () => switchCodexTab(btn.dataset.codex));
+  });
+  document.getElementById("new-char-btn").addEventListener("click", newCharacter);
+  document.getElementById("codex-search").addEventListener("input", renderCodex);
+  document.getElementById("print-back").addEventListener("click", () => openCharacterSheet(state.characterId));
+  document.getElementById("print-now").addEventListener("click", () => window.print());
+
+  switchTab("list");
+});
+
+
+</script>
+</body>
+</html>
