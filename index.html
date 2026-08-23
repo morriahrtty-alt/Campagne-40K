@@ -477,6 +477,70 @@ table.codex-table th { color: var(--brass); background: var(--bg-panel-raised); 
 .admin-card { flex-direction: column; align-items: stretch; gap: 0.6rem; }
 .admin-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
+/* ============ Bandeau de Campagne ============ */
+
+#campaign-banner { max-width: 920px; margin: 0 auto; padding: 0 1rem; }
+.campaign-banner-empty { display: flex; align-items: center; justify-content: space-between; gap: 1rem; background: var(--bg-panel); border: 1px dashed var(--border); border-radius: 4px; padding: 0.6rem 1rem; margin-top: 0.8rem; font-size: 0.85rem; color: var(--bone-dim); flex-wrap: wrap; }
+.campaign-panel { background: linear-gradient(180deg, rgba(166,124,61,0.08), transparent); border: 1px solid var(--brass-dim); border-radius: 4px; margin-top: 0.8rem; padding: 0.7rem 1rem; }
+.campaign-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-family: var(--font-display); color: var(--brass); letter-spacing: 0.04em; }
+.campaign-arrow { font-size: 1rem; }
+.campaign-body { margin-top: 0.6rem; }
+.campaign-announcement { background: var(--bg-panel-raised); border-left: 3px solid var(--brass); padding: 0.5rem 0.8rem; border-radius: 3px; font-size: 0.9rem; margin-bottom: 0.7rem; }
+.mission-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.mission-card { background: var(--bg-panel-raised); border: 1px solid var(--border); border-radius: 3px; padding: 0.55rem 0.8rem; }
+.mission-active { border-left: 3px solid var(--brass); }
+.mission-terminee { opacity: 0.6; }
+.mission-title { font-family: var(--font-display); font-size: 0.92rem; color: var(--bone); }
+.mission-status { font-family: var(--font-mono); font-size: 0.65rem; color: var(--brass-dim); margin-left: 0.4rem; }
+.mission-desc { font-size: 0.85rem; color: var(--bone-dim); margin: 0.3rem 0 0.5rem; }
+
+.mission-editor-row { display: grid; grid-template-columns: 1fr auto auto; gap: 0.5rem; align-items: center; margin-bottom: 0.6rem; background: var(--bg-panel-raised); border: 1px solid var(--border); border-radius: 3px; padding: 0.6rem; }
+.mission-editor-row textarea { grid-column: 1 / -1; }
+@media (max-width: 600px) { .mission-editor-row { grid-template-columns: 1fr; } }
+
+/* ============ Correspondance / Messages ============ */
+
+.message-bubble { border-radius: 6px; padding: 0.6rem 0.8rem; margin-bottom: 0.6rem; max-width: 85%; }
+.message-joueur { background: var(--bg-panel-raised); border: 1px solid var(--border); margin-right: auto; }
+.message-mj { background: rgba(127,29,29,0.25); border: 1px solid var(--blood); margin-left: auto; }
+.message-meta { font-family: var(--font-mono); font-size: 0.65rem; color: var(--brass-dim); margin-bottom: 0.2rem; }
+.message-text { font-size: 0.9rem; color: var(--bone); }
+
+/* ============ Sauvegarde & Partage (dropzone) ============ */
+
+.dropzone { border: 2px dashed var(--border); border-radius: 6px; padding: 1.8rem 1rem; text-align: center; color: var(--bone-dim); transition: border-color 0.15s ease, background 0.15s ease; }
+.dropzone-icon { font-size: 1.8rem; margin-bottom: 0.4rem; }
+.dropzone-active { border-color: var(--brass); background: rgba(166,124,61,0.08); color: var(--bone); }
+.dropzone .btn { margin-top: 0.7rem; }
+
+/* ============ Toasts ============ */
+
+#toast-box { position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 1000; display: flex; flex-direction: column; gap: 0.5rem; max-width: 320px; }
+.toast { background: var(--bg-panel-raised); border: 1px solid var(--brass-dim); border-left: 3px solid var(--brass); color: var(--bone); padding: 0.7rem 1rem; border-radius: 4px; font-size: 0.88rem; opacity: 0; transform: translateY(10px); transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+.toast-show { opacity: 1; transform: translateY(0); }
+.toast-success { border-left-color: #6fbf6f; }
+.toast-error { border-left-color: var(--blood-bright); }
+
+/* ============ Tutoriel ============ */
+
+.tuto-hero { text-align: center; padding: 1rem 0 1.5rem; }
+.tuto-hero h1 { font-family: var(--font-display); font-size: 1.6rem; color: var(--bone); margin: 0.3rem 0; }
+.tuto-hero p { color: var(--bone-dim); max-width: 560px; margin: 0 auto; }
+.tuto-steps { counter-reset: tuto-step; }
+.tuto-step { display: flex; gap: 1rem; margin-bottom: 1.2rem; }
+.tuto-step-num { flex-shrink: 0; width: 2.4rem; height: 2.4rem; border-radius: 50%; background: var(--brass); color: var(--bg-deep); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 900; font-size: 1.1rem; }
+.tuto-step-body h3 { font-family: var(--font-display); color: var(--bone); margin: 0 0 0.3rem; }
+.tuto-step-body p { color: var(--bone-dim); margin: 0 0 0.3rem; font-size: 0.94rem; }
+.tuto-step-body code { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 3px; padding: 0.1rem 0.4rem; font-family: var(--font-mono); color: var(--brass); }
+.tuto-example { background: var(--bg-panel-raised); border-left: 3px solid var(--brass-dim); border-radius: 3px; padding: 0.6rem 0.9rem; margin-top: 0.5rem; font-size: 0.88rem; color: var(--bone-dim); }
+.tuto-dice-demo { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; margin: 0.5rem 0; }
+
+.toast-info { border-left-color: #4a7ba8; }
+
+.sync-status { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.05em; margin-top: 0.4rem; }
+.sync-ok { color: #6fbf6f; }
+.sync-off { color: var(--bone-dim); }
+
 </style>
 </head>
 <body>
@@ -485,28 +549,35 @@ table.codex-table th { color: var(--brass); background: var(--bg-panel-raised); 
   <div class="aquila">✠</div>
   <h1 class="site-title">ARCHIVUM TACTICUS</h1>
   <div class="site-subtitle">Gestionnaire de personnages — Wrath &amp; Glory</div>
+  <div id="sync-status" class="sync-status"></div>
 </header>
 
 <nav class="tabs no-print">
-  <button class="tab-btn active" data-view="list">Personnages</button>
+  <button class="tab-btn active" data-view="tutoriel">Tutoriel</button>
+  <button class="tab-btn" data-view="list">Personnages</button>
   <button class="tab-btn" data-view="sheet">Fiche</button>
   <button class="tab-btn" data-view="codex">Codex</button>
   <button class="tab-btn" data-view="calc">Calculatrice</button>
   <button class="tab-btn" data-view="admin">Admin</button>
 </nav>
 
+<div id="campaign-banner" class="no-print"></div>
+
 <main>
 
-  <section id="view-list" class="view active">
+  <section id="view-tutoriel" class="view active">
+    <div id="tutoriel-content"></div>
+  </section>
+
+  <section id="view-list" class="view">
     <div class="panel">
       <h2 class="section-title">Vos Personnages</h2>
       <div id="char-list" class="char-grid"></div>
     </div>
     <div class="btn-row">
       <button class="btn btn-primary" id="new-char-btn">+ Nouveau Personnage</button>
-      <button class="btn" id="import-char-btn">Importer une fiche (JSON)</button>
-      <input type="file" id="import-file-input" accept=".json" style="display:none;">
     </div>
+    <div class="panel" id="share-panel"></div>
   </section>
 
   <section id="view-sheet" class="view">
@@ -552,6 +623,8 @@ table.codex-table th { color: var(--brass); background: var(--bg-panel-raised); 
 
 </main>
 
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script>
 
@@ -1798,6 +1871,7 @@ function buildPdfFieldValues(c) {
 // ============================================================
 
 const STORAGE_KEY = "wg_characters_v3";
+const CAMPAIGN_KEY = "wg_campaign_v1";
 const ADMIN_PASSWORD = "Sanguinius";
 
 // Déverrouillages valables pour la session en cours uniquement (mémoire,
@@ -1805,6 +1879,14 @@ const ADMIN_PASSWORD = "Sanguinius";
 // saisi correctement depuis l'ouverture de la page.
 const sessionUnlocked = new Set();
 let adminUnlocked = false;
+
+// Points de synchronisation Firestore (voir firebase-sync.js). Par défaut
+// ce sont des fonctions "no-op" : si Firebase n'est pas configuré, ou hors
+// ligne, ou bloqué (bloqueur de pub...), le site continue de fonctionner
+// normalement en local uniquement — ces fonctions ne font juste rien.
+let firestoreSaveCharacter = function () {};
+let firestoreDeleteCharacterRemote = function () {};
+let firestoreSaveCampaignRemote = function () {};
 
 async function hashText(text) {
   const enc = new TextEncoder().encode(text);
@@ -1877,7 +1959,10 @@ function createBlankCharacter(name) {
     cadreCampagne: "",
     bonusCadreCampagne: "",
     history: [],               // journal de progression : [{ts, label, diff}]
-    createdAt: new Date().toISOString()
+    messages: [],               // correspondance avec le MJ : [{author, text, ts}]
+    missionChoice: null,         // id de la mission choisie (voir Campagne)
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   };
 }
 
@@ -1889,10 +1974,12 @@ function migrateCharacter(c) {
     merged.equipment = c.wargear.slice();
   }
   if (!Array.isArray(merged.history)) merged.history = [];
+  if (!Array.isArray(merged.messages)) merged.messages = [];
   return merged;
 }
 
-function upsertCharacter(character) {
+function upsertCharacter(character, fromRemote) {
+  if (!fromRemote) character.updatedAt = new Date().toISOString();
   const chars = loadCharacters();
   const idx = chars.findIndex(c => c.id === character.id);
   if (idx >= 0) {
@@ -1900,13 +1987,16 @@ function upsertCharacter(character) {
   } else {
     chars.push(character);
   }
-  return saveCharacters(chars);
+  const ok = saveCharacters(chars);
+  if (!fromRemote) firestoreSaveCharacter(character);
+  return ok;
 }
 
-function deleteCharacter(id) {
+function deleteCharacter(id, fromRemote) {
   const chars = loadCharacters().filter(c => c.id !== id);
   saveCharacters(chars);
   sessionUnlocked.delete(id);
+  if (!fromRemote) firestoreDeleteCharacterRemote(id);
 }
 
 function getCharacter(id) {
@@ -1977,6 +2067,221 @@ function diffCharacters(before, after) {
   if ((before.archetype || "") !== (after.archetype || "")) lines.push(`Archétype : ${before.archetype || "—"} → ${after.archetype || "—"}`);
 
   return lines;
+}
+
+// ============================================================
+// CAMPAGNE — missions proposées par le MJ + annonces.
+// Séparée des personnages : un seul objet Campagne par navigateur.
+// Le MJ la configure depuis l'onglet Admin, l'exporte en JSON, et
+// chaque joueur l'importe pour la voir apparaître sur tous les onglets.
+// ============================================================
+
+function createBlankCampaign() {
+  return {
+    campaignName: "",
+    announcement: "",       // message MJ affiché en haut du bandeau
+    missions: [],            // [{id, title, description, status: 'proposee'|'active'|'terminee'}]
+    updatedAt: new Date().toISOString()
+  };
+}
+
+function loadCampaign() {
+  try {
+    const raw = localStorage.getItem(CAMPAIGN_KEY);
+    if (!raw) return createBlankCampaign();
+    return Object.assign(createBlankCampaign(), JSON.parse(raw));
+  } catch (e) {
+    console.error("Erreur de lecture de la campagne :", e);
+    return createBlankCampaign();
+  }
+}
+
+function saveCampaign(campaign, fromRemote) {
+  campaign.updatedAt = fromRemote ? (campaign.updatedAt || new Date().toISOString()) : new Date().toISOString();
+  try {
+    localStorage.setItem(CAMPAIGN_KEY, JSON.stringify(campaign));
+  } catch (e) {
+    console.error("Erreur d'écriture de la campagne :", e);
+    return false;
+  }
+  if (!fromRemote) firestoreSaveCampaignRemote(campaign);
+  return true;
+}
+
+function newMission(title) {
+  return {
+    id: "mission_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+    title: title || "Nouvelle Mission",
+    description: "",
+    status: "proposee"
+  };
+}
+
+
+// ==== js/firebase-sync.js ====
+// ============================================================
+// SYNCHRONISATION FIREBASE (Firestore) — temps réel entre navigateurs.
+//
+// Fonctionnement :
+//  - Le localStorage reste la mémoire "rapide" locale ; l'app continue
+//    de fonctionner exactement pareil, même hors ligne.
+//  - Toute écriture locale (upsertCharacter, saveCampaign) est aussi
+//    envoyée à Firestore en tâche de fond (sans bloquer l'interface).
+//  - Des écouteurs temps réel (onSnapshot) reçoivent les changements
+//    faits par d'autres navigateurs et les répercutent localement.
+//  - Si Firebase est indisponible (pas de connexion, bloqueur de pub,
+//    configuration absente...), tout ceci est ignoré silencieusement :
+//    le site continue de fonctionner en local uniquement.
+//
+// Sécurité : ce projet utilise les règles Firestore en "mode test"
+// (lecture/écriture ouvertes). C'est adapté à un groupe d'amis, mais
+// n'importe qui connaissant l'URL du projet pourrait techniquement lire
+// ou modifier les données directement via l'API Firestore, en
+// contournant le site. Les mots de passe de fiches restent une
+// protection au niveau de l'interface, pas une sécurité absolue.
+// ============================================================
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCgss4TruoeLsS7cg0gZTGI88Q4Ftk1Ds0",
+  authDomain: "wrath-glory-gilead.firebaseapp.com",
+  projectId: "wrath-glory-gilead",
+  storageBucket: "wrath-glory-gilead.firebasestorage.app",
+  messagingSenderId: "755636203867",
+  appId: "1:755636203867:web:668c5c1c22cf1848d4aa7e"
+};
+
+let fbDb = null;
+let firebaseSyncStatus = "init"; // init | connected | error | disabled
+
+function stripUndefined(obj) {
+  // Firestore refuse les valeurs "undefined" ; ce détour JSON les enlève proprement.
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function mergeCharacterLists(local, remote) {
+  const map = new Map();
+  local.forEach(c => map.set(c.id, c));
+  remote.forEach(rc => {
+    const lc = map.get(rc.id);
+    if (!lc || new Date(rc.updatedAt || 0) >= new Date(lc.updatedAt || 0)) {
+      map.set(rc.id, rc);
+    }
+  });
+  return Array.from(map.values());
+}
+
+function initFirebaseSync() {
+  if (typeof firebase === "undefined") {
+    firebaseSyncStatus = "disabled";
+    console.info("Firebase non chargé (hors ligne ou bloqué) — mode local uniquement.");
+    updateSyncStatusBadge();
+    return;
+  }
+  try {
+    firebase.initializeApp(firebaseConfig);
+    fbDb = firebase.firestore();
+    firebaseSyncStatus = "connected";
+  } catch (e) {
+    console.warn("Impossible d'initialiser Firebase — mode local uniquement :", e);
+    firebaseSyncStatus = "error";
+    updateSyncStatusBadge();
+    return;
+  }
+  updateSyncStatusBadge();
+
+  // ---------- Écriture (locale -> Firestore) ----------
+  firestoreSaveCharacter = function (character) {
+    if (!fbDb) return;
+    fbDb.collection("characters").doc(character.id).set(stripUndefined(character))
+      .catch(e => console.warn("Synchronisation (personnage) échouée :", e));
+  };
+  firestoreDeleteCharacterRemote = function (id) {
+    if (!fbDb) return;
+    fbDb.collection("characters").doc(id).delete()
+      .catch(e => console.warn("Synchronisation (suppression) échouée :", e));
+  };
+  firestoreSaveCampaignRemote = function (campaign) {
+    if (!fbDb) return;
+    fbDb.collection("campaign").doc("main").set(stripUndefined(campaign))
+      .catch(e => console.warn("Synchronisation (campagne) échouée :", e));
+  };
+
+  // ---------- Réconciliation initiale (ne jamais écraser sans fusionner) ----------
+  reconcileCharactersOnConnect();
+  reconcileCampaignOnConnect();
+}
+
+function reconcileCharactersOnConnect() {
+  fbDb.collection("characters").get().then(snapshot => {
+    const remoteChars = snapshot.docs.map(d => d.data());
+    const localChars = loadCharacters();
+    const merged = mergeCharacterLists(localChars, remoteChars).map(migrateCharacter);
+    saveCharacters(merged);
+
+    // Renvoie vers Firestore tout ce qui est absent ou plus récent localement
+    merged.forEach(c => {
+      const remoteMatch = remoteChars.find(rc => rc.id === c.id);
+      if (!remoteMatch || new Date(remoteMatch.updatedAt || 0) < new Date(c.updatedAt || 0)) {
+        firestoreSaveCharacter(c);
+      }
+    });
+
+    notifyRemoteDataChanged();
+    attachCharactersListener();
+  }).catch(e => {
+    console.warn("Lecture initiale Firestore (personnages) échouée :", e);
+    attachCharactersListener();
+  });
+}
+
+function attachCharactersListener() {
+  fbDb.collection("characters").onSnapshot(snapshot => {
+    const chars = snapshot.docs.map(d => d.data()).map(migrateCharacter);
+    saveCharacters(chars);
+    notifyRemoteDataChanged();
+  }, err => console.warn("Écoute Firestore (personnages) interrompue :", err));
+}
+
+function reconcileCampaignOnConnect() {
+  fbDb.collection("campaign").doc("main").get().then(doc => {
+    const remote = doc.exists ? doc.data() : null;
+    const local = loadCampaign();
+    if (!remote || new Date(local.updatedAt || 0) > new Date(remote.updatedAt || 0)) {
+      firestoreSaveCampaignRemote(local);
+    } else {
+      localStorage.setItem(CAMPAIGN_KEY, JSON.stringify(Object.assign(createBlankCampaign(), remote)));
+    }
+    notifyRemoteDataChanged();
+    attachCampaignListener();
+  }).catch(e => {
+    console.warn("Lecture initiale Firestore (campagne) échouée :", e);
+    attachCampaignListener();
+  });
+}
+
+function attachCampaignListener() {
+  fbDb.collection("campaign").doc("main").onSnapshot(doc => {
+    if (doc.exists) {
+      localStorage.setItem(CAMPAIGN_KEY, JSON.stringify(Object.assign(createBlankCampaign(), doc.data())));
+      notifyRemoteDataChanged();
+    }
+  }, err => console.warn("Écoute Firestore (campagne) interrompue :", err));
+}
+
+function notifyRemoteDataChanged() {
+  if (typeof onRemoteDataChanged === "function") onRemoteDataChanged();
+}
+
+function updateSyncStatusBadge() {
+  const el = document.getElementById("sync-status");
+  if (!el) return;
+  if (firebaseSyncStatus === "connected") {
+    el.textContent = "🔥 Synchronisé en temps réel";
+    el.className = "sync-status sync-ok";
+  } else {
+    el.textContent = "○ Mode local uniquement";
+    el.className = "sync-status sync-off";
+  }
 }
 
 
@@ -2487,10 +2792,167 @@ function switchTab(view) {
   state.view = view;
   document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.view === view));
   document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === "view-" + view));
-  if (view === "list") renderCharacterList();
+  if (view === "tutoriel") renderTutorielTab();
+  if (view === "list") { renderCharacterList(); renderSharePanel(); }
   if (view === "codex") renderCodex();
   if (view === "calc") renderCalcTab();
   if (view === "admin") renderAdminTab();
+  renderCampaignBanner();
+}
+
+// ---------- Vue : Tutoriel ----------
+
+function renderTutorielTab() {
+  const container = document.getElementById("tutoriel-content");
+  container.innerHTML = `
+    <div class="panel tuto-hero">
+      <div class="aquila" style="font-size:1.4rem;">✠</div>
+      <h1>Bienvenue, Acolyte</h1>
+      <p>Ce guide explique comment créer votre personnage et comment fonctionnent les règles de base de Wrath &amp; Glory. Pas besoin d'avoir lu le manuel : tout ce qu'il faut est ici et dans le Codex.</p>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Créer votre premier personnage</h2>
+      <div class="tuto-steps">
+        <div class="tuto-step">
+          <div class="tuto-step-num">1</div>
+          <div class="tuto-step-body">
+            <h3>Nouveau Personnage</h3>
+            <p>Onglet <strong>Personnages</strong> → <code>+ Nouveau Personnage</code>. Donnez-lui un nom, indiquez votre nom de joueur, et choisissez si vous voulez protéger la fiche par un mot de passe (recommandé si d'autres personnes ont accès au même navigateur).</p>
+          </div>
+        </div>
+        <div class="tuto-step">
+          <div class="tuto-step-num">2</div>
+          <div class="tuto-step-body">
+            <h3>Espèce et Archétype</h3>
+            <p>Dans l'onglet <strong>Fiche</strong>, choisissez une Espèce (Humain, Ork, Aeldari...) puis un Archétype (votre métier de départ : Garde Impérial, Sœur Hospitalière, Skitarius...). Consultez le <strong>Codex → Archétypes</strong> pour voir leurs détails avant de choisir.</p>
+            <div class="tuto-example">💡 Une fois l'Archétype choisi, cliquez sur <code>Appliquer les valeurs suggérées de l'Archétype</code> : le site remplit automatiquement l'Espèce, les Attributs, la Faction, les Dons et l'Équipement de départ recommandés.</div>
+          </div>
+        </div>
+        <div class="tuto-step">
+          <div class="tuto-step-num">3</div>
+          <div class="tuto-step-body">
+            <h3>Attributs &amp; Compétences</h3>
+            <p>Les <strong>Attributs</strong> (Force, Endurance, Agilité...) et <strong>Compétences</strong> (Athlétisme, Capacité de Tir...) se règlent avec des curseurs numériques. Chaque augmentation coûte des Points d'Expérience (XP) — le total dépensé s'affiche en bas de la section Attributs. Consultez le <strong>Codex</strong> pour la description de chacun.</p>
+          </div>
+        </div>
+        <div class="tuto-step">
+          <div class="tuto-step-num">4</div>
+          <div class="tuto-step-body">
+            <h3>Dons, Armes, Armure</h3>
+            <p>Dans les sections correspondantes de la fiche, choisissez vos Dons et votre équipement directement dans des menus déroulants alimentés par le Codex — leurs statistiques et effets sont automatiquement liés.</p>
+          </div>
+        </div>
+        <div class="tuto-step">
+          <div class="tuto-step-num">5</div>
+          <div class="tuto-step-body">
+            <h3>Portrait &amp; finitions</h3>
+            <p>Ajoutez une photo/portrait en haut de la fiche, complétez l'Historique, les Mots-Clés et la Faction. N'oubliez pas de cliquer sur <code>Enregistrer</code> régulièrement.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Comprendre les règles de base</h2>
+      <p>Wrath &amp; Glory se joue avec des <strong>dés à 6 faces (d6)</strong>. Chaque test suit le même principe :</p>
+
+      <div class="tuto-steps">
+        <div class="tuto-step">
+          <div class="tuto-step-num">1</div>
+          <div class="tuto-step-body">
+            <h3>Constituer sa réserve de dés</h3>
+            <p>Réserve = <strong>Rang de Compétence + Total de l'Attribut associé</strong>. Ce nombre est affiché directement sur votre fiche (ex : <code>3 (Rang) + 4 (Force Mentale) = 7</code>). C'est le nombre de d6 à lancer.</p>
+          </div>
+        </div>
+        <div class="tuto-step">
+          <div class="tuto-step-num">2</div>
+          <div class="tuto-step-body">
+            <h3>Compter les Icônes</h3>
+            <p>Sur chaque dé lancé :</p>
+            <div class="tuto-dice-demo">
+              <span class="die die-blank">1</span><span class="die die-blank">2</span><span class="die die-blank">3</span>
+              <span>= rien —</span>
+              <span class="die die-icon">4</span><span class="die die-icon">5</span>
+              <span>= 1 Icône —</span>
+              <span class="die die-exalted">6</span>
+              <span>= Icône Exalté (2 Icônes)</span>
+            </div>
+          </div>
+        </div>
+        <div class="tuto-step">
+          <div class="tuto-step-num">3</div>
+          <div class="tuto-step-body">
+            <h3>Toucher</h3>
+            <p>Si le total d'Icônes est <strong>≥ à la Défense</strong> de la cible, l'attaque touche. Un Dé de Courroux (Wrath Die) qui affiche un 6 déclenche un Coup Critique.</p>
+          </div>
+        </div>
+        <div class="tuto-step">
+          <div class="tuto-step-num">4</div>
+          <div class="tuto-step-body">
+            <h3>Dégâts</h3>
+            <p>En cas de touche : Dégâts de l'arme + bonus des dés ED (mêmes règles d'Icônes, sauf traits Brutal/Fusion qui changent la lecture). On soustrait la Résistance de la cible (moins sa PA), le reste est en Blessures.</p>
+            <div class="tuto-example">💡 Utilisez l'onglet <strong>Calculatrice</strong> pour faire tout ce calcul automatiquement, y compris depuis le bouton 🎲 sur chaque arme de votre fiche.</div>
+          </div>
+        </div>
+        <div class="tuto-step">
+          <div class="tuto-step-num">5</div>
+          <div class="tuto-step-body">
+            <h3>Ressources à surveiller</h3>
+            <p><strong>Blessures</strong> et <strong>Stress</strong> (dégâts physiques et mentaux, à ne pas laisser atteindre le maximum), <strong>Corruption</strong> (dérive vers le Chaos), et <strong>Fureur</strong>/<strong>Gloire</strong> (ressources à dépenser pour relancer des dés ou obtenir des bonus narratifs).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Se repérer sur le site</h2>
+      <div class="stat-grid">
+        <div class="stat-box"><span class="stat-name">Personnages<small>onglet</small></span><span class="note">Liste, création, import/export et sauvegarde de vos fiches.</span></div>
+        <div class="stat-box"><span class="stat-name">Fiche<small>onglet</small></span><span class="note">Édition complète : stats, équipement, historique de progression, correspondance avec le MJ.</span></div>
+        <div class="stat-box"><span class="stat-name">Codex<small>onglet</small></span><span class="note">Toutes les règles : Attributs, Compétences, Espèces, Archétypes, Dons, Armurerie, Pouvoirs Psychiques, Factions, Mutations.</span></div>
+        <div class="stat-box"><span class="stat-name">Calculatrice<small>onglet</small></span><span class="note">Simule les jets d'attaque et de dégâts sans dés physiques.</span></div>
+        <div class="stat-box"><span class="stat-name">Admin<small>onglet, MJ</small></span><span class="note">Configuration des missions/annonces de campagne, déverrouillage ou suppression de fiches en cas de mot de passe oublié.</span></div>
+      </div>
+      <p class="note" style="margin-top:0.8rem;">Ce site fonctionne sans serveur : chaque navigateur garde ses propres fiches. Pour partager une fiche avec le MJ ou un autre joueur, utilisez l'export/import JSON en bas de l'onglet <strong>Personnages</strong>.</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="tuto-start-btn" type="button">Commencer — Créer mon Personnage</button>
+    </div>
+  `;
+  document.getElementById("tuto-start-btn").addEventListener("click", () => switchTab("list"));
+}
+
+// ---------- Réception des mises à jour distantes (Firebase) ----------
+
+function onRemoteDataChanged() {
+  renderCampaignBanner();
+  if (state.view === "list") { renderCharacterList(); renderSharePanel(); }
+  if (state.view === "admin" && adminUnlocked) renderAdminTab();
+  if (state.view === "sheet" && state.characterId) {
+    toast("Cette fiche a été mise à jour ailleurs. Quittez puis rouvrez-la pour voir les changements.", "info");
+  }
+}
+
+// ---------- Notifications (toast) ----------
+
+function toast(message, kind) {
+  let box = document.getElementById("toast-box");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "toast-box";
+    document.body.appendChild(box);
+  }
+  const el = document.createElement("div");
+  el.className = "toast" + (kind ? " toast-" + kind : "");
+  el.textContent = message;
+  box.appendChild(el);
+  requestAnimationFrame(() => el.classList.add("toast-show"));
+  setTimeout(() => {
+    el.classList.remove("toast-show");
+    setTimeout(() => el.remove(), 300);
+  }, 3200);
 }
 
 // ---------- Vue : Liste des personnages ----------
@@ -2552,9 +3014,118 @@ function importCharacterFile(file) {
       // l'import ne déverrouille jamais automatiquement l'édition.
       upsertCharacter(migrateCharacter(imported));
       renderCharacterList();
-      alert(`Fiche "${imported.name}" importée${imported.passwordHash ? " (en lecture seule — mot de passe requis pour modifier)." : "."}`);
+      toast(`Fiche "${imported.name}" importée${imported.passwordHash ? " (lecture seule)" : ""}.`, "success");
     } catch (err) {
-      alert("Impossible d'importer ce fichier : " + err.message);
+      toast("Impossible d'importer ce fichier : " + err.message, "error");
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ---------- Panneau de Sauvegarde & Partage ----------
+// Ce site n'a pas de serveur : tout passe par des fichiers JSON échangés
+// entre joueurs et MJ (Discord, mail...). Ce panneau centralise les
+// imports/exports au même endroit, avec glisser-déposer.
+
+function renderSharePanel() {
+  const el = document.getElementById("share-panel");
+  if (!el) return;
+  const chars = loadCharacters();
+
+  el.innerHTML = `
+    <h2 class="section-title">Sauvegarde &amp; Partage</h2>
+    <p class="note">Aucun serveur derrière ce site : chaque navigateur a son propre stockage. Pour partager une fiche avec le MJ ou un autre joueur, exportez-la et envoyez le fichier ; pour la consulter, importez-la ci-dessous.</p>
+
+    <div class="dropzone" id="share-dropzone">
+      <div class="dropzone-icon">📂</div>
+      <div>Glissez un fichier <strong>.json</strong> ici (fiche ou campagne), ou</div>
+      <button class="btn" id="share-browse-btn" type="button">Choisir un fichier</button>
+      <input type="file" id="share-file-input" accept=".json" style="display:none;">
+    </div>
+
+    <div class="btn-row" style="margin-top:1rem;">
+      <button class="btn" id="backup-export-btn" type="button">Exporter TOUTE ma sauvegarde (${chars.length} fiche${chars.length > 1 ? "s" : ""})</button>
+      <button class="btn" id="backup-import-btn" type="button">Restaurer une sauvegarde complète</button>
+      <input type="file" id="backup-file-input" accept=".json" style="display:none;">
+    </div>
+  `;
+
+  const dropzone = document.getElementById("share-dropzone");
+  ["dragenter", "dragover"].forEach(evt => dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.add("dropzone-active"); }));
+  ["dragleave", "drop"].forEach(evt => dropzone.addEventListener(evt, (e) => { e.preventDefault(); dropzone.classList.remove("dropzone-active"); }));
+  dropzone.addEventListener("drop", (e) => {
+    const file = e.dataTransfer.files[0];
+    if (file) handleSharedFile(file);
+  });
+  document.getElementById("share-browse-btn").addEventListener("click", () => document.getElementById("share-file-input").click());
+  document.getElementById("share-file-input").addEventListener("change", (e) => {
+    if (e.target.files[0]) handleSharedFile(e.target.files[0]);
+    e.target.value = "";
+  });
+
+  document.getElementById("backup-export-btn").addEventListener("click", exportFullBackup);
+  document.getElementById("backup-import-btn").addEventListener("click", () => document.getElementById("backup-file-input").click());
+  document.getElementById("backup-file-input").addEventListener("change", (e) => {
+    if (e.target.files[0]) importFullBackup(e.target.files[0]);
+    e.target.value = "";
+  });
+}
+
+// Détecte automatiquement s'il s'agit d'une fiche perso, d'une campagne,
+// ou d'une sauvegarde complète, et route vers le bon import.
+function handleSharedFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    let data;
+    try { data = JSON.parse(e.target.result); }
+    catch (err) { toast("Fichier JSON invalide.", "error"); return; }
+
+    if (Array.isArray(data.characters) && data.campaign) {
+      importFullBackup(file);
+    } else if ("missions" in data) {
+      importCampaignFile(file);
+    } else if (data.id && data.name) {
+      importCharacterFile(file);
+    } else {
+      toast("Ce fichier ne correspond à aucun format reconnu.", "error");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function exportFullBackup() {
+  const bundle = {
+    exportedAt: new Date().toISOString(),
+    characters: loadCharacters(),
+    campaign: loadCampaign()
+  };
+  const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "archivum_sauvegarde_" + new Date().toISOString().slice(0, 10) + ".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast("Sauvegarde complète exportée.", "success");
+}
+
+function importFullBackup(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const bundle = JSON.parse(e.target.result);
+      if (!Array.isArray(bundle.characters)) throw new Error("Format de sauvegarde invalide.");
+      if (!confirm(`Restaurer cette sauvegarde va REMPLACER les ${loadCharacters().length} fiche(s) actuelles par les ${bundle.characters.length} fiche(s) du fichier. Continuer ?`)) return;
+      saveCharacters(bundle.characters.map(migrateCharacter));
+      if (bundle.campaign) saveCampaign(Object.assign(createBlankCampaign(), bundle.campaign));
+      renderCharacterList();
+      renderSharePanel();
+      renderCampaignBanner();
+      toast("Sauvegarde restaurée.", "success");
+    } catch (err) {
+      toast("Impossible de restaurer cette sauvegarde : " + err.message, "error");
     }
   };
   reader.readAsText(file);
@@ -2892,6 +3463,26 @@ function renderCharacterSheet() {
       <textarea id="f-notes" rows="4">${escapeHtml(c.notes || "")}</textarea>
     </div>
 
+    <div class="panel">
+      <h2 class="section-title">Correspondance avec le MJ <small class="note">(RP passif entre les sessions)</small></h2>
+      <div id="messages-list">${renderMessagesList(c.messages)}</div>
+      <div class="field">
+        <label>Nouveau message</label>
+        <textarea id="new-message-text" rows="3" placeholder="Écrivez ici (journal de bord, question au MJ, scène de RP passif...)"></textarea>
+      </div>
+      <div class="field-row" style="align-items:flex-end;">
+        <div class="field" style="max-width:220px;">
+          <label>Vous écrivez en tant que</label>
+          <select id="new-message-author">
+            <option value="joueur">Joueur (${escapeHtml(c.playerName || c.name)})</option>
+            <option value="mj">Maître de Jeu</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="add-message-btn" type="button">Envoyer</button>
+      </div>
+      <p class="note">Ce fil est stocké dans la fiche elle-même. Exportez la fiche (JSON) pour l'envoyer au MJ ; il pourra répondre puis vous la renvoyer.</p>
+    </div>
+
     <div class="btn-row">
       <button class="btn" id="back-to-list" type="button">&larr; Retour</button>
       <button class="btn btn-primary" id="save-char" type="button">Enregistrer</button>
@@ -2919,6 +3510,16 @@ function formatHistoryDate(iso) {
     const d = new Date(iso);
     return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" }) + " " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   } catch (e) { return iso; }
+}
+
+function renderMessagesList(messages) {
+  if (!messages || messages.length === 0) return `<p class="note">Aucun message pour l'instant.</p>`;
+  return messages.map(m => `
+    <div class="message-bubble message-${m.author === "mj" ? "mj" : "joueur"}">
+      <div class="message-meta">${m.author === "mj" ? "Maître de Jeu" : "Joueur"} — ${formatHistoryDate(m.ts)}</div>
+      <div class="message-text">${escapeHtml(m.text).replace(/\n/g, "<br>")}</div>
+    </div>
+  `).join("");
 }
 
 function bindSheetEvents(c) {
@@ -2969,7 +3570,7 @@ function bindSheetEvents(c) {
         cur.passwordHash = await hashText(newPw);
         sessionUnlocked.add(cur.id);
         upsertCharacter(cur);
-        alert("Mot de passe changé.");
+        toast("Mot de passe changé.", "success");
       } else {
         const oldPw = prompt("Mot de passe actuel (pour confirmer la suppression de la protection) :");
         if (oldPw == null) return;
@@ -2977,7 +3578,7 @@ function bindSheetEvents(c) {
         if (!ok) { alert("Mot de passe incorrect."); return; }
         cur.passwordHash = null;
         upsertCharacter(cur);
-        alert("Protection retirée.");
+        toast("Protection retirée.", "success");
       }
     } else {
       const newPw = prompt("Choisissez un mot de passe pour protéger cette fiche :");
@@ -2985,7 +3586,7 @@ function bindSheetEvents(c) {
       cur.passwordHash = await hashText(newPw);
       sessionUnlocked.add(cur.id);
       upsertCharacter(cur);
-      alert("Fiche protégée.");
+      toast("Fiche protégée.", "success");
     }
     renderCharacterSheet();
   });
@@ -3002,6 +3603,17 @@ function bindSheetEvents(c) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  });
+
+  document.getElementById("add-message-btn").addEventListener("click", () => {
+    const textEl = document.getElementById("new-message-text");
+    const text = textEl.value.trim();
+    if (!text) return;
+    const author = document.getElementById("new-message-author").value;
+    mutateCharacter(c.id, cur => {
+      cur.messages = cur.messages || [];
+      cur.messages.push({ author, text, ts: new Date().toISOString() });
+    });
   });
 
   // Portrait
@@ -3629,6 +4241,22 @@ function escapeHtml(str) {
 
 // ---------- Vue : Admin ----------
 
+function renderMissionEditorList(missions) {
+  if (!missions || missions.length === 0) return `<p class="note">Aucune mission pour l'instant.</p>`;
+  return missions.map(m => `
+    <div class="mission-editor-row">
+      <input type="text" data-mission-id="${m.id}" data-mission-field="title" value="${escapeHtml(m.title)}" placeholder="Titre">
+      <select data-mission-id="${m.id}" data-mission-field="status">
+        <option value="proposee" ${m.status === "proposee" ? "selected" : ""}>Proposée</option>
+        <option value="active" ${m.status === "active" ? "selected" : ""}>Active</option>
+        <option value="terminee" ${m.status === "terminee" ? "selected" : ""}>Terminée</option>
+      </select>
+      <button class="btn btn-danger" data-mission-delete="${m.id}" type="button">&times;</button>
+      <textarea data-mission-id="${m.id}" data-mission-field="description" rows="2" placeholder="Description...">${escapeHtml(m.description || "")}</textarea>
+    </div>
+  `).join("");
+}
+
 function renderAdminTab() {
   const container = document.getElementById("admin-content");
   if (!adminUnlocked) {
@@ -3662,10 +4290,29 @@ function renderAdminTab() {
   }
 
   const chars = loadCharacters();
+  const campaign = loadCampaign();
   container.innerHTML = `
     <div class="panel">
-      <h2 class="section-title">Panneau Administrateur</h2>
-      <p class="note">${chars.length} fiche(s) dans ce navigateur.</p>
+      <h2 class="section-title">Campagne — Missions &amp; Annonces</h2>
+      <p class="note">Configurez ici les missions proposées et le message du jour. Exportez ensuite le fichier pour le partager avec vos joueurs (ils l'importeront pour le voir apparaître sur tous leurs onglets).</p>
+      <div class="field"><label>Nom de la Campagne</label><input type="text" id="campaign-name" value="${escapeHtml(campaign.campaignName || "")}"></div>
+      <div class="field"><label>Annonce du MJ</label><textarea id="campaign-announcement" rows="2">${escapeHtml(campaign.announcement || "")}</textarea></div>
+
+      <h3 class="codex-subhead">MISSIONS</h3>
+      <div id="mission-editor-list">${renderMissionEditorList(campaign.missions)}</div>
+      <div class="list-tag-input">
+        <input type="text" id="new-mission-title" placeholder="Titre de la nouvelle mission">
+        <button class="btn" id="add-mission-btn" type="button">Ajouter</button>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="save-campaign-btn" type="button">Enregistrer</button>
+        <button class="btn" id="export-campaign-btn" type="button">Exporter (JSON à partager)</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="section-title">Fiches des Joueurs (${chars.length})</h2>
       <div class="char-grid">
         ${chars.map(c => `
           <div class="char-card admin-card">
@@ -3673,6 +4320,7 @@ function renderAdminTab() {
             <div class="char-card-info">
               <div class="cname">${escapeHtml(c.name)} ${c.passwordHash ? `<span class="lock-icon">🔒</span>` : ""}</div>
               <div class="cmeta">${escapeHtml(c.species)} · Tier ${c.tier}${c.ownerLabel ? " · " + escapeHtml(c.ownerLabel) : ""}</div>
+              ${(c.messages || []).length ? `<div class="cmeta">✉ ${c.messages.length} message(s)</div>` : ""}
             </div>
             <div class="admin-actions">
               ${c.passwordHash ? `<button class="btn" data-admin-unlock="${c.id}" type="button">Retirer le mot de passe</button>` : ""}
@@ -3687,6 +4335,59 @@ function renderAdminTab() {
       </div>
     </div>
   `;
+
+  document.getElementById("save-campaign-btn").addEventListener("click", () => {
+    const cur = loadCampaign();
+    cur.campaignName = document.getElementById("campaign-name").value;
+    cur.announcement = document.getElementById("campaign-announcement").value;
+    saveCampaign(cur);
+    renderAdminTab();
+    renderCampaignBanner();
+    toast("Campagne enregistrée.", "success");
+  });
+  document.getElementById("export-campaign-btn").addEventListener("click", () => {
+    const cur = loadCampaign();
+    cur.campaignName = document.getElementById("campaign-name").value;
+    cur.announcement = document.getElementById("campaign-announcement").value;
+    saveCampaign(cur);
+    const blob = new Blob([JSON.stringify(cur, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = (cur.campaignName || "campagne").replace(/[^a-z0-9]+/gi, "_") + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+  document.getElementById("add-mission-btn").addEventListener("click", () => {
+    const input = document.getElementById("new-mission-title");
+    const title = input.value.trim();
+    if (!title) return;
+    const cur = loadCampaign();
+    cur.missions.push(newMission(title));
+    saveCampaign(cur);
+    renderAdminTab();
+  });
+  container.querySelectorAll("[data-mission-field]").forEach(inp => {
+    inp.addEventListener("change", () => {
+      const cur = loadCampaign();
+      const m = cur.missions.find(x => x.id === inp.dataset.missionId);
+      if (!m) return;
+      m[inp.dataset.missionField] = inp.value;
+      saveCampaign(cur);
+      if (inp.dataset.missionField === "status") renderAdminTab();
+    });
+  });
+  container.querySelectorAll("[data-mission-delete]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (!confirm("Supprimer cette mission ?")) return;
+      const cur = loadCampaign();
+      cur.missions = cur.missions.filter(m => m.id !== btn.dataset.missionDelete);
+      saveCampaign(cur);
+      renderAdminTab();
+    });
+  });
 
   container.querySelectorAll("[data-admin-unlock]").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -3718,6 +4419,103 @@ function renderAdminTab() {
     adminUnlocked = false;
     renderAdminTab();
   });
+}
+
+// ---------- Bandeau de Campagne (visible sur tous les onglets) ----------
+
+function renderCampaignBanner() {
+  const el = document.getElementById("campaign-banner");
+  const campaign = loadCampaign();
+  const hasContent = campaign.campaignName || campaign.announcement || (campaign.missions || []).length > 0;
+
+  if (!hasContent) {
+    el.innerHTML = `
+      <div class="campaign-banner-empty">
+        <span>Aucune campagne importée pour l'instant.</span>
+        <button class="btn" id="banner-import-campaign" type="button">Importer une Campagne (JSON du MJ)</button>
+        <input type="file" id="banner-campaign-file" accept=".json" style="display:none;">
+      </div>`;
+    document.getElementById("banner-import-campaign").addEventListener("click", () => document.getElementById("banner-campaign-file").click());
+    document.getElementById("banner-campaign-file").addEventListener("change", (e) => {
+      if (e.target.files[0]) importCampaignFile(e.target.files[0]);
+      e.target.value = "";
+    });
+    return;
+  }
+
+  const activeChar = state.characterId ? getCharacter(state.characterId) : null;
+  const missionsHtml = (campaign.missions || []).map(m => {
+    const chosen = activeChar && activeChar.missionChoice === m.id;
+    return `<div class="mission-card mission-${m.status}">
+      <div class="mission-title">${escapeHtml(m.title)} <span class="mission-status">${missionStatusLabel(m.status)}</span></div>
+      ${m.description ? `<div class="mission-desc">${escapeHtml(m.description)}</div>` : ""}
+      ${m.status === "proposee" && activeChar ? `<button class="btn ${chosen ? "btn-primary" : ""}" data-choose-mission="${m.id}" type="button">${chosen ? "✓ Choisie" : "Choisir cette mission"}</button>` : ""}
+    </div>`;
+  }).join("");
+
+  el.innerHTML = `
+    <div class="campaign-panel">
+      <div class="campaign-header" id="campaign-toggle">
+        <strong>${escapeHtml(campaign.campaignName || "Campagne")}</strong>
+        <span class="campaign-arrow">▾</span>
+      </div>
+      <div class="campaign-body" id="campaign-body">
+        ${campaign.announcement ? `<div class="campaign-announcement">📜 ${escapeHtml(campaign.announcement)}</div>` : ""}
+        ${missionsHtml ? `<div class="mission-list">${missionsHtml}</div>` : ""}
+        ${!activeChar && (campaign.missions || []).some(m => m.status === "proposee") ? `<p class="note">Ouvrez une fiche personnage pour indiquer votre choix de mission.</p>` : ""}
+        <div class="btn-row" style="margin-top:0.5rem;">
+          <button class="btn" id="banner-reimport-campaign" type="button">Mettre à jour (réimporter)</button>
+          <input type="file" id="banner-campaign-file2" accept=".json" style="display:none;">
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById("campaign-toggle").addEventListener("click", () => {
+    const body = document.getElementById("campaign-body");
+    const arrow = document.querySelector(".campaign-arrow");
+    const open = body.style.display !== "none";
+    body.style.display = open ? "none" : "block";
+    arrow.textContent = open ? "▾" : "▴";
+  });
+  document.getElementById("banner-reimport-campaign").addEventListener("click", () => document.getElementById("banner-campaign-file2").click());
+  document.getElementById("banner-campaign-file2").addEventListener("change", (e) => {
+    if (e.target.files[0]) importCampaignFile(e.target.files[0]);
+    e.target.value = "";
+  });
+  el.querySelectorAll("[data-choose-mission]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (!state.characterId) return;
+      mutateCharacter(state.characterId, cur => {
+        cur.missionChoice = btn.dataset.chooseMission;
+        const m = campaign.missions.find(x => x.id === cur.missionChoice);
+        pushHistoryEntry(cur, "Mission choisie : " + (m ? m.title : "?"));
+      }, false);
+      renderCampaignBanner();
+      if (state.view === "sheet") renderCharacterSheet();
+    });
+  });
+}
+
+function missionStatusLabel(status) {
+  if (status === "active") return "★ En cours";
+  if (status === "terminee") return "Terminée";
+  return "Proposée";
+}
+
+function importCampaignFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!("missions" in imported)) throw new Error("Ce fichier ne semble pas être une campagne valide.");
+      saveCampaign(Object.assign(createBlankCampaign(), imported));
+      renderCampaignBanner();
+      toast("Campagne mise à jour.", "success");
+    } catch (err) {
+      toast("Impossible d'importer ce fichier : " + err.message, "error");
+    }
+  };
+  reader.readAsText(file);
 }
 
 // ---------- Initialisation ----------
@@ -3760,16 +4558,12 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => switchCodexTab(btn.dataset.codex));
   });
   document.getElementById("new-char-btn").addEventListener("click", newCharacter);
-  document.getElementById("import-char-btn").addEventListener("click", () => document.getElementById("import-file-input").click());
-  document.getElementById("import-file-input").addEventListener("change", (e) => {
-    if (e.target.files[0]) importCharacterFile(e.target.files[0]);
-    e.target.value = "";
-  });
   document.getElementById("codex-search").addEventListener("input", renderCodex);
   document.getElementById("print-back").addEventListener("click", () => openCharacterSheet(state.characterId));
   document.getElementById("print-now").addEventListener("click", () => window.print());
 
-  switchTab("list");
+  switchTab("tutoriel");
+  initFirebaseSync();
 });
 
 
