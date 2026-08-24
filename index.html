@@ -501,10 +501,17 @@ table.codex-table th { color: var(--brass); background: var(--bg-panel-raised); 
 /* ============ Correspondance / Messages ============ */
 
 .message-bubble { border-radius: 6px; padding: 0.6rem 0.8rem; margin-bottom: 0.6rem; max-width: 85%; }
-.message-joueur { background: var(--bg-panel-raised); border: 1px solid var(--border); margin-right: auto; }
-.message-mj { background: rgba(127,29,29,0.25); border: 1px solid var(--blood); margin-left: auto; }
+.message-other { background: var(--bg-panel-raised); border: 1px solid var(--border); margin-right: auto; }
+.message-mine { background: rgba(166,124,61,0.18); border: 1px solid var(--brass-dim); margin-left: auto; }
 .message-meta { font-family: var(--font-mono); font-size: 0.65rem; color: var(--brass-dim); margin-bottom: 0.2rem; }
 .message-text { font-size: 0.9rem; color: var(--bone); }
+
+.channel-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.9rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border); }
+.channel-tab { background: var(--bg-panel-raised); border: 1px solid var(--border); color: var(--bone-dim); font-family: var(--font-body); font-size: 0.85rem; padding: 0.4rem 0.8rem; border-radius: 20px; cursor: pointer; }
+.channel-tab.active { background: var(--brass); color: var(--bg-deep); border-color: var(--brass); font-weight: bold; }
+.channel-count { background: var(--blood); color: var(--bone); border-radius: 10px; padding: 0.05rem 0.4rem; font-size: 0.7rem; font-family: var(--font-mono); }
+.channel-tab.active .channel-count { background: var(--bg-deep); color: var(--brass); }
+.thread-box { max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; padding: 0.5rem; background: var(--bg-deep); border-radius: 4px; border: 1px solid var(--border); }
 
 /* ============ Sauvegarde & Partage (dropzone) ============ */
 
@@ -556,6 +563,7 @@ table.codex-table th { color: var(--brass); background: var(--bg-panel-raised); 
   <button class="tab-btn active" data-view="tutoriel">Tutoriel</button>
   <button class="tab-btn" data-view="list">Personnages</button>
   <button class="tab-btn" data-view="sheet">Fiche</button>
+  <button class="tab-btn" data-view="messagerie">Messagerie</button>
   <button class="tab-btn" data-view="codex">Codex</button>
   <button class="tab-btn" data-view="calc">Calculatrice</button>
   <button class="tab-btn" data-view="admin">Admin</button>
@@ -582,6 +590,10 @@ table.codex-table th { color: var(--brass); background: var(--bg-panel-raised); 
 
   <section id="view-sheet" class="view">
     <div id="sheet-content"></div>
+  </section>
+
+  <section id="view-messagerie" class="view">
+    <div id="messagerie-content"></div>
   </section>
 
   <section id="view-codex" class="view">
@@ -1887,6 +1899,7 @@ let adminUnlocked = false;
 let firestoreSaveCharacter = function () {};
 let firestoreDeleteCharacterRemote = function () {};
 let firestoreSaveCampaignRemote = function () {};
+let firestoreSaveMessage = function () {};
 
 async function hashText(text) {
   const enc = new TextEncoder().encode(text);
@@ -2117,6 +2130,114 @@ function newMission(title) {
   };
 }
 
+// ============================================================
+// MESSAGERIE — canaux d'échange Personnage ↔ MJ et Personnage ↔ Personnage.
+// Onglet séparé (pas rattaché à une fiche). Un canal MJ existe
+// implicitement pour chaque personnage ; un canal direct existe entre
+// chaque paire de personnages. Pas de collection "canaux" séparée : on
+// calcule un identifiant déterministe et on filtre les messages dessus.
+// ============================================================
+
+const MESSAGES_KEY = "wg_messages_v1";
+
+function gmChannelId(charId) {
+  return "gm_" + charId;
+}
+
+function dmChannelId(charIdA, charIdB) {
+  return "dm_" + [charIdA, charIdB].sort().join("__");
+}
+
+function channelLabel(channelId, characters, viewerCharId) {
+  if (channelId.startsWith("gm_")) {
+    const charId = channelId.slice(3);
+    const c = characters.find(x => x.id === charId);
+    return viewerCharId === "MJ" ? `${c ? c.name : "?"} (MJ)` : "Maître de Jeu";
+  }
+  if (channelId.startsWith("dm_")) {
+    const ids = channelId.slice(3).split("__");
+    const otherId = ids.find(id => id !== viewerCharId);
+    const c = characters.find(x => x.id === otherId);
+    return c ? c.name : "?";
+  }
+  return channelId;
+}
+
+function loadMessages() {
+  try {
+    const raw = localStorage.getItem(MESSAGES_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    console.error("Erreur de lecture des messages :", e);
+    return [];
+  }
+}
+
+function saveMessagesLocal(list) {
+  try {
+    localStorage.setItem(MESSAGES_KEY, JSON.stringify(list));
+    return true;
+  } catch (e) {
+    console.error("Erreur d'écriture des messages :", e);
+    return false;
+  }
+}
+
+function messagesForChannel(channelId) {
+  return loadMessages().filter(m => m.channelId === channelId).sort((a, b) => new Date(a.ts) - new Date(b.ts));
+}
+
+// authorId : id de personnage, ou "MJ"
+function sendMessage(channelId, authorId, authorName, text, fromRemote) {
+  const msg = {
+    id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
+    channelId, authorId, authorName, text,
+    ts: new Date().toISOString()
+  };
+  const list = loadMessages();
+  if (list.some(m => m.id === msg.id)) return; // évite les doublons (écho distant)
+  list.push(msg);
+  saveMessagesLocal(list);
+  if (!fromRemote) firestoreSaveMessage(msg);
+  return msg;
+}
+
+function mergeMessageLists(local, remote) {
+  const map = new Map();
+  local.forEach(m => map.set(m.id, m));
+  remote.forEach(m => map.set(m.id, m)); // les messages ne changent jamais après envoi : pas de conflit possible
+  return Array.from(map.values());
+}
+
+// Migration unique : convertit les anciennes correspondances stockées
+// dans chaque fiche (c.messages) vers la Messagerie globale, puis vide
+// le champ pour ne pas les dupliquer aux prochains chargements.
+function migrateOldCharacterMessages() {
+  const chars = loadCharacters();
+  let changed = false;
+  const list = loadMessages();
+  chars.forEach(c => {
+    if (c.messages && c.messages.length > 0) {
+      const channelId = gmChannelId(c.id);
+      c.messages.forEach(m => {
+        const authorId = m.author === "mj" ? "MJ" : c.id;
+        const authorName = m.author === "mj" ? "Maître de Jeu" : (c.playerName || c.name);
+        const msg = {
+          id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
+          channelId, authorId, authorName, text: m.text,
+          ts: m.ts || new Date().toISOString()
+        };
+        list.push(msg);
+        firestoreSaveMessage(msg);
+      });
+      c.messages = [];
+      changed = true;
+    }
+  });
+  saveMessagesLocal(list);
+  if (changed) saveCharacters(chars);
+}
+
 
 // ==== js/firebase-sync.js ====
 // ============================================================
@@ -2205,10 +2326,16 @@ function initFirebaseSync() {
     fbDb.collection("campaign").doc("main").set(stripUndefined(campaign))
       .catch(e => console.warn("Synchronisation (campagne) échouée :", e));
   };
+  firestoreSaveMessage = function (message) {
+    if (!fbDb) return;
+    fbDb.collection("messages").doc(message.id).set(stripUndefined(message))
+      .catch(e => console.warn("Synchronisation (message) échouée :", e));
+  };
 
   // ---------- Réconciliation initiale (ne jamais écraser sans fusionner) ----------
   reconcileCharactersOnConnect();
   reconcileCampaignOnConnect();
+  reconcileMessagesOnConnect();
 }
 
 function reconcileCharactersOnConnect() {
@@ -2266,6 +2393,34 @@ function attachCampaignListener() {
       notifyRemoteDataChanged();
     }
   }, err => console.warn("Écoute Firestore (campagne) interrompue :", err));
+}
+
+function reconcileMessagesOnConnect() {
+  fbDb.collection("messages").get().then(snapshot => {
+    const remoteMsgs = snapshot.docs.map(d => d.data());
+    const localMsgs = loadMessages();
+    const merged = mergeMessageLists(localMsgs, remoteMsgs);
+    saveMessagesLocal(merged);
+
+    // Renvoie vers Firestore les messages locaux absents du serveur
+    merged.forEach(m => {
+      if (!remoteMsgs.some(rm => rm.id === m.id)) firestoreSaveMessage(m);
+    });
+
+    notifyRemoteDataChanged();
+    attachMessagesListener();
+  }).catch(e => {
+    console.warn("Lecture initiale Firestore (messages) échouée :", e);
+    attachMessagesListener();
+  });
+}
+
+function attachMessagesListener() {
+  fbDb.collection("messages").onSnapshot(snapshot => {
+    const msgs = snapshot.docs.map(d => d.data());
+    saveMessagesLocal(msgs);
+    notifyRemoteDataChanged();
+  }, err => console.warn("Écoute Firestore (messages) interrompue :", err));
 }
 
 function notifyRemoteDataChanged() {
@@ -2787,10 +2942,156 @@ function switchTab(view) {
   document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === "view-" + view));
   if (view === "tutoriel") renderTutorielTab();
   if (view === "list") { renderCharacterList(); renderSharePanel(); }
+  if (view === "messagerie") renderMessagerieTab();
   if (view === "codex") renderCodex();
   if (view === "calc") renderCalcTab();
   if (view === "admin") renderAdminTab();
   renderCampaignBanner();
+}
+
+// ---------- Vue : Messagerie ----------
+
+function renderMessagerieTab() {
+  const container = document.getElementById("messagerie-content");
+  const characters = loadCharacters();
+
+  if (characters.length === 0) {
+    container.innerHTML = `<div class="panel"><p class="note">Créez au moins un personnage pour utiliser la Messagerie.</p></div>`;
+    return;
+  }
+
+  if (!state.msgIdentity || (state.msgIdentity !== "MJ" && !characters.find(c => c.id === state.msgIdentity))) {
+    state.msgIdentity = characters[0].id;
+  }
+
+  const identityOptions = characters.map(c =>
+    `<option value="${c.id}" ${state.msgIdentity === c.id ? "selected" : ""}>${escapeHtml(c.name)}${c.ownerLabel ? " (" + escapeHtml(c.ownerLabel) + ")" : ""}</option>`
+  ).join("") + (adminUnlocked ? `<option value="MJ" ${state.msgIdentity === "MJ" ? "selected" : ""}>Maître de Jeu</option>` : "");
+
+  let channels;
+  if (state.msgIdentity === "MJ") {
+    channels = characters.map(c => ({ id: gmChannelId(c.id), label: c.name }));
+  } else {
+    channels = [{ id: gmChannelId(state.msgIdentity), label: "Maître de Jeu" }]
+      .concat(characters.filter(c => c.id !== state.msgIdentity).map(c => ({ id: dmChannelId(state.msgIdentity, c.id), label: c.name })));
+  }
+
+  if (!state.msgChannel || !channels.find(ch => ch.id === state.msgChannel)) {
+    state.msgChannel = channels[0].id;
+  }
+
+  const allMsgs = loadMessages();
+  const unreadByChannel = {}; // simple compte de messages par canal, pour affichage
+  channels.forEach(ch => { unreadByChannel[ch.id] = allMsgs.filter(m => m.channelId === ch.id).length; });
+
+  container.innerHTML = `
+    <div class="panel">
+      <h2 class="section-title">Messagerie</h2>
+      <p class="note">Échanges en temps réel — RP passif entre les sessions, questions au MJ, ou discussions entre personnages.</p>
+      <div class="field" style="max-width:320px;">
+        <label>Vous parlez en tant que</label>
+        <select id="msg-identity-select">${identityOptions}</select>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="channel-tabs">
+        ${channels.map(ch => `
+          <button class="channel-tab ${ch.id === state.msgChannel ? "active" : ""}" data-channel="${ch.id}" type="button">
+            💬 ${escapeHtml(ch.label)}${unreadByChannel[ch.id] ? ` <span class="channel-count">${unreadByChannel[ch.id]}</span>` : ""}
+          </button>
+        `).join("")}
+      </div>
+
+      <div id="thread-box" class="thread-box">${renderThread(state.msgChannel, state.msgIdentity)}</div>
+
+      <div class="field-row" style="align-items:flex-end;margin-top:0.8rem;">
+        <div class="field" style="flex:1;">
+          <textarea id="msg-compose" rows="2" placeholder="Écrire un message..."></textarea>
+        </div>
+        <button class="btn btn-primary" id="msg-send-btn" type="button">Envoyer</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("msg-identity-select").addEventListener("change", (e) => {
+    state.msgIdentity = e.target.value;
+    state.msgChannel = null;
+    renderMessagerieTab();
+  });
+  container.querySelectorAll(".channel-tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.msgChannel = btn.dataset.channel;
+      renderMessagerieTab();
+    });
+  });
+  document.getElementById("msg-send-btn").addEventListener("click", sendMessageFromComposer);
+  document.getElementById("msg-compose").addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessageFromComposer(); }
+  });
+
+  // Défile jusqu'au dernier message
+  const box = document.getElementById("thread-box");
+  if (box) box.scrollTop = box.scrollHeight;
+}
+
+function sendMessageFromComposer() {
+  const textEl = document.getElementById("msg-compose");
+  const text = textEl.value.trim();
+  if (!text) return;
+  const characters = loadCharacters();
+  let authorName;
+  if (state.msgIdentity === "MJ") {
+    authorName = "Maître de Jeu";
+  } else {
+    const c = characters.find(x => x.id === state.msgIdentity);
+    authorName = c ? (c.playerName || c.name) : "?";
+  }
+  sendMessage(state.msgChannel, state.msgIdentity, authorName, text);
+  textEl.value = "";
+  document.getElementById("thread-box").innerHTML = renderThread(state.msgChannel, state.msgIdentity);
+  const box = document.getElementById("thread-box");
+  box.scrollTop = box.scrollHeight;
+  // Rafraîchit juste le compteur du canal actif sans tout redessiner (garde le focus)
+  const activeTab = document.querySelector(`.channel-tab[data-channel="${state.msgChannel}"]`);
+  if (activeTab) {
+    const count = loadMessages().filter(m => m.channelId === state.msgChannel).length;
+    activeTab.innerHTML = activeTab.innerHTML.replace(/<span class="channel-count">\d+<\/span>/, "") + ` <span class="channel-count">${count}</span>`;
+  }
+}
+
+function renderThread(channelId, viewerId) {
+  const msgs = messagesForChannel(channelId);
+  if (msgs.length === 0) return `<p class="note">Aucun message pour l'instant. Écrivez le premier !</p>`;
+  return msgs.map(m => `
+    <div class="message-bubble ${m.authorId === viewerId ? "message-mine" : "message-other"}">
+      <div class="message-meta">${escapeHtml(m.authorName)} — ${formatHistoryDate(m.ts)}</div>
+      <div class="message-text">${escapeHtml(m.text).replace(/\n/g, "<br>")}</div>
+    </div>
+  `).join("");
+}
+
+// Rafraîchissement léger appelé quand des données distantes changent pendant
+// que l'onglet Messagerie est ouvert : met à jour le fil et les compteurs
+// sans toucher au brouillon en cours de frappe ni changer de canal.
+function refreshMessagerieLive() {
+  if (!document.getElementById("messagerie-content").innerHTML.trim()) return;
+  const characters = loadCharacters();
+  if (!state.msgIdentity || !state.msgChannel) { renderMessagerieTab(); return; }
+
+  const box = document.getElementById("thread-box");
+  if (box) {
+    const wasNearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
+    box.innerHTML = renderThread(state.msgChannel, state.msgIdentity);
+    if (wasNearBottom) box.scrollTop = box.scrollHeight;
+  }
+  const allMsgs = loadMessages();
+  document.querySelectorAll(".channel-tab").forEach(tab => {
+    const chId = tab.dataset.channel;
+    const count = allMsgs.filter(m => m.channelId === chId).length;
+    const label = tab.textContent.replace(/\s*\d+\s*$/, "").trim();
+    tab.innerHTML = `${escapeHtml(label)}${count ? ` <span class="channel-count">${count}</span>` : ""}`;
+  });
 }
 
 // ---------- Vue : Tutoriel ----------
@@ -2902,7 +3203,8 @@ function renderTutorielTab() {
       <h2 class="section-title">Se repérer sur le site</h2>
       <div class="stat-grid">
         <div class="stat-box"><span class="stat-name">Personnages<small>onglet</small></span><span class="note">Liste, création, import/export et sauvegarde de vos fiches.</span></div>
-        <div class="stat-box"><span class="stat-name">Fiche<small>onglet</small></span><span class="note">Édition complète : stats, équipement, historique de progression, correspondance avec le MJ.</span></div>
+        <div class="stat-box"><span class="stat-name">Fiche<small>onglet</small></span><span class="note">Édition complète : stats, équipement, historique de progression.</span></div>
+        <div class="stat-box"><span class="stat-name">Messagerie<small>onglet</small></span><span class="note">Discutez en temps réel avec le MJ ou avec les autres personnages, entre les sessions.</span></div>
         <div class="stat-box"><span class="stat-name">Codex<small>onglet</small></span><span class="note">Toutes les règles : Attributs, Compétences, Espèces, Archétypes, Dons, Armurerie, Pouvoirs Psychiques, Factions, Mutations.</span></div>
         <div class="stat-box"><span class="stat-name">Calculatrice<small>onglet</small></span><span class="note">Simule les jets d'attaque et de dégâts sans dés physiques.</span></div>
         <div class="stat-box"><span class="stat-name">Admin<small>onglet, MJ</small></span><span class="note">Configuration des missions/annonces de campagne, déverrouillage ou suppression de fiches en cas de mot de passe oublié.</span></div>
@@ -2923,6 +3225,7 @@ function onRemoteDataChanged() {
   renderCampaignBanner();
   if (state.view === "list") { renderCharacterList(); renderSharePanel(); }
   if (state.view === "admin" && adminUnlocked) renderAdminTab();
+  if (state.view === "messagerie") refreshMessagerieLive();
   if (state.view === "sheet" && state.characterId) {
     toast("Cette fiche a été mise à jour ailleurs. Quittez puis rouvrez-la pour voir les changements.", "info");
   }
@@ -3456,26 +3759,6 @@ function renderCharacterSheet() {
       <textarea id="f-notes" rows="4">${escapeHtml(c.notes || "")}</textarea>
     </div>
 
-    <div class="panel">
-      <h2 class="section-title">Correspondance avec le MJ <small class="note">(RP passif entre les sessions)</small></h2>
-      <div id="messages-list">${renderMessagesList(c.messages)}</div>
-      <div class="field">
-        <label>Nouveau message</label>
-        <textarea id="new-message-text" rows="3" placeholder="Écrivez ici (journal de bord, question au MJ, scène de RP passif...)"></textarea>
-      </div>
-      <div class="field-row" style="align-items:flex-end;">
-        <div class="field" style="max-width:220px;">
-          <label>Vous écrivez en tant que</label>
-          <select id="new-message-author">
-            <option value="joueur">Joueur (${escapeHtml(c.playerName || c.name)})</option>
-            <option value="mj">Maître de Jeu</option>
-          </select>
-        </div>
-        <button class="btn btn-primary" id="add-message-btn" type="button">Envoyer</button>
-      </div>
-      <p class="note">Ce fil est stocké dans la fiche elle-même. Exportez la fiche (JSON) pour l'envoyer au MJ ; il pourra répondre puis vous la renvoyer.</p>
-    </div>
-
     <div class="btn-row">
       <button class="btn" id="back-to-list" type="button">&larr; Retour</button>
       <button class="btn btn-primary" id="save-char" type="button">Enregistrer</button>
@@ -3503,16 +3786,6 @@ function formatHistoryDate(iso) {
     const d = new Date(iso);
     return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" }) + " " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
   } catch (e) { return iso; }
-}
-
-function renderMessagesList(messages) {
-  if (!messages || messages.length === 0) return `<p class="note">Aucun message pour l'instant.</p>`;
-  return messages.map(m => `
-    <div class="message-bubble message-${m.author === "mj" ? "mj" : "joueur"}">
-      <div class="message-meta">${m.author === "mj" ? "Maître de Jeu" : "Joueur"} — ${formatHistoryDate(m.ts)}</div>
-      <div class="message-text">${escapeHtml(m.text).replace(/\n/g, "<br>")}</div>
-    </div>
-  `).join("");
 }
 
 function bindSheetEvents(c) {
@@ -3596,17 +3869,6 @@ function bindSheetEvents(c) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  });
-
-  document.getElementById("add-message-btn").addEventListener("click", () => {
-    const textEl = document.getElementById("new-message-text");
-    const text = textEl.value.trim();
-    if (!text) return;
-    const author = document.getElementById("new-message-author").value;
-    mutateCharacter(c.id, cur => {
-      cur.messages = cur.messages || [];
-      cur.messages.push({ author, text, ts: new Date().toISOString() });
-    });
   });
 
   // Portrait
@@ -4555,6 +4817,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("print-back").addEventListener("click", () => openCharacterSheet(state.characterId));
   document.getElementById("print-now").addEventListener("click", () => window.print());
 
+  migrateOldCharacterMessages();
   switchTab("tutoriel");
   initFirebaseSync();
 });
