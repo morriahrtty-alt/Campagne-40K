@@ -548,6 +548,27 @@ table.codex-table th { color: var(--brass); background: var(--bg-panel-raised); 
 .sync-ok { color: #6fbf6f; }
 .sync-off { color: var(--bone-dim); }
 
+.msg-delete-btn { background: none; border: none; color: var(--blood-bright); cursor: pointer; font-size: 0.85rem; margin-left: 0.4rem; padding: 0 0.2rem; }
+.msg-delete-btn:hover { color: var(--bone); }
+
+/* ============ Sondage missions (Admin) ============ */
+
+.poll-results { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+.poll-row { display: grid; grid-template-columns: 1fr auto 2fr; gap: 0.6rem; align-items: center; background: var(--bg-panel-raised); border: 1px solid var(--border); border-radius: 3px; padding: 0.5rem 0.8rem; font-size: 0.85rem; }
+.poll-mission-name { font-family: var(--font-display); color: var(--bone); }
+.poll-count { font-family: var(--font-mono); color: var(--brass); text-align: center; }
+.poll-voters { color: var(--bone-dim); font-size: 0.8rem; }
+@media (max-width: 600px) { .poll-row { grid-template-columns: 1fr; } }
+
+/* ============ Récapitulatifs de session ============ */
+
+.recap-section { margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid var(--border); }
+.recap-card { background: var(--bg-panel-raised); border-left: 3px solid var(--brass-dim); border-radius: 3px; padding: 0.6rem 0.9rem; margin-bottom: 0.6rem; }
+.recap-title { font-family: var(--font-display); color: var(--bone); font-size: 0.92rem; }
+.recap-text { color: var(--bone-dim); font-size: 0.88rem; margin-top: 0.3rem; }
+.recap-editor-row { background: var(--bg-panel-raised); border: 1px solid var(--border); border-radius: 3px; padding: 0.7rem; margin-bottom: 0.7rem; }
+.recap-editor-row textarea { margin: 0.5rem 0; }
+
 </style>
 </head>
 <body>
@@ -1900,6 +1921,7 @@ let firestoreSaveCharacter = function () {};
 let firestoreDeleteCharacterRemote = function () {};
 let firestoreSaveCampaignRemote = function () {};
 let firestoreSaveMessage = function () {};
+let firestoreDeleteMessageRemote = function () {};
 
 async function hashText(text) {
   const enc = new TextEncoder().encode(text);
@@ -2094,6 +2116,7 @@ function createBlankCampaign() {
     campaignName: "",
     announcement: "",       // message MJ affiché en haut du bandeau
     missions: [],            // [{id, title, description, status: 'proposee'|'active'|'terminee'}]
+    sessionRecaps: [],       // [{id, title, date, text}] — rédigés par le MJ
     updatedAt: new Date().toISOString()
   };
 }
@@ -2127,6 +2150,15 @@ function newMission(title) {
     title: title || "Nouvelle Mission",
     description: "",
     status: "proposee"
+  };
+}
+
+function newRecap(title) {
+  return {
+    id: "recap_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+    title: title || "Session",
+    date: new Date().toISOString().slice(0, 10),
+    text: ""
   };
 }
 
@@ -2209,6 +2241,12 @@ function mergeMessageLists(local, remote) {
   return Array.from(map.values());
 }
 
+function deleteMessage(id, fromRemote) {
+  const list = loadMessages().filter(m => m.id !== id);
+  saveMessagesLocal(list);
+  if (!fromRemote) firestoreDeleteMessageRemote(id);
+}
+
 // Migration unique : convertit les anciennes correspondances stockées
 // dans chaque fiche (c.messages) vers la Messagerie globale, puis vide
 // le champ pour ne pas les dupliquer aux prochains chargements.
@@ -2221,7 +2259,7 @@ function migrateOldCharacterMessages() {
       const channelId = gmChannelId(c.id);
       c.messages.forEach(m => {
         const authorId = m.author === "mj" ? "MJ" : c.id;
-        const authorName = m.author === "mj" ? "Maître de Jeu" : (c.playerName || c.name);
+        const authorName = m.author === "mj" ? "Maître de Jeu" : c.name;
         const msg = {
           id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8),
           channelId, authorId, authorName, text: m.text,
@@ -2330,6 +2368,11 @@ function initFirebaseSync() {
     if (!fbDb) return;
     fbDb.collection("messages").doc(message.id).set(stripUndefined(message))
       .catch(e => console.warn("Synchronisation (message) échouée :", e));
+  };
+  firestoreDeleteMessageRemote = function (id) {
+    if (!fbDb) return;
+    fbDb.collection("messages").doc(id).delete()
+      .catch(e => console.warn("Synchronisation (suppression message) échouée :", e));
   };
 
   // ---------- Réconciliation initiale (ne jamais écraser sans fusionner) ----------
@@ -3029,6 +3072,13 @@ function renderMessagerieTab() {
   document.getElementById("msg-compose").addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessageFromComposer(); }
   });
+  document.getElementById("thread-box").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-delete-msg]");
+    if (!btn) return;
+    if (!confirm("Supprimer ce message ?")) return;
+    deleteMessage(btn.dataset.deleteMsg);
+    document.getElementById("thread-box").innerHTML = renderThread(state.msgChannel, state.msgIdentity);
+  });
 
   // Défile jusqu'au dernier message
   const box = document.getElementById("thread-box");
@@ -3045,7 +3095,7 @@ function sendMessageFromComposer() {
     authorName = "Maître de Jeu";
   } else {
     const c = characters.find(x => x.id === state.msgIdentity);
-    authorName = c ? (c.playerName || c.name) : "?";
+    authorName = c ? c.name : "?";
   }
   sendMessage(state.msgChannel, state.msgIdentity, authorName, text);
   textEl.value = "";
@@ -3063,12 +3113,18 @@ function sendMessageFromComposer() {
 function renderThread(channelId, viewerId) {
   const msgs = messagesForChannel(channelId);
   if (msgs.length === 0) return `<p class="note">Aucun message pour l'instant. Écrivez le premier !</p>`;
-  return msgs.map(m => `
+  return msgs.map(m => {
+    const canDelete = m.authorId === viewerId || adminUnlocked;
+    return `
     <div class="message-bubble ${m.authorId === viewerId ? "message-mine" : "message-other"}">
-      <div class="message-meta">${escapeHtml(m.authorName)} — ${formatHistoryDate(m.ts)}</div>
+      <div class="message-meta">
+        ${escapeHtml(m.authorName)} — ${formatHistoryDate(m.ts)}
+        ${canDelete ? `<button class="msg-delete-btn" data-delete-msg="${m.id}" type="button" title="Supprimer ce message">&times;</button>` : ""}
+      </div>
       <div class="message-text">${escapeHtml(m.text).replace(/\n/g, "<br>")}</div>
     </div>
-  `).join("");
+  `;
+  }).join("");
 }
 
 // Rafraîchissement léger appelé quand des données distantes changent pendant
@@ -4512,6 +4568,32 @@ function renderMissionEditorList(missions) {
   `).join("");
 }
 
+function renderMissionPollResults(missions, characters) {
+  if (!missions || missions.length === 0) return `<p class="note">Aucune mission à sonder pour l'instant.</p>`;
+  return `<div class="poll-results">${missions.map(m => {
+    const voters = characters.filter(c => c.missionChoice === m.id);
+    return `<div class="poll-row">
+      <div class="poll-mission-name">${escapeHtml(m.title)}</div>
+      <div class="poll-count">${voters.length} vote${voters.length > 1 ? "s" : ""}</div>
+      <div class="poll-voters">${voters.length ? voters.map(v => escapeHtml(v.name)).join(", ") : "—"}</div>
+    </div>`;
+  }).join("")}</div>`;
+}
+
+function renderRecapEditorList(recaps) {
+  if (!recaps || recaps.length === 0) return `<p class="note">Aucun récapitulatif pour l'instant.</p>`;
+  return recaps.slice().sort((a, b) => new Date(b.date) - new Date(a.date)).map(r => `
+    <div class="recap-editor-row">
+      <div class="field-row-4" style="grid-template-columns:2fr 1fr;">
+        <input type="text" data-recap-id="${r.id}" data-recap-field="title" value="${escapeHtml(r.title)}" placeholder="Titre">
+        <input type="date" data-recap-id="${r.id}" data-recap-field="date" value="${escapeHtml(r.date)}">
+      </div>
+      <textarea data-recap-id="${r.id}" data-recap-field="text" rows="3" placeholder="Résumé de la session...">${escapeHtml(r.text || "")}</textarea>
+      <button class="btn btn-danger" data-recap-delete="${r.id}" type="button">Supprimer</button>
+    </div>
+  `).join("");
+}
+
 function renderAdminTab() {
   const container = document.getElementById("admin-content");
   if (!adminUnlocked) {
@@ -4558,6 +4640,16 @@ function renderAdminTab() {
       <div class="list-tag-input">
         <input type="text" id="new-mission-title" placeholder="Titre de la nouvelle mission">
         <button class="btn" id="add-mission-btn" type="button">Ajouter</button>
+      </div>
+
+      <h3 class="codex-subhead">SONDAGE — CHOIX DES JOUEURS <small class="note">(visible uniquement ici, par vous)</small></h3>
+      ${renderMissionPollResults(campaign.missions, chars)}
+
+      <h3 class="codex-subhead">RÉCAPITULATIFS DE SESSION</h3>
+      <div id="recap-editor-list">${renderRecapEditorList(campaign.sessionRecaps)}</div>
+      <div class="list-tag-input">
+        <input type="text" id="new-recap-title" placeholder="Titre (ex : Session 4 — Le Nid Ork)">
+        <button class="btn" id="add-recap-btn" type="button">Ajouter</button>
       </div>
 
       <div class="btn-row">
@@ -4644,6 +4736,36 @@ function renderAdminTab() {
     });
   });
 
+  document.getElementById("add-recap-btn").addEventListener("click", () => {
+    const input = document.getElementById("new-recap-title");
+    const title = input.value.trim();
+    if (!title) return;
+    const cur = loadCampaign();
+    cur.sessionRecaps = cur.sessionRecaps || [];
+    cur.sessionRecaps.push(newRecap(title));
+    saveCampaign(cur);
+    renderAdminTab();
+  });
+  container.querySelectorAll("[data-recap-field]").forEach(inp => {
+    inp.addEventListener("change", () => {
+      const cur = loadCampaign();
+      cur.sessionRecaps = cur.sessionRecaps || [];
+      const r = cur.sessionRecaps.find(x => x.id === inp.dataset.recapId);
+      if (!r) return;
+      r[inp.dataset.recapField] = inp.value;
+      saveCampaign(cur);
+    });
+  });
+  container.querySelectorAll("[data-recap-delete]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (!confirm("Supprimer ce récapitulatif ?")) return;
+      const cur = loadCampaign();
+      cur.sessionRecaps = (cur.sessionRecaps || []).filter(r => r.id !== btn.dataset.recapDelete);
+      saveCampaign(cur);
+      renderAdminTab();
+    });
+  });
+
   container.querySelectorAll("[data-admin-unlock]").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.adminUnlock;
@@ -4703,7 +4825,7 @@ function renderCampaignBanner() {
     const chosen = activeChar && activeChar.missionChoice === m.id;
     return `<div class="mission-card mission-${m.status}">
       <div class="mission-title">${escapeHtml(m.title)} <span class="mission-status">${missionStatusLabel(m.status)}</span></div>
-      ${m.description ? `<div class="mission-desc">${escapeHtml(m.description)}</div>` : ""}
+      ${m.description ? `<div class="mission-desc">${escapeHtml(m.description).replace(/\n/g, "<br>")}</div>` : ""}
       ${m.status === "proposee" && activeChar ? `<button class="btn ${chosen ? "btn-primary" : ""}" data-choose-mission="${m.id}" type="button">${chosen ? "✓ Choisie" : "Choisir cette mission"}</button>` : ""}
     </div>`;
   }).join("");
@@ -4718,6 +4840,7 @@ function renderCampaignBanner() {
         ${campaign.announcement ? `<div class="campaign-announcement">📜 ${escapeHtml(campaign.announcement)}</div>` : ""}
         ${missionsHtml ? `<div class="mission-list">${missionsHtml}</div>` : ""}
         ${!activeChar && (campaign.missions || []).some(m => m.status === "proposee") ? `<p class="note">Ouvrez une fiche personnage pour indiquer votre choix de mission.</p>` : ""}
+        ${(campaign.sessionRecaps || []).length ? renderSessionRecapsPreview(campaign.sessionRecaps) : ""}
         <div class="btn-row" style="margin-top:0.5rem;">
           <button class="btn" id="banner-reimport-campaign" type="button">Mettre à jour (réimporter)</button>
           <input type="file" id="banner-campaign-file2" accept=".json" style="display:none;">
@@ -4749,6 +4872,20 @@ function renderCampaignBanner() {
       if (state.view === "sheet") renderCharacterSheet();
     });
   });
+}
+
+function renderSessionRecapsPreview(recaps) {
+  const sorted = recaps.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+  return `
+    <div class="recap-section">
+      <h3 class="codex-subhead">RÉCAPITULATIFS DE SESSION</h3>
+      ${sorted.map(r => `
+        <div class="recap-card">
+          <div class="recap-title">${escapeHtml(r.title)} <span class="mission-status">${r.date}</span></div>
+          <div class="recap-text">${escapeHtml(r.text).replace(/\n/g, "<br>")}</div>
+        </div>
+      `).join("")}
+    </div>`;
 }
 
 function missionStatusLabel(status) {
