@@ -2153,6 +2153,7 @@ function buildPdfFieldValues(c) {
 // ============================================================
 
 const GROUP_ID_KEY = "wg_group_id";
+const GROUP_NAME_KEY = "wg_group_name";
 const ADMIN_PASSWORD = "Sanguinius";
 const CREATE_GROUP_PASSWORD = "Leman";
 
@@ -2166,6 +2167,18 @@ function getGroupId() {
   return localStorage.getItem(GROUP_ID_KEY) || null;
 }
 
+// Nom "joli" du groupe (ex : "Les Croisés de Gilead"), distinct de son
+// identifiant technique normalisé (ex : "les-croises-de-gilead") qui sert
+// de chemin Firestore. Repli sur l'identifiant si jamais absent (anciens
+// groupes rejoints avant l'ajout de cette fonctionnalité).
+function getGroupDisplayName() {
+  return localStorage.getItem(GROUP_NAME_KEY) || getGroupId() || "";
+}
+
+function setGroupDisplayName(name) {
+  if (name) localStorage.setItem(GROUP_NAME_KEY, name);
+}
+
 function normalizeGroupId(raw) {
   return String(raw || "")
     .trim().toLowerCase()
@@ -2174,15 +2187,17 @@ function normalizeGroupId(raw) {
     .replace(/^-+|-+$/g, "");
 }
 
-function setGroupId(raw) {
+function setGroupId(raw, displayName) {
   const id = normalizeGroupId(raw);
   if (!id) return false;
   localStorage.setItem(GROUP_ID_KEY, id);
+  setGroupDisplayName(displayName || raw);
   return true;
 }
 
 function leaveGroup() {
   localStorage.removeItem(GROUP_ID_KEY);
+  localStorage.removeItem(GROUP_NAME_KEY);
 }
 
 // Efface le cache local (personnages/campagne/messages) d'un groupe donné,
@@ -2667,6 +2682,22 @@ function registerGroupInRegistry(groupId, displayName) {
   }).catch(e => console.warn("Enregistrement du groupe échoué :", e));
 }
 
+// Renomme un groupe existant dans le registre (nom affiché uniquement —
+// l'identifiant technique et le chemin Firestore des données ne changent
+// pas). callback(error) — error est null/undefined en cas de succès.
+function renameGroupInRegistry(groupId, newName, callback) {
+  if (!fbDb) { callback && callback(new Error("Firebase indisponible.")); return; }
+  fbDb.collection("groupRegistry").doc(groupId).set(
+    { id: groupId, name: newName },
+    { merge: true }
+  )
+    .then(() => callback && callback(null))
+    .catch(e => {
+      console.warn("Renommage du groupe échoué :", e);
+      callback && callback(e);
+    });
+}
+
 // Supprime complètement un groupe : toutes ses données (personnages,
 // campagne, messages) ainsi que son entrée dans le registre. Irréversible.
 function deleteGroupCompletely(groupId, callback) {
@@ -2849,12 +2880,12 @@ function notifyRemoteDataChanged() {
 function updateSyncStatusBadge() {
   const el = document.getElementById("sync-status");
   if (!el) return;
-  const groupId = getGroupId();
+  const groupName = getGroupDisplayName();
   if (firebaseSyncStatus === "connected") {
-    el.textContent = `🔥 Groupe "${groupId}" — synchronisé en temps réel`;
+    el.textContent = `🔥 Groupe "${groupName}" — synchronisé en temps réel`;
     el.className = "sync-status sync-ok";
   } else {
-    el.textContent = groupId ? `○ Groupe "${groupId}" — mode local uniquement` : "○ Mode local uniquement";
+    el.textContent = groupName ? `○ Groupe "${groupName}" — mode local uniquement` : "○ Mode local uniquement";
     el.className = "sync-status sync-off";
   }
 }
@@ -5312,6 +5343,18 @@ function renderAdminTab() {
   const campaign = loadCampaign();
   container.innerHTML = `
     <div class="panel">
+      <h2 class="section-title">Groupe Actuel</h2>
+      <p class="note">Identifiant technique : <code>${escapeHtml(getGroupId())}</code> (fixe, sert au chemin de stockage — ne change pas). Vous pouvez renommer son affichage public.</p>
+      <div class="field-row" style="align-items:flex-end;">
+        <div class="field" style="flex:1;">
+          <label>Nom affiché du Groupe</label>
+          <input type="text" id="group-rename-input" value="${escapeHtml(getGroupDisplayName())}">
+        </div>
+        <button class="btn btn-primary" id="group-rename-btn" type="button">Renommer</button>
+      </div>
+    </div>
+
+    <div class="panel">
       <h2 class="section-title">Campagne — Missions &amp; Annonces</h2>
       <p class="note">Configurez ici les missions proposées et le message du jour. Exportez ensuite le fichier pour le partager avec vos joueurs (ils l'importeront pour le voir apparaître sur tous leurs onglets).</p>
       <div class="field"><label>Nom de la Campagne</label><input type="text" id="campaign-name" value="${escapeHtml(campaign.campaignName || "")}"></div>
@@ -5372,6 +5415,18 @@ function renderAdminTab() {
       </div>
     </div>
   `;
+
+  document.getElementById("group-rename-btn").addEventListener("click", () => {
+    const input = document.getElementById("group-rename-input");
+    const newName = input.value.trim();
+    if (!newName) { toast("Entrez un nom de groupe.", "error"); return; }
+    renameGroupInRegistry(getGroupId(), newName, (err) => {
+      if (err) { toast("Échec du renommage : " + err.message, "error"); return; }
+      setGroupDisplayName(newName);
+      toast(`Groupe renommé en "${newName}".`, "success");
+      updateSyncStatusBadge();
+    });
+  });
 
   document.getElementById("save-campaign-btn").addEventListener("click", () => {
     const cur = loadCampaign();
@@ -5727,7 +5782,7 @@ function renderGroupList(groups) {
   }
   container.innerHTML = groups.map(g => `
     <div class="group-list-row">
-      <button class="group-list-btn" data-join-group="${escapeHtml(g.id)}" type="button">
+      <button class="group-list-btn" data-join-group="${escapeHtml(g.id)}" data-join-group-name="${escapeHtml(g.name)}" type="button">
         <span>${escapeHtml(g.name)}</span><span class="group-list-arrow">→</span>
       </button>
       <button class="group-list-delete" data-delete-group="${escapeHtml(g.id)}" data-delete-group-name="${escapeHtml(g.name)}" type="button" title="Supprimer ce groupe">🗑</button>
@@ -5735,7 +5790,7 @@ function renderGroupList(groups) {
   `).join("");
   container.querySelectorAll("[data-join-group]").forEach(btn => {
     btn.addEventListener("click", () => {
-      setGroupId(btn.dataset.joinGroup);
+      setGroupId(btn.dataset.joinGroup, btn.dataset.joinGroupName);
       location.reload();
     });
   });
