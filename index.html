@@ -569,24 +569,263 @@ table.codex-table th { color: var(--brass); background: var(--bg-panel-raised); 
 .recap-editor-row { background: var(--bg-panel-raised); border: 1px solid var(--border); border-radius: 3px; padding: 0.7rem; margin-bottom: 0.7rem; }
 .recap-editor-row textarea { margin: 0.5rem 0; }
 
+/* ============ Portail de Groupe ============ */
+
+.app-shell-hidden { display: none; }
+
+.group-gate-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: radial-gradient(ellipse at top, #211a13 0%, var(--bg-deep) 60%), var(--bg-deep);
+  display: flex; align-items: center; justify-content: center; padding: 1.5rem;
+}
+.group-gate-box {
+  max-width: 420px; width: 100%; text-align: center;
+  background: var(--bg-panel); border: 1px solid var(--brass-dim); border-radius: 6px;
+  padding: 2rem 1.8rem;
+}
+.group-gate-title { font-family: var(--font-display); font-size: 1.4rem; color: var(--bone); margin: 0.4rem 0 0.8rem; }
+.group-gate-text { color: var(--bone-dim); font-size: 0.9rem; margin-bottom: 1.2rem; }
+.group-gate-box .field { text-align: left; margin-bottom: 1rem; }
+.group-gate-box .btn { width: 100%; }
+.group-gate-box label { display: block; text-align: left; margin-bottom: 0.4rem; }
+.group-list { display: flex; flex-direction: column; gap: 0.4rem; max-height: 220px; overflow-y: auto; }
+.group-list-row { display: flex; gap: 0.4rem; align-items: stretch; }
+.group-list-btn { display: flex; justify-content: space-between; align-items: center; background: var(--bg-panel-raised); border: 1px solid var(--border); color: var(--bone); font-family: var(--font-body); font-size: 0.92rem; padding: 0.6rem 0.9rem; border-radius: 4px; cursor: pointer; text-align: left; flex: 1; min-width: 0; }
+.group-list-btn:hover { border-color: var(--brass); }
+.group-list-btn .group-list-arrow { color: var(--brass); }
+.group-list-delete { flex-shrink: 0; width: 2.4rem; background: var(--bg-panel-raised); border: 1px solid var(--border); border-radius: 4px; color: var(--bone-dim); cursor: pointer; font-size: 0.95rem; }
+.group-list-delete:hover { border-color: var(--blood-bright); color: var(--blood-bright); }
+
+.change-group-btn {
+  background: none; border: 1px solid var(--border); color: var(--bone-dim);
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem; border-radius: 3px; cursor: pointer; margin-top: 0.5rem;
+}
+.change-group-btn:hover { border-color: var(--brass-dim); color: var(--bone); }
+
+/* ============ Écrans de mot de passe ("sceau") ============ */
+
+.seal-gate {
+  max-width: 380px;
+  margin: 2rem auto;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at top, rgba(166,124,61,0.10), transparent 70%),
+    var(--bg-panel);
+  border: 1px solid var(--brass-dim);
+  border-radius: 6px;
+  padding: 2.2rem 1.8rem 1.8rem;
+  position: relative;
+}
+.seal-gate::before {
+  content: "";
+  position: absolute; inset: 6px;
+  border: 1px solid rgba(166,124,61,0.25);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.seal-icon {
+  width: 3.2rem; height: 3.2rem;
+  margin: 0 auto 0.8rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #3a2f1e, var(--bg-deep) 75%);
+  border: 2px solid var(--brass);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  box-shadow: 0 0 18px rgba(166,124,61,0.25), inset 0 0 8px rgba(0,0,0,0.6);
+}
+
+.seal-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 1.15rem;
+  color: var(--bone);
+  margin: 0 0 0.2rem;
+}
+.seal-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-dim);
+  margin: 0 0 1rem;
+}
+
+.seal-field {
+  display: flex; align-items: stretch;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--bg-deep);
+  margin: 1rem 0 0;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.seal-field:focus-within {
+  border-color: var(--brass);
+  box-shadow: 0 0 0 2px rgba(166,124,61,0.18);
+}
+.seal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--bone);
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  letter-spacing: 0.15em;
+  padding: 0.7rem 0.9rem;
+}
+.seal-input:focus { outline: none; }
+.seal-input::placeholder { font-family: var(--font-body); letter-spacing: normal; font-size: 0.85rem; color: var(--bone-dim); opacity: 0.7; }
+
+.seal-toggle {
+  background: var(--bg-panel-raised);
+  border: none; border-left: 1px solid var(--border);
+  color: var(--bone-dim);
+  width: 2.8rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: color 0.15s ease;
+}
+.seal-toggle:hover { color: var(--bone); }
+.seal-toggle-active { color: var(--brass); }
+
+.seal-submit { margin-top: 1rem; width: 100%; }
+
+@keyframes seal-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(3px); }
+}
+.seal-shake { animation: seal-shake 0.4s ease; border-color: var(--blood-bright) !important; }
+
+/* ============ Calculatrice — refonte ============ */
+
+.wrath-label { color: var(--blood-bright); }
+.die {
+  animation: die-pop 0.35s ease backwards;
+}
+@keyframes die-pop {
+  0% { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+  70% { transform: scale(1.15) rotate(4deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); }
+}
+.die-wrath { box-shadow: 0 0 0 2px var(--blood-bright), 0 0 10px rgba(168,50,50,0.5); position: relative; }
+.die-wrath::after {
+  content: "✦";
+  position: absolute; top: -8px; right: -6px;
+  font-size: 0.6rem; color: var(--blood-bright);
+}
+.calc-history { margin-top: 1.2rem; padding-top: 0.9rem; border-top: 1px solid var(--border); }
+.calc-history-row { font-family: var(--font-mono); font-size: 0.78rem; color: var(--bone-dim); padding: 0.3rem 0; border-bottom: 1px dashed var(--border); }
+.calc-history-row:last-of-type { border-bottom: none; }
+
+/* ============ Calendrier ============ */
+
+.cal-header { display: flex; align-items: center; justify-content: space-between; margin: 1rem 0 0.8rem; }
+.cal-month-title { font-family: var(--font-display); color: var(--bone); font-size: 1.1rem; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.cal-weekday { text-align: center; font-family: var(--font-mono); font-size: 0.65rem; color: var(--brass-dim); text-transform: uppercase; padding-bottom: 0.4rem; }
+.cal-cell { min-height: 4.2rem; background: var(--bg-deep); border: 1px solid var(--border); border-radius: 3px; padding: 0.3rem; display: flex; flex-direction: column; gap: 0.2rem; }
+.cal-cell-empty { background: transparent; border: none; }
+.cal-daynum { font-family: var(--font-mono); font-size: 0.75rem; color: var(--bone-dim); }
+.cal-today { border-color: var(--brass); }
+.cal-today .cal-daynum { color: var(--brass); font-weight: bold; }
+.cal-has-session { cursor: pointer; border-color: var(--blood); background: rgba(127,29,29,0.12); }
+.cal-has-session:hover { background: rgba(127,29,29,0.22); }
+.cal-marker { font-size: 0.62rem; color: var(--bone); background: var(--blood); border-radius: 2px; padding: 0.05rem 0.25rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 600px) { .cal-cell { min-height: 3rem; } .cal-marker { display: none; } .cal-has-session .cal-daynum::after { content: " •"; color: var(--blood-bright); } }
+
+/* ============ Pop-up de session ============ */
+
+.session-popup-overlay {
+  position: fixed; inset: 0; z-index: 1500;
+  background: rgba(0,0,0,0.72);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+.session-popup-box {
+  max-width: 420px; width: 100%;
+  background: var(--bg-panel);
+  border: 1px solid var(--brass);
+  border-radius: 6px;
+  padding: 1.8rem;
+  position: relative;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(166,124,61,0.15);
+  animation: popup-rise 0.25s ease;
+  text-align: center;
+}
+@keyframes popup-rise {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.session-popup-close { position: absolute; top: 0.7rem; right: 0.9rem; background: none; border: none; color: var(--bone-dim); font-size: 1.4rem; cursor: pointer; line-height: 1; }
+.session-popup-close:hover { color: var(--bone); }
+.session-popup-title { font-family: var(--font-display); font-size: 1.15rem; color: var(--bone); margin: 0 0 0.3rem; }
+.session-popup-datetime { font-family: var(--font-mono); font-size: 0.72rem; color: var(--brass); text-transform: capitalize; margin-bottom: 0.9rem; }
+.session-popup-notes { color: var(--bone-dim); font-size: 0.9rem; text-align: left; }
+
+/* ============ Lore 40k ============ */
+
+.lore-result-bar { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin: 1rem 0 0.6rem; }
+.lore-iframe-wrap { position: relative; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: #fff; min-height: 420px; }
+.lore-iframe { width: 100%; height: 500px; border: none; display: block; background: #fff; }
+.lore-iframe-fallback { padding: 0.9rem 1rem; background: var(--bg-panel-raised); border-top: 1px solid var(--border); text-align: center; }
+.lore-iframe-fallback p { color: var(--bone-dim); font-size: 0.85rem; margin: 0 0 0.6rem; }
+
 </style>
 </head>
 <body>
+
+<div id="group-gate" class="group-gate-overlay no-print">
+  <div class="group-gate-box">
+    <div class="aquila" style="font-size:1.6rem;">✠</div>
+    <h1 class="group-gate-title">ARCHIVUM TACTICUS</h1>
+    <p class="group-gate-text">Ce site est partagé par plusieurs groupes de jeu.</p>
+
+    <div id="group-list-section">
+      <label>Groupes existants</label>
+      <div id="group-list" class="group-list"><p class="note">Chargement...</p></div>
+    </div>
+
+    <div id="group-create-section" style="margin-top:1.2rem;">
+      <label>Rejoindre par nom, ou créer un nouveau Groupe</label>
+      <div class="field">
+        <input type="text" id="group-gate-input" placeholder="Nom du groupe (existant ou nouveau)">
+      </div>
+      <div class="seal-field" id="group-password-field">
+        <input type="password" id="group-gate-password" class="seal-input" placeholder="Mot de passe (uniquement pour créer)" autocomplete="off">
+        <button class="seal-toggle" id="group-password-toggle" type="button" title="Afficher/masquer">👁</button>
+      </div>
+      <button class="btn btn-primary" id="group-gate-submit" type="button" style="margin-top:0.8rem;">Continuer</button>
+    </div>
+
+    <p class="note" style="margin-top:1rem;">Toutes les personnes de votre table doivent rejoindre exactement le même groupe pour partager leurs données.</p>
+  </div>
+</div>
+
+<div id="app-shell" class="app-shell-hidden">
 
 <header class="site-header no-print">
   <div class="aquila">✠</div>
   <h1 class="site-title">ARCHIVUM TACTICUS</h1>
   <div class="site-subtitle">Gestionnaire de personnages — Wrath &amp; Glory</div>
   <div id="sync-status" class="sync-status"></div>
+  <button id="change-group-btn" class="change-group-btn no-print" type="button">Changer de groupe</button>
 </header>
 
 <nav class="tabs no-print">
   <button class="tab-btn active" data-view="tutoriel">Tutoriel</button>
   <button class="tab-btn" data-view="list">Personnages</button>
-  <button class="tab-btn" data-view="sheet">Fiche</button>
   <button class="tab-btn" data-view="messagerie">Messagerie</button>
+  <button class="tab-btn" data-view="calendrier">Calendrier</button>
   <button class="tab-btn" data-view="codex">Codex</button>
   <button class="tab-btn" data-view="calc">Calculatrice</button>
+  <button class="tab-btn" data-view="lore">Lore 40k</button>
   <button class="tab-btn" data-view="admin">Admin</button>
 </nav>
 
@@ -650,11 +889,21 @@ table.codex-table th { color: var(--brass); background: var(--bg-panel-raised); 
     <div id="calc-content"></div>
   </section>
 
+  <section id="view-calendrier" class="view">
+    <div id="calendrier-content"></div>
+  </section>
+
+  <section id="view-lore" class="view">
+    <div id="lore-content"></div>
+  </section>
+
   <section id="view-admin" class="view">
     <div id="admin-content"></div>
   </section>
 
 </main>
+
+</div><!-- /#app-shell -->
 
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore-compat.js"></script>
@@ -1903,9 +2152,52 @@ function buildPdfFieldValues(c) {
 // le même navigateur/ordinateur de jeu).
 // ============================================================
 
-const STORAGE_KEY = "wg_characters_v3";
-const CAMPAIGN_KEY = "wg_campaign_v1";
+const GROUP_ID_KEY = "wg_group_id";
 const ADMIN_PASSWORD = "Sanguinius";
+const CREATE_GROUP_PASSWORD = "Leman";
+
+// ---------- Groupe / Table ----------
+// Chaque groupe (table de jeu, MJ différent) a ses propres personnages,
+// campagne et messages, complètement isolés des autres groupes — aussi
+// bien en local (clés de stockage préfixées) que sur Firestore
+// (sous-collection propre à chaque groupe).
+
+function getGroupId() {
+  return localStorage.getItem(GROUP_ID_KEY) || null;
+}
+
+function normalizeGroupId(raw) {
+  return String(raw || "")
+    .trim().toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // enlève les accents
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function setGroupId(raw) {
+  const id = normalizeGroupId(raw);
+  if (!id) return false;
+  localStorage.setItem(GROUP_ID_KEY, id);
+  return true;
+}
+
+function leaveGroup() {
+  localStorage.removeItem(GROUP_ID_KEY);
+}
+
+// Efface le cache local (personnages/campagne/messages) d'un groupe donné,
+// utilisé après suppression d'un groupe pour ne pas garder de données
+// fantômes dans ce navigateur si c'était le groupe actif.
+function clearLocalGroupCache(groupId) {
+  ["wg_characters_v3", "wg_campaign_v1", "wg_messages_v1"].forEach(base => {
+    localStorage.removeItem(base + "_" + groupId);
+  });
+}
+
+function storageKey(base) {
+  const g = getGroupId() || "default";
+  return base + "_" + g;
+}
 
 // Déverrouillages valables pour la session en cours uniquement (mémoire,
 // jamais persistés) : id de personnage -> true si le mot de passe a été
@@ -1931,7 +2223,7 @@ async function hashText(text) {
 
 function loadCharacters() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey("wg_characters_v3"));
     return raw ? JSON.parse(raw) : [];
   } catch (e) {
     console.error("Erreur de lecture du stockage :", e);
@@ -1941,7 +2233,7 @@ function loadCharacters() {
 
 function saveCharacters(characters) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
+    localStorage.setItem(storageKey("wg_characters_v3"), JSON.stringify(characters));
     return true;
   } catch (e) {
     console.error("Erreur d'écriture du stockage :", e);
@@ -2117,13 +2409,14 @@ function createBlankCampaign() {
     announcement: "",       // message MJ affiché en haut du bandeau
     missions: [],            // [{id, title, description, status: 'proposee'|'active'|'terminee'}]
     sessionRecaps: [],       // [{id, title, date, text}] — rédigés par le MJ
+    sessions: [],             // [{id, date (YYYY-MM-DD), time, title, notes}] — calendrier
     updatedAt: new Date().toISOString()
   };
 }
 
 function loadCampaign() {
   try {
-    const raw = localStorage.getItem(CAMPAIGN_KEY);
+    const raw = localStorage.getItem(storageKey("wg_campaign_v1"));
     if (!raw) return createBlankCampaign();
     return Object.assign(createBlankCampaign(), JSON.parse(raw));
   } catch (e) {
@@ -2135,7 +2428,7 @@ function loadCampaign() {
 function saveCampaign(campaign, fromRemote) {
   campaign.updatedAt = fromRemote ? (campaign.updatedAt || new Date().toISOString()) : new Date().toISOString();
   try {
-    localStorage.setItem(CAMPAIGN_KEY, JSON.stringify(campaign));
+    localStorage.setItem(storageKey("wg_campaign_v1"), JSON.stringify(campaign));
   } catch (e) {
     console.error("Erreur d'écriture de la campagne :", e);
     return false;
@@ -2162,6 +2455,16 @@ function newRecap(title) {
   };
 }
 
+function newSession(date, title) {
+  return {
+    id: "session_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+    date: date || new Date().toISOString().slice(0, 10),
+    time: "20:00",
+    title: title || "Session de jeu",
+    notes: ""
+  };
+}
+
 // ============================================================
 // MESSAGERIE — canaux d'échange Personnage ↔ MJ et Personnage ↔ Personnage.
 // Onglet séparé (pas rattaché à une fiche). Un canal MJ existe
@@ -2169,8 +2472,6 @@ function newRecap(title) {
 // chaque paire de personnages. Pas de collection "canaux" séparée : on
 // calcule un identifiant déterministe et on filtre les messages dessus.
 // ============================================================
-
-const MESSAGES_KEY = "wg_messages_v1";
 
 function gmChannelId(charId) {
   return "gm_" + charId;
@@ -2197,7 +2498,7 @@ function channelLabel(channelId, characters, viewerCharId) {
 
 function loadMessages() {
   try {
-    const raw = localStorage.getItem(MESSAGES_KEY);
+    const raw = localStorage.getItem(storageKey("wg_messages_v1"));
     return raw ? JSON.parse(raw) : [];
   } catch (e) {
     console.error("Erreur de lecture des messages :", e);
@@ -2207,7 +2508,7 @@ function loadMessages() {
 
 function saveMessagesLocal(list) {
   try {
-    localStorage.setItem(MESSAGES_KEY, JSON.stringify(list));
+    localStorage.setItem(storageKey("wg_messages_v1"), JSON.stringify(list));
     return true;
   } catch (e) {
     console.error("Erreur d'écriture des messages :", e);
@@ -2281,23 +2582,31 @@ function migrateOldCharacterMessages() {
 // ============================================================
 // SYNCHRONISATION FIREBASE (Firestore) — temps réel entre navigateurs.
 //
+// Toutes les données (personnages, campagne, messages) sont rangées
+// sous groups/{groupId}/... — chaque Groupe/Table (donc chaque MJ) a
+// ainsi ses propres données, complètement isolées des autres groupes,
+// dans la même base Firestore.
+//
 // Fonctionnement :
-//  - Le localStorage reste la mémoire "rapide" locale ; l'app continue
-//    de fonctionner exactement pareil, même hors ligne.
+//  - Le localStorage reste la mémoire "rapide" locale (elle aussi
+//    préfixée par groupe, voir storage.js) ; l'app continue de
+//    fonctionner exactement pareil, même hors ligne.
 //  - Toute écriture locale (upsertCharacter, saveCampaign) est aussi
 //    envoyée à Firestore en tâche de fond (sans bloquer l'interface).
 //  - Des écouteurs temps réel (onSnapshot) reçoivent les changements
-//    faits par d'autres navigateurs et les répercutent localement.
+//    faits par d'autres navigateurs DU MÊME GROUPE et les répercutent
+//    localement.
 //  - Si Firebase est indisponible (pas de connexion, bloqueur de pub,
 //    configuration absente...), tout ceci est ignoré silencieusement :
 //    le site continue de fonctionner en local uniquement.
 //
 // Sécurité : ce projet utilise les règles Firestore en "mode test"
-// (lecture/écriture ouvertes). C'est adapté à un groupe d'amis, mais
-// n'importe qui connaissant l'URL du projet pourrait techniquement lire
-// ou modifier les données directement via l'API Firestore, en
-// contournant le site. Les mots de passe de fiches restent une
-// protection au niveau de l'interface, pas une sécurité absolue.
+// (lecture/écriture ouvertes). C'est adapté à des groupes d'amis, mais
+// n'importe qui connaissant l'URL du projet ET l'identifiant d'un
+// groupe pourrait techniquement lire/modifier ses données en
+// contournant le site. Les mots de passe de fiches et le mot de passe
+// Admin restent une protection au niveau de l'interface, pas une
+// sécurité absolue. Choisissez des identifiants de groupe peu devinables.
 // ============================================================
 
 const firebaseConfig = {
@@ -2317,6 +2626,75 @@ function stripUndefined(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
+// Racine Firestore du groupe actif : groups/{groupId}/{collectionName}
+function groupCollection(name) {
+  const groupId = getGroupId();
+  return fbDb.collection("groups").doc(groupId).collection(name);
+}
+
+// ---------- Connexion Firebase indépendante du groupe (pour le portail) ----------
+
+function connectFirebaseApp() {
+  if (typeof firebase === "undefined") {
+    firebaseSyncStatus = "disabled";
+    return false;
+  }
+  try {
+    if (!firebase.apps || firebase.apps.length === 0) firebase.initializeApp(firebaseConfig);
+    fbDb = firebase.firestore();
+    return true;
+  } catch (e) {
+    console.warn("Impossible d'initialiser Firebase :", e);
+    firebaseSyncStatus = "error";
+    return false;
+  }
+}
+
+// Liste des groupes déjà créés (registre global, hors de tout groupe).
+function fetchGroupRegistry(callback) {
+  if (!fbDb) { callback([]); return; }
+  fbDb.collection("groupRegistry").orderBy("name").get()
+    .then(snapshot => callback(snapshot.docs.map(d => d.data())))
+    .catch(e => { console.warn("Lecture du registre de groupes échouée :", e); callback([]); });
+}
+
+function registerGroupInRegistry(groupId, displayName) {
+  if (!fbDb) return;
+  const ref = fbDb.collection("groupRegistry").doc(groupId);
+  ref.get().then(doc => {
+    if (doc.exists) return; // ne jamais écraser un nom déjà enregistré
+    ref.set({ id: groupId, name: displayName, createdAt: new Date().toISOString() });
+  }).catch(e => console.warn("Enregistrement du groupe échoué :", e));
+}
+
+// Supprime complètement un groupe : toutes ses données (personnages,
+// campagne, messages) ainsi que son entrée dans le registre. Irréversible.
+function deleteGroupCompletely(groupId, callback) {
+  if (!fbDb) { if (callback) callback(new Error("Firebase indisponible.")); return; }
+  const subCollections = ["characters", "campaign", "messages"];
+  const deletions = subCollections.map(name =>
+    fbDb.collection("groups").doc(groupId).collection(name).get().then(snapshot => {
+      if (snapshot.empty) return null;
+      const batch = fbDb.batch();
+      snapshot.docs.forEach(d => batch.delete(d.ref));
+      return batch.commit();
+    })
+  );
+  Promise.all(deletions)
+    .then(() => fbDb.collection("groupRegistry").doc(groupId).delete())
+    .then(() => {
+      // Nettoyage du cache local si ce navigateur avait déjà utilisé ce groupe
+      ["wg_characters_v3", "wg_campaign_v1", "wg_messages_v1"].forEach(base => {
+        localStorage.removeItem(base + "_" + groupId);
+      });
+      if (callback) callback();
+    })
+    .catch(e => {
+      console.warn("Suppression du groupe échouée :", e);
+      if (callback) callback(e);
+    });
+}
+
 function mergeCharacterLists(local, remote) {
   const map = new Map();
   local.forEach(c => map.set(c.id, c));
@@ -2330,48 +2708,46 @@ function mergeCharacterLists(local, remote) {
 }
 
 function initFirebaseSync() {
-  if (typeof firebase === "undefined") {
+  if (!getGroupId()) {
     firebaseSyncStatus = "disabled";
-    console.info("Firebase non chargé (hors ligne ou bloqué) — mode local uniquement.");
-    updateSyncStatusBadge();
-    return;
+    return; // pas de groupe choisi : rien à synchroniser pour l'instant
   }
-  try {
-    firebase.initializeApp(firebaseConfig);
-    fbDb = firebase.firestore();
-    firebaseSyncStatus = "connected";
-  } catch (e) {
-    console.warn("Impossible d'initialiser Firebase — mode local uniquement :", e);
-    firebaseSyncStatus = "error";
-    updateSyncStatusBadge();
-    return;
+  if (!fbDb) {
+    const ok = connectFirebaseApp();
+    if (!ok) {
+      console.info("Firebase indisponible — mode local uniquement.");
+      updateSyncStatusBadge();
+      return;
+    }
   }
+  firebaseSyncStatus = "connected";
   updateSyncStatusBadge();
+  registerGroupInRegistry(getGroupId(), getGroupId()); // rétro-inscription si créé avant cette fonctionnalité
 
   // ---------- Écriture (locale -> Firestore) ----------
   firestoreSaveCharacter = function (character) {
     if (!fbDb) return;
-    fbDb.collection("characters").doc(character.id).set(stripUndefined(character))
+    groupCollection("characters").doc(character.id).set(stripUndefined(character))
       .catch(e => console.warn("Synchronisation (personnage) échouée :", e));
   };
   firestoreDeleteCharacterRemote = function (id) {
     if (!fbDb) return;
-    fbDb.collection("characters").doc(id).delete()
+    groupCollection("characters").doc(id).delete()
       .catch(e => console.warn("Synchronisation (suppression) échouée :", e));
   };
   firestoreSaveCampaignRemote = function (campaign) {
     if (!fbDb) return;
-    fbDb.collection("campaign").doc("main").set(stripUndefined(campaign))
+    groupCollection("campaign").doc("main").set(stripUndefined(campaign))
       .catch(e => console.warn("Synchronisation (campagne) échouée :", e));
   };
   firestoreSaveMessage = function (message) {
     if (!fbDb) return;
-    fbDb.collection("messages").doc(message.id).set(stripUndefined(message))
+    groupCollection("messages").doc(message.id).set(stripUndefined(message))
       .catch(e => console.warn("Synchronisation (message) échouée :", e));
   };
   firestoreDeleteMessageRemote = function (id) {
     if (!fbDb) return;
-    fbDb.collection("messages").doc(id).delete()
+    groupCollection("messages").doc(id).delete()
       .catch(e => console.warn("Synchronisation (suppression message) échouée :", e));
   };
 
@@ -2382,7 +2758,7 @@ function initFirebaseSync() {
 }
 
 function reconcileCharactersOnConnect() {
-  fbDb.collection("characters").get().then(snapshot => {
+  groupCollection("characters").get().then(snapshot => {
     const remoteChars = snapshot.docs.map(d => d.data());
     const localChars = loadCharacters();
     const merged = mergeCharacterLists(localChars, remoteChars).map(migrateCharacter);
@@ -2405,7 +2781,7 @@ function reconcileCharactersOnConnect() {
 }
 
 function attachCharactersListener() {
-  fbDb.collection("characters").onSnapshot(snapshot => {
+  groupCollection("characters").onSnapshot(snapshot => {
     const chars = snapshot.docs.map(d => d.data()).map(migrateCharacter);
     saveCharacters(chars);
     notifyRemoteDataChanged();
@@ -2413,13 +2789,13 @@ function attachCharactersListener() {
 }
 
 function reconcileCampaignOnConnect() {
-  fbDb.collection("campaign").doc("main").get().then(doc => {
+  groupCollection("campaign").doc("main").get().then(doc => {
     const remote = doc.exists ? doc.data() : null;
     const local = loadCampaign();
     if (!remote || new Date(local.updatedAt || 0) > new Date(remote.updatedAt || 0)) {
       firestoreSaveCampaignRemote(local);
     } else {
-      localStorage.setItem(CAMPAIGN_KEY, JSON.stringify(Object.assign(createBlankCampaign(), remote)));
+      localStorage.setItem(storageKey("wg_campaign_v1"), JSON.stringify(Object.assign(createBlankCampaign(), remote)));
     }
     notifyRemoteDataChanged();
     attachCampaignListener();
@@ -2430,16 +2806,16 @@ function reconcileCampaignOnConnect() {
 }
 
 function attachCampaignListener() {
-  fbDb.collection("campaign").doc("main").onSnapshot(doc => {
+  groupCollection("campaign").doc("main").onSnapshot(doc => {
     if (doc.exists) {
-      localStorage.setItem(CAMPAIGN_KEY, JSON.stringify(Object.assign(createBlankCampaign(), doc.data())));
+      localStorage.setItem(storageKey("wg_campaign_v1"), JSON.stringify(Object.assign(createBlankCampaign(), doc.data())));
       notifyRemoteDataChanged();
     }
   }, err => console.warn("Écoute Firestore (campagne) interrompue :", err));
 }
 
 function reconcileMessagesOnConnect() {
-  fbDb.collection("messages").get().then(snapshot => {
+  groupCollection("messages").get().then(snapshot => {
     const remoteMsgs = snapshot.docs.map(d => d.data());
     const localMsgs = loadMessages();
     const merged = mergeMessageLists(localMsgs, remoteMsgs);
@@ -2459,7 +2835,7 @@ function reconcileMessagesOnConnect() {
 }
 
 function attachMessagesListener() {
-  fbDb.collection("messages").onSnapshot(snapshot => {
+  groupCollection("messages").onSnapshot(snapshot => {
     const msgs = snapshot.docs.map(d => d.data());
     saveMessagesLocal(msgs);
     notifyRemoteDataChanged();
@@ -2473,11 +2849,12 @@ function notifyRemoteDataChanged() {
 function updateSyncStatusBadge() {
   const el = document.getElementById("sync-status");
   if (!el) return;
+  const groupId = getGroupId();
   if (firebaseSyncStatus === "connected") {
-    el.textContent = "🔥 Synchronisé en temps réel";
+    el.textContent = `🔥 Groupe "${groupId}" — synchronisé en temps réel`;
     el.className = "sync-status sync-ok";
   } else {
-    el.textContent = "○ Mode local uniquement";
+    el.textContent = groupId ? `○ Groupe "${groupId}" — mode local uniquement` : "○ Mode local uniquement";
     el.className = "sync-status sync-off";
   }
 }
@@ -2488,10 +2865,15 @@ function updateSyncStatusBadge() {
 // CALCULATRICE DE COMBAT — jets de dés selon les règles officielles.
 // Résultat d'un d6 : 1-3 = rien, 4-5 = 1 Icône, 6 = Icône Exalté (2 Icônes).
 // Brutal (ED) : 1-2=0, 3-4=1, 5-6=2. Fusion/Melta (ED, courte portée) : idem Brutal.
+// Le premier dé de la réserve d'attaque est le Dé de Courroux (Wrath Die).
 // ============================================================
 
 let calcState = {
+  attackerId: "",
+  weaponRef: "",       // "melee|idx" ou "ranged|idx" du personnage attaquant
+  targetId: "",
   attackPool: 6,
+  weaponName: "",
   weaponDamage: 10,
   weaponED: 2,
   weaponAP: 0,
@@ -2500,7 +2882,8 @@ let calcState = {
   targetDefence: 4,
   targetResilience: 5,
   lastHitRoll: null,
-  lastDamageRoll: null
+  lastDamageRoll: null,
+  history: []
 };
 
 function rollDice(n) {
@@ -2510,7 +2893,6 @@ function rollDice(n) {
 }
 
 function iconsForRoll(die, specialEd) {
-  // specialEd = true applique la lecture Brutal/Fusion (1-2=0,3-4=1,5-6=2)
   if (specialEd) {
     if (die <= 2) return 0;
     if (die <= 4) return 1;
@@ -2525,24 +2907,49 @@ function sumIcons(rolls, specialEd) {
   return rolls.reduce((sum, d) => sum + iconsForRoll(d, specialEd), 0);
 }
 
-function renderDiceRow(rolls, specialEd) {
-  return rolls.map(d => {
+function renderDiceRow(rolls, specialEd, markWrathDie) {
+  return rolls.map((d, i) => {
     const icons = iconsForRoll(d, specialEd);
-    const cls = icons === 0 ? "die die-blank" : icons === 1 ? "die die-icon" : "die die-exalted";
-    return `<span class="${cls}">${d}</span>`;
+    let cls = icons === 0 ? "die die-blank" : icons === 1 ? "die die-icon" : "die die-exalted";
+    if (markWrathDie && i === 0) cls += " die-wrath";
+    return `<span class="${cls}" style="animation-delay:${i * 60}ms">${d}</span>`;
   }).join("");
 }
 
 function renderCalcTab() {
   const container = document.getElementById("calc-content");
+  const characters = loadCharacters();
+
+  const attacker = characters.find(c => c.id === calcState.attackerId);
+  const target = characters.find(c => c.id === calcState.targetId);
+
+  const weaponOptions = attacker
+    ? [{ value: "", label: "— Arme manuelle —" }]
+        .concat((attacker.weapons || []).map((w, i) => ({ value: i + "|" + w.type, label: w.name })))
+    : [];
+
   container.innerHTML = `
     <div class="panel">
       <h2 class="section-title">Calculatrice de Dégâts</h2>
-      <p class="note">Simule un jet d'attaque puis un jet de dégâts selon les règles officielles (Icônes : 4-5 = 1, 6 = Icône Exalté = 2 ; lecture spéciale pour les traits Brutal / Fusion).</p>
+      <p class="note">Icônes : 4-5 = 1, 6 = Icône Exalté (2). Lecture spéciale pour Brutal/Fusion. Le premier dé de la réserve d'attaque est votre <strong class="wrath-label">Dé de Courroux</strong>.</p>
 
       <div class="calc-grid">
         <div class="calc-col">
-          <h3 class="codex-subhead">ATTAQUE</h3>
+          <h3 class="codex-subhead">ATTAQUANT</h3>
+          <div class="field">
+            <label>Personnage</label>
+            <select id="calc-attacker">
+              <option value="">— Manuel —</option>
+              ${characters.map(c => `<option value="${c.id}" ${calcState.attackerId === c.id ? "selected" : ""}>${escapeHtml(c.name)}</option>`).join("")}
+            </select>
+          </div>
+          ${attacker ? `
+          <div class="field">
+            <label>Arme équipée</label>
+            <select id="calc-weapon-ref">
+              ${weaponOptions.map(o => `<option value="${o.value}" ${calcState.weaponRef === o.value ? "selected" : ""}>${escapeHtml(o.label)}</option>`).join("")}
+            </select>
+          </div>` : ""}
           <div class="field"><label>Réserve de dés (Compétence + Attribut)</label><input type="number" id="calc-pool" min="1" value="${calcState.attackPool}"></div>
           <div class="field"><label>Dégâts de l'arme</label><input type="number" id="calc-damage" value="${calcState.weaponDamage}"></div>
           <div class="field"><label>DE (Dés de Dégâts Supplémentaires)</label><input type="number" id="calc-ed" min="0" value="${calcState.weaponED}"></div>
@@ -2554,20 +2961,61 @@ function renderCalcTab() {
         </div>
         <div class="calc-col">
           <h3 class="codex-subhead">CIBLE</h3>
+          <div class="field">
+            <label>Personnage</label>
+            <select id="calc-target">
+              <option value="">— Manuel —</option>
+              ${characters.map(c => `<option value="${c.id}" ${calcState.targetId === c.id ? "selected" : ""}>${escapeHtml(c.name)}</option>`).join("")}
+            </select>
+          </div>
           <div class="field"><label>Défense de la cible</label><input type="number" id="calc-defence" min="0" value="${calcState.targetDefence}"></div>
           <div class="field"><label>Résistance de la cible</label><input type="number" id="calc-resilience" min="0" value="${calcState.targetResilience}"></div>
+          ${target ? `<div class="note">Blessures actuelles : ${target.wounds || 0} / ${computeDerived(target).blessuresMax}</div>` : ""}
         </div>
       </div>
 
       <div class="btn-row">
-        <button class="btn btn-primary" id="calc-roll-attack" type="button">Lancer l'Attaque</button>
-        <button class="btn" id="calc-roll-damage" type="button" ${calcState.lastHitRoll && calcState.lastHitRoll.hit ? "" : "disabled"}>Lancer les Dégâts</button>
+        <button class="btn btn-primary" id="calc-roll-attack" type="button">🎲 Lancer l'Attaque</button>
+        <button class="btn" id="calc-roll-damage" type="button" ${calcState.lastHitRoll && calcState.lastHitRoll.hit ? "" : "disabled"}>🎲 Lancer les Dégâts</button>
+        ${(calcState.lastDamageRoll && target) ? `<button class="btn" id="calc-apply-wounds" type="button">Appliquer ${calcState.lastDamageRoll.wounds} Blessures à ${escapeHtml(target.name)}</button>` : ""}
         <button class="btn" id="calc-reset" type="button">Réinitialiser</button>
       </div>
 
       <div id="calc-results"></div>
+
+      ${calcState.history.length ? `
+      <div class="calc-history">
+        <h3 class="codex-subhead">HISTORIQUE DE LA SESSION</h3>
+        ${calcState.history.map(h => `<div class="calc-history-row">${h}</div>`).join("")}
+        <button class="btn" id="calc-clear-history" type="button">Vider l'historique</button>
+      </div>` : ""}
     </div>
   `;
+
+  document.getElementById("calc-attacker").addEventListener("change", (e) => {
+    calcState.attackerId = e.target.value;
+    calcState.weaponRef = "";
+    const a = characters.find(c => c.id === calcState.attackerId);
+    if (a) calcState.attackPool = skillTotal(a, "Capacité de Combat"); // valeur par défaut, ajustable
+    renderCalcTab();
+  });
+  if (attacker) {
+    document.getElementById("calc-weapon-ref").addEventListener("change", (e) => {
+      calcState.weaponRef = e.target.value;
+      applyWeaponRef(attacker);
+      renderCalcTab();
+    });
+  }
+  document.getElementById("calc-target").addEventListener("change", (e) => {
+    calcState.targetId = e.target.value;
+    const t = characters.find(c => c.id === calcState.targetId);
+    if (t) {
+      const d = computeDerived(t);
+      calcState.targetDefence = d.defense;
+      calcState.targetResilience = d.resistanceTotal;
+    }
+    renderCalcTab();
+  });
 
   document.getElementById("calc-pool").addEventListener("input", e => calcState.attackPool = parseInt(e.target.value, 10) || 1);
   document.getElementById("calc-damage").addEventListener("input", e => calcState.weaponDamage = parseInt(e.target.value, 10) || 0);
@@ -2585,16 +3033,45 @@ function renderCalcTab() {
     calcState.lastDamageRoll = null;
     renderCalcTab();
   });
+  const applyBtn = document.getElementById("calc-apply-wounds");
+  if (applyBtn) applyBtn.addEventListener("click", () => {
+    const t = getCharacter(calcState.targetId);
+    if (!t) return;
+    t.wounds = (t.wounds || 0) + calcState.lastDamageRoll.wounds;
+    upsertCharacter(t);
+    toast(`${calcState.lastDamageRoll.wounds} Blessures appliquées à ${t.name}.`, "success");
+    renderCalcTab();
+  });
+  const clearBtn = document.getElementById("calc-clear-history");
+  if (clearBtn) clearBtn.addEventListener("click", () => { calcState.history = []; renderCalcTab(); });
 
   renderCalcResults();
+}
+
+function applyWeaponRef(attacker) {
+  if (!calcState.weaponRef) return;
+  const [idxStr, type] = calcState.weaponRef.split("|");
+  const w = attacker.weapons[parseInt(idxStr, 10)];
+  if (!w) return;
+  calcState.weaponName = w.name;
+  calcState.weaponDamage = resolveWeaponDamage(attacker, w);
+  calcState.weaponED = parseInt(w.ed, 10) || 0;
+  calcState.weaponAP = parseInt(String(w.ap).replace(/[^0-9-]/g, ""), 10) || 0;
+  calcState.brutal = /brutal/i.test(w.traits || "");
+  calcState.melta = /(melta|fusion)/i.test(w.traits || "");
+  calcState.attackPool = type === "ranged" ? skillTotal(attacker, "Capacité de Tir") : skillTotal(attacker, "Capacité de Combat");
 }
 
 function doRollAttack() {
   const rolls = rollDice(calcState.attackPool);
   const icons = sumIcons(rolls, false);
   const hit = icons >= calcState.targetDefence;
-  calcState.lastHitRoll = { rolls, icons, hit };
+  const wrathExalted = rolls[0] === 6;
+  calcState.lastHitRoll = { rolls, icons, hit, wrathExalted };
   calcState.lastDamageRoll = null;
+  const atkName = attackerLabel();
+  const tgtName = targetLabel();
+  calcState.history.unshift(`${atkName} attaque ${tgtName} : ${icons} Icônes vs Déf. ${calcState.targetDefence} → ${hit ? "TOUCHÉ" : "MANQUÉ"}${wrathExalted ? " ⚡ Dé de Courroux Exalté !" : ""}`);
   renderCalcTab();
 }
 
@@ -2606,7 +3083,17 @@ function doRollDamage() {
   const effectiveResilience = Math.max(0, calcState.targetResilience - calcState.weaponAP);
   const wounds = Math.max(0, totalDamage - effectiveResilience);
   calcState.lastDamageRoll = { rolls, bonus, totalDamage, effectiveResilience, wounds, specialEd };
+  calcState.history.unshift(`→ Dégâts : ${totalDamage} − Résistance ${effectiveResilience} = ${wounds} Blessures`);
   renderCalcTab();
+}
+
+function attackerLabel() {
+  const a = loadCharacters().find(c => c.id === calcState.attackerId);
+  return a ? a.name : "Attaquant";
+}
+function targetLabel() {
+  const t = loadCharacters().find(c => c.id === calcState.targetId);
+  return t ? t.name : "la cible";
 }
 
 function renderCalcResults() {
@@ -2618,8 +3105,9 @@ function renderCalcResults() {
     const r = calcState.lastHitRoll;
     html += `<div class="calc-result-block">
       <h3 class="codex-subhead">JET D'ATTAQUE</h3>
-      <div class="dice-row">${renderDiceRow(r.rolls, false)}</div>
+      <div class="dice-row">${renderDiceRow(r.rolls, false, true)}</div>
       <div class="calc-summary">Icônes : <strong>${r.icons}</strong> vs Défense <strong>${calcState.targetDefence}</strong> → <span class="${r.hit ? "calc-hit" : "calc-miss"}">${r.hit ? "TOUCHÉ" : "MANQUÉ"}</span></div>
+      ${r.wrathExalted ? `<div class="calc-summary wrath-label">⚡ Dé de Courroux Exalté — de la Gloire peut être générée !</div>` : ""}
     </div>`;
   }
 
@@ -2627,7 +3115,7 @@ function renderCalcResults() {
     const r = calcState.lastDamageRoll;
     html += `<div class="calc-result-block">
       <h3 class="codex-subhead">JET DE DÉGÂTS ${r.specialEd ? "(lecture Brutal/Fusion)" : ""}</h3>
-      <div class="dice-row">${renderDiceRow(r.rolls, r.specialEd)}</div>
+      <div class="dice-row">${renderDiceRow(r.rolls, r.specialEd, false)}</div>
       <div class="calc-summary">Dégâts de base ${calcState.weaponDamage} + ${r.bonus} (DE) = <strong>${r.totalDamage}</strong> dégâts totaux</div>
       <div class="calc-summary">Résistance ${calcState.targetResilience} − PA ${calcState.weaponAP} = <strong>${r.effectiveResilience}</strong> Résistance effective</div>
       <div class="calc-summary calc-wounds">Blessures infligées : <strong>${r.wounds}</strong></div>
@@ -2988,6 +3476,8 @@ function switchTab(view) {
   if (view === "messagerie") renderMessagerieTab();
   if (view === "codex") renderCodex();
   if (view === "calc") renderCalcTab();
+  if (view === "calendrier") renderCalendrierTab();
+  if (view === "lore") renderLoreTab();
   if (view === "admin") renderAdminTab();
   renderCampaignBanner();
 }
@@ -3008,7 +3498,7 @@ function renderMessagerieTab() {
   }
 
   const identityOptions = characters.map(c =>
-    `<option value="${c.id}" ${state.msgIdentity === c.id ? "selected" : ""}>${escapeHtml(c.name)}${c.ownerLabel ? " (" + escapeHtml(c.ownerLabel) + ")" : ""}</option>`
+    `<option value="${c.id}" ${state.msgIdentity === c.id ? "selected" : ""}>${escapeHtml(c.name)}${c.ownerLabel ? " (" + escapeHtml(c.ownerLabel) + ")" : ""}${c.passwordHash ? " 🔒" : ""}</option>`
   ).join("") + (adminUnlocked ? `<option value="MJ" ${state.msgIdentity === "MJ" ? "selected" : ""}>Maître de Jeu</option>` : "");
 
   let channels;
@@ -3057,8 +3547,23 @@ function renderMessagerieTab() {
     </div>
   `;
 
-  document.getElementById("msg-identity-select").addEventListener("change", (e) => {
-    state.msgIdentity = e.target.value;
+  document.getElementById("msg-identity-select").addEventListener("change", async (e) => {
+    const newIdentity = e.target.value;
+    if (newIdentity !== "MJ" && newIdentity !== state.msgIdentity) {
+      const c = characters.find(x => x.id === newIdentity);
+      if (c && c.passwordHash && !sessionUnlocked.has(c.id)) {
+        const pw = prompt(`Mot de passe de "${c.name}" pour parler en son nom :`);
+        if (pw == null) { renderMessagerieTab(); return; }
+        const ok = await tryUnlockCharacter(c, pw);
+        if (!ok) {
+          toast("Mot de passe incorrect — vous ne pouvez pas parler au nom de ce personnage.", "error");
+          renderMessagerieTab();
+          return;
+        }
+        toast(`Identité "${c.name}" déverrouillée pour cette session.`, "success");
+      }
+    }
+    state.msgIdentity = newIdentity;
     state.msgChannel = null;
     renderMessagerieTab();
   });
@@ -3150,6 +3655,152 @@ function refreshMessagerieLive() {
   });
 }
 
+// ---------- Vue : Calendrier ----------
+
+let calState = { year: new Date().getFullYear(), month: new Date().getMonth() }; // month: 0-11
+
+function renderCalendrierTab() {
+  const container = document.getElementById("calendrier-content");
+  const campaign = loadCampaign();
+  const sessions = campaign.sessions || [];
+
+  const { year, month } = calState;
+  const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  const firstDay = new Date(year, month, 1);
+  const startWeekday = (firstDay.getDay() + 6) % 7; // lundi = 0
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const todayStr = new Date().toISOString().slice(0, 10);
+
+  const sessionsByDate = {};
+  sessions.forEach(s => { (sessionsByDate[s.date] = sessionsByDate[s.date] || []).push(s); });
+
+  let cells = "";
+  for (let i = 0; i < startWeekday; i++) cells += `<div class="cal-cell cal-cell-empty"></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    const daySessions = sessionsByDate[dateStr] || [];
+    const isToday = dateStr === todayStr;
+    cells += `
+      <div class="cal-cell ${daySessions.length ? "cal-has-session" : ""} ${isToday ? "cal-today" : ""}" ${daySessions.length ? `data-cal-date="${dateStr}"` : ""}>
+        <span class="cal-daynum">${d}</span>
+        ${daySessions.map(s => `<span class="cal-marker">${escapeHtml(s.title)}</span>`).join("")}
+      </div>`;
+  }
+
+  // Prochaine session à venir (toutes dates confondues)
+  const upcoming = sessions.filter(s => s.date >= todayStr).sort((a, b) => a.date.localeCompare(b.date))[0];
+
+  container.innerHTML = `
+    <div class="panel">
+      <h2 class="section-title">Calendrier des Sessions</h2>
+      ${upcoming ? `<div class="campaign-announcement">📅 Prochaine session : <strong>${escapeHtml(upcoming.title)}</strong> — ${formatDateFr(upcoming.date)} à ${escapeHtml(upcoming.time || "")}</div>` : `<p class="note">Aucune session à venir programmée.</p>`}
+
+      <div class="cal-header">
+        <button class="btn" id="cal-prev" type="button">← </button>
+        <h3 class="cal-month-title">${monthNames[month]} ${year}</h3>
+        <button class="btn" id="cal-next" type="button">→</button>
+      </div>
+      <div class="cal-grid">
+        ${["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d => `<div class="cal-weekday">${d}</div>`).join("")}
+        ${cells}
+      </div>
+      <p class="note" style="margin-top:0.8rem;">Cliquez une date marquée pour voir les détails. Les sessions sont créées par le MJ depuis l'onglet Admin.</p>
+    </div>
+
+    <div id="session-popup-overlay" class="session-popup-overlay" style="display:none;">
+      <div class="session-popup-box">
+        <button class="session-popup-close" id="session-popup-close" type="button">&times;</button>
+        <div id="session-popup-content"></div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("cal-prev").addEventListener("click", () => {
+    calState.month--; if (calState.month < 0) { calState.month = 11; calState.year--; }
+    renderCalendrierTab();
+  });
+  document.getElementById("cal-next").addEventListener("click", () => {
+    calState.month++; if (calState.month > 11) { calState.month = 0; calState.year++; }
+    renderCalendrierTab();
+  });
+  container.querySelectorAll("[data-cal-date]").forEach(cell => {
+    cell.addEventListener("click", () => openSessionPopup(sessionsByDate[cell.dataset.calDate]));
+  });
+  document.getElementById("session-popup-close").addEventListener("click", closeSessionPopup);
+  document.getElementById("session-popup-overlay").addEventListener("click", (e) => {
+    if (e.target.id === "session-popup-overlay") closeSessionPopup();
+  });
+}
+
+function openSessionPopup(sessionsForDay) {
+  const overlay = document.getElementById("session-popup-overlay");
+  const content = document.getElementById("session-popup-content");
+  content.innerHTML = sessionsForDay.map(s => `
+    <div class="session-popup-entry">
+      <div class="seal-icon" style="margin:0 auto 0.8rem;width:2.6rem;height:2.6rem;font-size:1.1rem;">📅</div>
+      <h3 class="session-popup-title">${escapeHtml(s.title)}</h3>
+      <div class="session-popup-datetime">${formatDateFr(s.date)}${s.time ? " — " + escapeHtml(s.time) : ""}</div>
+      ${s.notes ? `<p class="session-popup-notes">${escapeHtml(s.notes).replace(/\n/g, "<br>")}</p>` : `<p class="note">Aucune note pour cette session.</p>`}
+    </div>
+  `).join("<hr style='border-color:var(--border);margin:1rem 0;'>");
+  overlay.style.display = "flex";
+}
+
+function closeSessionPopup() {
+  document.getElementById("session-popup-overlay").style.display = "none";
+}
+
+function formatDateFr(dateStr) {
+  try {
+    const d = new Date(dateStr + "T00:00:00");
+    return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  } catch (e) { return dateStr; }
+}
+
+// ---------- Vue : Lore 40k (recherche externe) ----------
+
+function renderLoreTab() {
+  const container = document.getElementById("lore-content");
+  container.innerHTML = `
+    <div class="panel">
+      <h2 class="section-title">Recherche Lore 40k — Omnis Bibliotheca</h2>
+      <p class="note">Recherche rapide sur <a href="https://omnis-bibliotheca.com/index.php/Accueil" target="_blank" rel="noopener">l'Omnis Bibliotheca</a>, l'encyclopédie francophone non-officielle de Warhammer 40 000. L'aperçu intégré ci-dessous est une tentative : selon les réglages du site, il peut ne pas s'afficher — le bouton "Ouvrir dans un nouvel onglet" fonctionne toujours.</p>
+      <div class="field-row" style="align-items:flex-end;">
+        <div class="field" style="flex:1;">
+          <label>Rechercher un terme, un personnage, une faction...</label>
+          <input type="text" id="lore-search-input" placeholder="ex : Primaris, Necrons, Codex Astartes...">
+        </div>
+        <button class="btn btn-primary" id="lore-search-btn" type="button">Rechercher</button>
+      </div>
+      <div id="lore-result-area"></div>
+    </div>
+  `;
+
+  const doSearch = () => {
+    const q = document.getElementById("lore-search-input").value.trim();
+    if (!q) return;
+    const url = "https://omnis-bibliotheca.com/index.php?search=" + encodeURIComponent(q) + "&title=Sp%C3%A9cial:Recherche&fulltext=1";
+    document.getElementById("lore-result-area").innerHTML = `
+      <div class="lore-result-bar">
+        <a href="${url}" target="_blank" rel="noopener" class="btn btn-primary">Ouvrir « ${escapeHtml(q)} » dans un nouvel onglet ↗</a>
+        <span class="note">Aperçu intégré ci-dessous (peut rester vide selon le site) :</span>
+      </div>
+      <div class="lore-iframe-wrap">
+        <iframe src="${url}" class="lore-iframe" id="lore-iframe" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+        <div class="lore-iframe-fallback" id="lore-iframe-fallback">
+          <p>Si rien ne s'affiche ci-dessus, le site refuse d'être intégré dans une autre page (protection courante des wikis).</p>
+          <a href="${url}" target="_blank" rel="noopener" class="btn">Ouvrir la recherche dans un nouvel onglet ↗</a>
+        </div>
+      </div>
+    `;
+  };
+
+  document.getElementById("lore-search-btn").addEventListener("click", doSearch);
+  document.getElementById("lore-search-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") doSearch();
+  });
+}
+
 // ---------- Vue : Tutoriel ----------
 
 function renderTutorielTab() {
@@ -3175,7 +3826,7 @@ function renderTutorielTab() {
           <div class="tuto-step-num">2</div>
           <div class="tuto-step-body">
             <h3>Espèce et Archétype</h3>
-            <p>Dans l'onglet <strong>Fiche</strong>, choisissez une Espèce (Humain, Ork, Aeldari...) puis un Archétype (votre métier de départ : Garde Impérial, Sœur Hospitalière, Skitarius...). Consultez le <strong>Codex → Archétypes</strong> pour voir leurs détails avant de choisir.</p>
+            <p>Sur la fiche qui s'ouvre automatiquement, choisissez une Espèce (Humain, Ork, Aeldari...) puis un Archétype (votre métier de départ : Garde Impérial, Sœur Hospitalière, Skitarius...). Consultez le <strong>Codex → Archétypes</strong> pour voir leurs détails avant de choisir.</p>
             <div class="tuto-example">💡 Une fois l'Archétype choisi, cliquez sur <code>Appliquer les valeurs suggérées de l'Archétype</code> : le site remplit automatiquement l'Espèce, les Attributs, la Faction, les Dons et l'Équipement de départ recommandés.</div>
           </div>
         </div>
@@ -3258,14 +3909,15 @@ function renderTutorielTab() {
     <div class="panel">
       <h2 class="section-title">Se repérer sur le site</h2>
       <div class="stat-grid">
-        <div class="stat-box"><span class="stat-name">Personnages<small>onglet</small></span><span class="note">Liste, création, import/export et sauvegarde de vos fiches.</span></div>
-        <div class="stat-box"><span class="stat-name">Fiche<small>onglet</small></span><span class="note">Édition complète : stats, équipement, historique de progression.</span></div>
-        <div class="stat-box"><span class="stat-name">Messagerie<small>onglet</small></span><span class="note">Discutez en temps réel avec le MJ ou avec les autres personnages, entre les sessions.</span></div>
+        <div class="stat-box"><span class="stat-name">Personnages<small>onglet</small></span><span class="note">Liste, création, ouverture d'une fiche (cliquez un personnage), import/export et sauvegarde.</span></div>
+        <div class="stat-box"><span class="stat-name">Messagerie<small>onglet</small></span><span class="note">Discutez en temps réel avec le MJ ou avec les autres personnages, entre les sessions. Identité protégeable par mot de passe.</span></div>
+        <div class="stat-box"><span class="stat-name">Calendrier<small>onglet</small></span><span class="note">Dates de sessions programmées par le MJ, avec détails au clic.</span></div>
         <div class="stat-box"><span class="stat-name">Codex<small>onglet</small></span><span class="note">Toutes les règles : Attributs, Compétences, Espèces, Archétypes, Dons, Armurerie, Pouvoirs Psychiques, Factions, Mutations.</span></div>
-        <div class="stat-box"><span class="stat-name">Calculatrice<small>onglet</small></span><span class="note">Simule les jets d'attaque et de dégâts sans dés physiques.</span></div>
-        <div class="stat-box"><span class="stat-name">Admin<small>onglet, MJ</small></span><span class="note">Configuration des missions/annonces de campagne, déverrouillage ou suppression de fiches en cas de mot de passe oublié.</span></div>
+        <div class="stat-box"><span class="stat-name">Calculatrice<small>onglet</small></span><span class="note">Simule les jets d'attaque et de dégâts, avec sélection directe des personnages et armes.</span></div>
+        <div class="stat-box"><span class="stat-name">Lore 40k<small>onglet</small></span><span class="note">Recherche rapide sur l'encyclopédie Omnis Bibliotheca.</span></div>
+        <div class="stat-box"><span class="stat-name">Admin<small>onglet, MJ</small></span><span class="note">Missions, annonces, calendrier, récapitulatifs, déverrouillage/suppression de fiches.</span></div>
       </div>
-      <p class="note" style="margin-top:0.8rem;">Ce site fonctionne sans serveur : chaque navigateur garde ses propres fiches. Pour partager une fiche avec le MJ ou un autre joueur, utilisez l'export/import JSON en bas de l'onglet <strong>Personnages</strong>.</p>
+      <p class="note" style="margin-top:0.8rem;">Ce site est partagé par plusieurs groupes de jeu, chacun isolé dans son propre <strong>Groupe/Table</strong> (choisi au premier chargement). Les personnages, la campagne et la messagerie se synchronisent en temps réel entre tous les membres du même groupe. Le bouton "Changer de groupe" est en haut à droite de l'en-tête.</p>
     </div>
 
     <div class="btn-row">
@@ -4594,21 +5246,47 @@ function renderRecapEditorList(recaps) {
   `).join("");
 }
 
+function bindPasswordToggle(toggleId, inputId) {
+  const toggle = document.getElementById(toggleId);
+  const input = document.getElementById(inputId);
+  if (!toggle || !input) return;
+  toggle.addEventListener("click", () => {
+    const showing = input.type === "text";
+    input.type = showing ? "password" : "text";
+    toggle.classList.toggle("seal-toggle-active", !showing);
+  });
+}
+
+function renderSessionEditorList(sessions) {
+  if (!sessions || sessions.length === 0) return `<p class="note">Aucune session programmée.</p>`;
+  return sessions.slice().sort((a, b) => a.date.localeCompare(b.date)).map(s => `
+    <div class="recap-editor-row">
+      <div class="field-row-4" style="grid-template-columns:1fr 1fr 2fr;">
+        <input type="date" data-session-id="${s.id}" data-session-field="date" value="${escapeHtml(s.date)}">
+        <input type="time" data-session-id="${s.id}" data-session-field="time" value="${escapeHtml(s.time || "")}">
+        <input type="text" data-session-id="${s.id}" data-session-field="title" value="${escapeHtml(s.title)}" placeholder="Titre">
+      </div>
+      <textarea data-session-id="${s.id}" data-session-field="notes" rows="2" placeholder="Notes (lieu, préparation, rappel...)">${escapeHtml(s.notes || "")}</textarea>
+      <button class="btn btn-danger" data-session-delete="${s.id}" type="button">Supprimer</button>
+    </div>
+  `).join("");
+}
+
 function renderAdminTab() {
   const container = document.getElementById("admin-content");
   if (!adminUnlocked) {
     container.innerHTML = `
-      <div class="panel">
-        <h2 class="section-title">Accès Administrateur</h2>
-        <p class="note">Réservé au Maître de Jeu. Permet de déverrouiller ou supprimer une fiche si un joueur a perdu son mot de passe.<br>
-        Ceci n'agit que sur les fiches présentes dans <em>ce navigateur</em> (le stockage n'est pas partagé entre joueurs).</p>
-        <div class="field" style="max-width:300px;">
-          <label>Mot de passe administrateur</label>
-          <input type="password" id="admin-password-input">
+      <div class="seal-gate">
+        <div class="seal-icon">🔒</div>
+        <h2 class="seal-title">Accès Restreint</h2>
+        <p class="seal-subtitle">Réservé au Maître de Jeu</p>
+        <p class="note">Permet de déverrouiller ou supprimer une fiche si un joueur a perdu son mot de passe.<br>
+        Ceci n'agit que sur les fiches de <em>votre groupe actuel</em>.</p>
+        <div class="seal-field">
+          <input type="password" id="admin-password-input" class="seal-input" placeholder="Mot de passe administrateur" autocomplete="off">
+          <button class="seal-toggle" id="admin-password-toggle" type="button" title="Afficher/masquer">👁</button>
         </div>
-        <div class="btn-row">
-          <button class="btn btn-primary" id="admin-login-btn" type="button">Entrer</button>
-        </div>
+        <button class="btn btn-primary seal-submit" id="admin-login-btn" type="button">Déverrouiller</button>
       </div>
     `;
     document.getElementById("admin-login-btn").addEventListener("click", () => {
@@ -4617,12 +5295,16 @@ function renderAdminTab() {
         adminUnlocked = true;
         renderAdminTab();
       } else {
-        alert("Mot de passe administrateur incorrect.");
+        const field = document.querySelector(".seal-field");
+        field.classList.add("seal-shake");
+        setTimeout(() => field.classList.remove("seal-shake"), 400);
+        toast("Mot de passe administrateur incorrect.", "error");
       }
     });
     document.getElementById("admin-password-input").addEventListener("keydown", (e) => {
       if (e.key === "Enter") document.getElementById("admin-login-btn").click();
     });
+    bindPasswordToggle("admin-password-toggle", "admin-password-input");
     return;
   }
 
@@ -4650,6 +5332,14 @@ function renderAdminTab() {
       <div class="list-tag-input">
         <input type="text" id="new-recap-title" placeholder="Titre (ex : Session 4 — Le Nid Ork)">
         <button class="btn" id="add-recap-btn" type="button">Ajouter</button>
+      </div>
+
+      <h3 class="codex-subhead">CALENDRIER — SESSIONS À VENIR</h3>
+      <div id="session-editor-list">${renderSessionEditorList(campaign.sessions)}</div>
+      <div class="list-tag-input">
+        <input type="date" id="new-session-date">
+        <input type="text" id="new-session-title" placeholder="Titre de la session">
+        <button class="btn" id="add-session-btn" type="button">Ajouter</button>
       </div>
 
       <div class="btn-row">
@@ -4761,6 +5451,37 @@ function renderAdminTab() {
       if (!confirm("Supprimer ce récapitulatif ?")) return;
       const cur = loadCampaign();
       cur.sessionRecaps = (cur.sessionRecaps || []).filter(r => r.id !== btn.dataset.recapDelete);
+      saveCampaign(cur);
+      renderAdminTab();
+    });
+  });
+
+  document.getElementById("add-session-btn").addEventListener("click", () => {
+    const dateInput = document.getElementById("new-session-date");
+    const titleInput = document.getElementById("new-session-title");
+    const title = titleInput.value.trim();
+    if (!dateInput.value || !title) { toast("Indiquez une date et un titre.", "error"); return; }
+    const cur = loadCampaign();
+    cur.sessions = cur.sessions || [];
+    cur.sessions.push(newSession(dateInput.value, title));
+    saveCampaign(cur);
+    renderAdminTab();
+  });
+  container.querySelectorAll("[data-session-field]").forEach(inp => {
+    inp.addEventListener("change", () => {
+      const cur = loadCampaign();
+      cur.sessions = cur.sessions || [];
+      const s = cur.sessions.find(x => x.id === inp.dataset.sessionId);
+      if (!s) return;
+      s[inp.dataset.sessionField] = inp.value;
+      saveCampaign(cur);
+    });
+  });
+  container.querySelectorAll("[data-session-delete]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (!confirm("Supprimer cette session ?")) return;
+      const cur = loadCampaign();
+      cur.sessions = (cur.sessions || []).filter(s => s.id !== btn.dataset.sessionDelete);
       saveCampaign(cur);
       renderAdminTab();
     });
@@ -4913,6 +5634,8 @@ function importCampaignFile(file) {
 // ---------- Initialisation ----------
 
 document.addEventListener("DOMContentLoaded", () => {
+  initGroupGate();
+
   document.querySelectorAll(".tab-btn").forEach(btn => {
     btn.addEventListener("click", () => switchTab(btn.dataset.view));
   });
@@ -4954,10 +5677,131 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("print-back").addEventListener("click", () => openCharacterSheet(state.characterId));
   document.getElementById("print-now").addEventListener("click", () => window.print());
 
-  migrateOldCharacterMessages();
-  switchTab("tutoriel");
-  initFirebaseSync();
+  if (getGroupId()) {
+    migrateOldCharacterMessages();
+    switchTab("tutoriel");
+    initFirebaseSync();
+  }
 });
+
+// ---------- Portail de Groupe ----------
+// Tant qu'aucun Groupe/Table n'est choisi, seul cet écran est visible.
+// Une fois un groupe rejoint, la page se recharge simplement : toutes
+// les clés de stockage et les chemins Firestore en dépendent, un
+// rechargement propre évite d'avoir à tout ré-initialiser à la main.
+
+function initGroupGate() {
+  const existing = getGroupId();
+  if (existing) {
+    document.getElementById("group-gate").style.display = "none";
+    document.getElementById("app-shell").classList.remove("app-shell-hidden");
+  } else {
+    document.getElementById("group-gate").style.display = "flex";
+    document.getElementById("app-shell").classList.add("app-shell-hidden");
+
+    connectFirebaseApp();
+    fetchGroupRegistry(renderGroupList);
+  }
+
+  document.getElementById("group-gate-submit").addEventListener("click", submitGroupGate);
+  document.getElementById("group-gate-password").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") submitGroupGate();
+  });
+  bindPasswordToggle("group-password-toggle", "group-gate-password");
+
+  document.getElementById("change-group-btn").addEventListener("click", () => {
+    if (!confirm("Changer de groupe ? Vous reviendrez sur cet écran pour en rejoindre un autre (vos données restent sauvegardées, vous pourrez revenir).")) return;
+    leaveGroup();
+    location.reload();
+  });
+}
+
+let knownGroups = [];
+
+function renderGroupList(groups) {
+  knownGroups = groups || [];
+  const container = document.getElementById("group-list");
+  if (!groups || groups.length === 0) {
+    container.innerHTML = `<p class="note">Aucun groupe existant pour l'instant — créez le premier ci-dessous.</p>`;
+    return;
+  }
+  container.innerHTML = groups.map(g => `
+    <div class="group-list-row">
+      <button class="group-list-btn" data-join-group="${escapeHtml(g.id)}" type="button">
+        <span>${escapeHtml(g.name)}</span><span class="group-list-arrow">→</span>
+      </button>
+      <button class="group-list-delete" data-delete-group="${escapeHtml(g.id)}" data-delete-group-name="${escapeHtml(g.name)}" type="button" title="Supprimer ce groupe">🗑</button>
+    </div>
+  `).join("");
+  container.querySelectorAll("[data-join-group]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      setGroupId(btn.dataset.joinGroup);
+      location.reload();
+    });
+  });
+  container.querySelectorAll("[data-delete-group]").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      promptDeleteGroup(btn.dataset.deleteGroup, btn.dataset.deleteGroupName);
+    });
+  });
+}
+
+function promptDeleteGroup(groupId, groupName) {
+  const pw = prompt(`Supprimer définitivement le groupe "${groupName}" ?\nToutes ses fiches, sa campagne et ses messages seront perdus, pour tout le monde.\n\nMot de passe de suppression :`);
+  if (pw == null) return;
+  if (pw !== CREATE_GROUP_PASSWORD) {
+    toast("Mot de passe incorrect.", "error");
+    return;
+  }
+  if (!confirm(`Dernière confirmation : supprimer "${groupName}" définitivement ?`)) return;
+  deleteGroupCompletely(groupId, (err) => {
+    if (err) {
+      toast("Échec de la suppression : " + err.message, "error");
+      return;
+    }
+    clearLocalGroupCache(groupId);
+    toast(`Groupe "${groupName}" supprimé.`, "success");
+    fetchGroupRegistry(renderGroupList);
+  });
+}
+
+function submitGroupGate() {
+  const nameInput = document.getElementById("group-gate-input");
+  const pwInput = document.getElementById("group-gate-password");
+  const rawName = nameInput.value.trim();
+  if (!rawName) {
+    toast("Entrez un nom de groupe.", "error");
+    nameInput.focus();
+    return;
+  }
+  const id = normalizeGroupId(rawName);
+  if (!id) {
+    toast("Nom de groupe invalide.", "error");
+    return;
+  }
+
+  const existingGroup = knownGroups.find(g => g.id === id);
+  if (existingGroup) {
+    // Groupe déjà connu : pas besoin de mot de passe, c'est une jonction.
+    setGroupId(existingGroup.name);
+    location.reload();
+    return;
+  }
+
+  // Nom inconnu du registre : c'est une création, mot de passe requis.
+  if (pwInput.value !== CREATE_GROUP_PASSWORD) {
+    const field = document.getElementById("group-password-field");
+    field.classList.add("seal-shake");
+    setTimeout(() => field.classList.remove("seal-shake"), 400);
+    toast("Ce groupe n'existe pas encore. Le mot de passe de création est requis (ou incorrect).", "error");
+    pwInput.focus();
+    return;
+  }
+  registerGroupInRegistry(id, rawName);
+  setGroupId(rawName);
+  location.reload();
+}
 
 
 </script>
